@@ -15,7 +15,8 @@
 %
 %  This work consists of the files thesis-uestc.cls, thesis-uestc.bst.
 %
-
+\usepackage{enumerate}
+\usepackage{tabularx}
 
 \ProvidesClass{thesis-uestc}
 
@@ -47,27 +48,28 @@
 \RequirePackage{xeCJK}
 \RequirePackage{ifplatform}
 
+
 \ifwindows
   \setCJKmainfont[AutoFakeBold=true]{SimSun}
   \newCJKfontfamily{\heiti}{SimHei}
   \newfontfamily{\heiti@letter}{SimHei}
   \setallmainfonts{Times New Roman}
 \else
-\ifmacosx
-  \setCJKmainfont[AutoFakeBold=true]{Songti SC}
-  \newCJKfontfamily{\heiti}{STHeiti}
-  \newfontfamily{\heiti@letter}{STHeiti}
-  \setallmainfonts{Times New Roman}
-\else
-  \setCJKmainfont[AutoFakeBold=true]{fzsong.ttf}
-  \newCJKfontfamily{\heiti}{fzhei.ttf}
-  \newfontfamily{\heiti@letter}{fzhei.ttf}
-  \setallmainfonts[
-    BoldFont=timesbd.ttf,
-    ItalicFont=timesi.ttf,
-    BoldItalicFont=timesbi.ttf,
-  ]{times.ttf}
-\fi
+  \ifmacosx
+    \setCJKmainfont[AutoFakeBold=true]{Songti SC}
+    \newCJKfontfamily{\heiti}{STHeiti}
+    \newfontfamily{\heiti@letter}{STHeiti}
+    \setallmainfonts{Times New Roman}
+  \else
+    \setCJKmainfont[AutoFakeBold=true]{fzsong.ttf}
+    \newCJKfontfamily{\heiti}{fzhei.ttf}
+    \newfontfamily{\heiti@letter}{fzhei.ttf}
+    \setallmainfonts[
+      BoldFont=timesbd.ttf,
+      ItalicFont=timesi.ttf,
+      BoldItalicFont=timesbi.ttf,
+    ]{times.ttf}
+  \fi
 \fi
 
 \DeclareMathAlphabet{\mathbf}{\eu@enc}{\eu@mathrm}{\bfdefault}{it}
@@ -79,8 +81,8 @@
 
 \RequirePackage[hyphens]{xurl}
 \RequirePackage[hyperfootnotes=false,
-    bookmarksnumbered,
-    bookmarksdepth=4
+  bookmarksnumbered,
+  bookmarksdepth=4
 ]{hyperref}
 \hypersetup{
   colorlinks=true,
@@ -180,19 +182,19 @@
 \setcounter{tocdepth}{2}
 
 \titleformat{\chapter}[block]
-  {\centering\fontsize{15pt}{15pt}\selectfont\strong\thispagestyle{fancy}}{\thechapter}{7.5pt}{}
+{\centering\fontsize{15pt}{15pt}\selectfont\strong\thispagestyle{fancy}}{\thechapter}{7.5pt}{}
 
 \titleformat{\section}[block]
-  {\fontsize{14pt}{14pt}\selectfont\strong}
-  {\thesection}{7pt}{}
+{\fontsize{14pt}{14pt}\selectfont\strong}
+{\thesection}{7pt}{}
 
 \titleformat{\subsection}[block]
-  {\fontsize{14pt}{14pt}\selectfont\strong}
-  {\thesubsection}{7pt}{}
+{\fontsize{14pt}{14pt}\selectfont\strong}
+{\thesubsection}{7pt}{}
 
 \titleformat{\subsubsection}[block]
-  {\fontsize{12pt}{12pt}\selectfont\strong}
-  {\thesubsubsection}{6pt}{}
+{\fontsize{12pt}{12pt}\selectfont\strong}
+{\thesubsubsection}{6pt}{}
 
 \RequirePackage[hang, perpage]{footmisc}
 \addtolength{\footnotesep}{0pt}
@@ -203,42 +205,42 @@
 \renewcommand\footnotelayout{\fontsize{9}{11.7}\selectfont}
 
 \renewcommand{\thefootnote}{\ifcase\value{footnote}\or\ding{172}\or
-\ding{173}\or\ding{174}\or\ding{175}\or\ding{176}\or\ding{177}\or
-\ding{178}\or\ding{179}\or\ding{180\or\ding{181}}\fi}
+    \ding{173}\or\ding{174}\or\ding{175}\or\ding{176}\or\ding{177}\or
+    \ding{178}\or\ding{179}\or\ding{180\or\ding{181}}\fi}
 
 \renewcommand{\footnoterule}{\vfill\noindent\vspace{0.9mm}\hspace{27pt}\rule{5.05cm}{0.02cm}\vspace*{2.6pt}}
 
 \def\@makefntext #1{
   \ifFN@hangfoot
-      \bgroup \setbox \@tempboxa \hbox {
-          \ifdim
+    \bgroup \setbox \@tempboxa \hbox {
+      \ifdim
         \footnotemargin >0pt \hb@xt@
-                \footnotemargin {\hbox { \normalfont \@thefnmark}\hss }
-            \else
-              \hbox { \normalfont \@thefnmark}
+        \footnotemargin {\hbox { \normalfont \@thefnmark}\hss }
+      \else
+        \hbox { \normalfont \@thefnmark}
       \fi
     }
-        \leftmargin \wd \@tempboxa
-        \rightmargin \z@ \linewidth \columnwidth
-          \advance \linewidth -\leftmargin\parshape \@ne
+    \leftmargin \wd \@tempboxa
+    \rightmargin \z@ \linewidth \columnwidth
+    \advance \linewidth -\leftmargin\parshape \@ne
     \leftmargin \linewidth \footnotesize \@setpar {{\@@par }}
     \leavevmode \llap {\box \@tempboxa }\parskip
-        \hangfootparskip \relax \parindent
+    \hangfootparskip \relax \parindent
     \hangfootparindent \relax
-        \else
-          \parindent 1em \noindent
-            \ifdim
-                \footnotemargin >\z@ \hb@xt@
-                \footnotemargin {\hss \hbox { \normalfont \@thefnmark} }
-            \else
-        \ifdim \footnotemargin =\z@
-                    \llap {\hbox { \normalfont \@thefnmark} }
-                \else
-          \llap {\hb@xt@ -\footnotemargin {\hbox { \normalfont \@thefnmark} \hss }}
-        \fi
-            \fi
+  \else
+    \parindent 1em \noindent
+    \ifdim
+      \footnotemargin >\z@ \hb@xt@
+      \footnotemargin {\hss \hbox { \normalfont \@thefnmark} }
+    \else
+      \ifdim \footnotemargin =\z@
+        \llap {\hbox { \normalfont \@thefnmark} }
+      \else
+        \llap {\hb@xt@ -\footnotemargin {\hbox { \normalfont \@thefnmark} \hss }}
+      \fi
     \fi
-        \footnotelayout #1\ifFN@hangfoot \par \egroup
+  \fi
+  \footnotelayout #1\ifFN@hangfoot \par \egroup
   \fi
 }
 
@@ -269,10 +271,10 @@
 }{
   \checkoddpage
   \ifoddpage
-      \blankpage
-    \else
-      \newpage
-    \fi
+    \blankpage
+  \else
+    \newpage
+  \fi
 }
 
 \newcommand{\chinesekeyword}[1]{
@@ -289,16 +291,16 @@
     \pdfbookmark{English Abstract}{englishabstract}
   }
   \chapter*{\bfseries ABSTRACT}
-    \fancyhf{}
-    \fancyhead[C]{\fontsize{10.5pt}{12.6pt}\selectfont ABSTRACT}
-    \fancyfoot[CE,CO]{\fontsize{9pt}{10.8pt}\selectfont\Roman{pseudopage}}
+  \fancyhf{}
+  \fancyhead[C]{\fontsize{10.5pt}{12.6pt}\selectfont ABSTRACT}
+  \fancyfoot[CE,CO]{\fontsize{9pt}{10.8pt}\selectfont\Roman{pseudopage}}
 }{
   \checkoddpage
   \ifoddpage
-      \blankpage
-    \else
-      \newpage
-    \fi
+    \blankpage
+  \else
+    \newpage
+  \fi
 }
 
 \newcommand{\englishkeyword}[1]{
@@ -308,16 +310,16 @@
 }
 
 \AddEverypageHook{\addtocontents{toc}{
-  \protect\cftsetpnumwidth{\widthof{\thepage}-1pt}
-}}
+    \protect\cftsetpnumwidth{\widthof{\thepage}-1pt}
+  }}
 
 \AddEverypageHook{\addtocontents{lof}{
-  \protect\cftsetpnumwidth{\widthof{\thepage}-1pt}
-}}
+    \protect\cftsetpnumwidth{\widthof{\thepage}-1pt}
+  }}
 
 \AddEverypageHook{\addtocontents{lot}{
-  \protect\cftsetpnumwidth{\widthof{\thepage}-1pt}
-}}
+    \protect\cftsetpnumwidth{\widthof{\thepage}-1pt}
+  }}
 
 \tocloftpagestyle{fancy}
 \renewcommand{\cftchappagefont}{\normalfont}
@@ -392,16 +394,16 @@
 \newcommand{\thedatesubmit}{}
 \newcommand{\thedateconfer}{年\chinesespace 月}
 
-\newcommand{\setdate}[2][]{ 
-\ifthenelse{\equal{#1}{oral}}{
-  \renewcommand{\thedateoral}{#2}
-}{}
-\ifthenelse{\equal{#1}{submit}}{
-  \renewcommand{\thedatesubmit}{#2}
-}{}
-\ifthenelse{\equal{#1}{confer}}{
-  \renewcommand{\thedateconfer}{#2}
-}{}
+\newcommand{\setdate}[2][]{
+  \ifthenelse{\equal{#1}{oral}}{
+    \renewcommand{\thedateoral}{#2}
+  }{}
+  \ifthenelse{\equal{#1}{submit}}{
+    \renewcommand{\thedatesubmit}{#2}
+  }{}
+  \ifthenelse{\equal{#1}{confer}}{
+    \renewcommand{\thedateconfer}{#2}
+  }{}
 }
 
 \renewcommand{\strong}{\heiti}
@@ -446,7 +448,7 @@
   \def\chinesebooktitle{专业学位硕士学位论文}
   \def\englishbooktitle{Master Thesis for Professional Degree}
   \def\display@chineseheader{电子科技大学硕士学位论文}
-  \def\display@englishheader{Professional Master Thesis of University 
+  \def\display@englishheader{Professional Master Thesis of University
     of Electronic Science and Technology of China}
 }
 
@@ -484,7 +486,7 @@
 }{}
 
 \pretocmd{\listoffigures}{
-    \newpage
+  \newpage
   \fancyhf{}
   \fancyhead[C]{\fontsize{10.5pt}{12.6pt}\selectfont\listfigurename}
   \fancyfoot[CE,CO]{\fontsize{9pt}{10.8pt}\selectfont\Roman{pseudopage}}
@@ -503,11 +505,11 @@
 }
 
 \pretocmd{\listoftables}{
-    \newpage
+  \newpage
   \fancyhf{}
   \fancyhead[C]{\fontsize{10.5pt}{12.6pt}\selectfont\listtablename}
   \fancyfoot[CE,CO]{\fontsize{9pt}{10.8pt}\selectfont\Roman{pseudopage}}
-  
+
   \ifchinesebook{
     \addtolength{\cfttabnumwidth}{12pt}
     \renewcommand{\cfttabpresnum}{\tablename}
@@ -550,7 +552,7 @@
   \setlength{\glspagelistwidth}{.3\textwidth}
   \renewenvironment{theglossary}%
   {\begin{longtable}{lp{\glsdescwidth}p{\glspagelistwidth}}}%
-    {\end{longtable}}%
+      {\end{longtable}}%
   \renewcommand*{\glossaryheader}{%
     \heiti 缩略词 &\heiti 英文全称 &
     \heiti 中文全称 \tabularnewline\endhead}%
@@ -567,8 +569,8 @@
 \newglossarystyle{uestc-english}{
   \setlength\glsdescwidth{.7\textwidth}
   \renewenvironment{theglossary}%
-    {\begin{longtable}{lp{\glsdescwidth}}}%
-    {\end{longtable}}%
+  {\begin{longtable}{lp{\glsdescwidth}}}%
+      {\end{longtable}}%
 
   \renewcommand*{\glossaryheader}{}%
   \renewcommand*{\glsgroupheading}[1]{}%
@@ -578,7 +580,7 @@
     {\glsentrydesc{##1}} \\
   }
   \renewcommand*{\subglossentry}[3]{
-  \glossentry{##2}{##3}}
+    \glossentry{##2}{##3}}
 }
 
 \defglsentryfmt{%
@@ -594,7 +596,7 @@
 }
 
 \newcommand{\thesisglossarylist}{
-  \newpage 
+  \newpage
   \fancyhf{}
   \ifchinesebook{
     \fancyhead[C]{\fontsize{10.5pt}{12.6pt}\selectfont 缩略词表}
@@ -611,87 +613,87 @@
 }
 
 \newcommand{\makecover}{
-\thispagestyle{empty}
-\setlength{\extrarowheight}{9pt}
-\ifchinesebook{\pdfbookmark{封面}{cover}}{\pdfbookmark{Cover}{cover}}
-\begin{center}
-  \ifbachelor{\includegraphics{bachelor_font.pdf} \\}{
-    \fontsize{22pt}{22pt}\selectfont 电\hspace{0.5em}子\hspace{0.5em}科\hspace{0.5em}技%
-    \hspace{0.5em}大\hspace{0.5em}学 \\[7bp]}
-  \fontsize{12pt}{12pt}\selectfont UNIVERSITY OF ELECTRONIC SCIENCE
+  \thispagestyle{empty}
+  \setlength{\extrarowheight}{9pt}
+  \ifchinesebook{\pdfbookmark{封面}{cover}}{\pdfbookmark{Cover}{cover}}
+  \begin{center}
+    \ifbachelor{\includegraphics{bachelor_font.pdf} \\}{
+      \fontsize{22pt}{22pt}\selectfont 电\hspace{0.5em}子\hspace{0.5em}科\hspace{0.5em}技%
+      \hspace{0.5em}大\hspace{0.5em}学 \\[7bp]}
+    \fontsize{12pt}{12pt}\selectfont UNIVERSITY OF ELECTRONIC SCIENCE
     AND TECHNOLOGY OF CHINA \\[36bp]
-  \ifbachelor{\fontsize{42pt}{42pt}\selectfont{\bfseries\chinesebooktitle} \\[24bp]}{
-    \fontsize{42pt}{42pt}\selectfont\chinesebooktitle \\[24bp]}
-  \fontsize{16pt}{16pt}\selectfont
+    \ifbachelor{\fontsize{42pt}{42pt}\selectfont{\bfseries\chinesebooktitle} \\[24bp]}{
+      \fontsize{42pt}{42pt}\selectfont\chinesebooktitle \\[24bp]}
+    \fontsize{16pt}{16pt}\selectfont
     \textnormal{\MakeUppercase{\englishbooktitle}} \\[48bp]
-  \ifbachelor{
-    %\vspace{0.4cm}
-    \includegraphics[width=180bp]{logo.pdf} \\[40bp]
-  }{\includegraphics[width=180bp]{logo.pdf} \\[40bp]}
-  \begin{tabular}{lp{4.2in}}
-    \bfseries\fontsize{18pt}{18pt}\selectfont 论文题目 & \multirow[t]{2}{4.2in}{
+    \ifbachelor{
+      %\vspace{0.4cm}
+      \includegraphics[width=180bp]{logo.pdf} \\[40bp]
+    }{\includegraphics[width=180bp]{logo.pdf} \\[40bp]}
+    \begin{tabular}{lp{4.2in}}
+      \bfseries\fontsize{18pt}{18pt}\selectfont 论文题目 & \multirow[t]{2}{4.2in}{
         \centering
-          \bfseries\fontsize{18pt}{18pt}\selectfont
-          \zh@thetitle
-    } \\
-    \cline{2-2}
-            & \\
-    \cline{2-2}
-  \end{tabular}\hspace*{\fill} \\[\baselineskip]
-  \begin{tabular}{>{\bfseries\fontsize{16pt}{16pt}\selectfont}l
+        \bfseries\fontsize{18pt}{18pt}\selectfont
+        \zh@thetitle
+      }                                                                        \\
+      \cline{2-2}
+                                                     &                         \\
+      \cline{2-2}
+    \end{tabular}\hspace*{\fill} \\[\baselineskip]
+    \begin{tabular}{>{\bfseries\fontsize{16pt}{16pt}\selectfont}l
       >{\centering\arraybackslash\bfseries\fontsize{16pt}{16pt}\selectfont}
       p{3.77in}p{15pt}}
-    学科专业 & \zh@themajor &\\
-    \cline{2-2}
-    学\chinesespace\chinesespace 号 & \thestudentnumber & \\
-    \cline{2-2}
-    作者姓名 & \zh@theauthor &\\
-    \cline{2-2}
-    指导老师 & \zh@theadvisor &\\
-    \cline{2-2}
-    学\chinesespace\chinesespace 院 & \zh@theschool &\\
-    \cline{2-2}
-  \end{tabular}
-\end{center}
+      学科专业                          & \zh@themajor      & \\
+      \cline{2-2}
+      学\chinesespace\chinesespace 号 & \thestudentnumber & \\
+      \cline{2-2}
+      作者姓名                          & \zh@theauthor     & \\
+      \cline{2-2}
+      指导老师                          & \zh@theadvisor    & \\
+      \cline{2-2}
+      学\chinesespace\chinesespace 院 & \zh@theschool     & \\
+      \cline{2-2}
+    \end{tabular}
+  \end{center}
 
-\ifbachelor{}{\thetitlepage}
+  \ifbachelor{}{\thetitlepage}
 
-\newpage
-\setcounter{page}{1}
-\setlength{\extrarowheight}{2pt}
+  \newpage
+  \setcounter{page}{1}
+  \setlength{\extrarowheight}{2pt}
 }
 
 \newcommand{\thetitlepage}{
   \newpage
   \thispagestyle{empty}
 
-\noindent 分类号 \rule[-3pt]{2.5in}{0.5pt} 密级 \rule[-3pt]{2.5in}{0.5pt} \\[12bp]
-UDC\textsuperscript{ 注1} \rule[-3pt]{2.5in}{0.5pt} \\[12bp]
+  \noindent 分类号 \rule[-3pt]{2.5in}{0.5pt} 密级 \rule[-3pt]{2.5in}{0.5pt} \\[12bp]
+  UDC\textsuperscript{ 注1} \rule[-3pt]{2.5in}{0.5pt} \\[12bp]
 
-\begin{center}
-  \fontsize{36pt}{36pt}\selectfont{
-    学\chinesespace 位\chinesespace 论\chinesespace 文
-  } \\[48bp]
+  \begin{center}
+    \fontsize{36pt}{36pt}\selectfont{
+      学\chinesespace 位\chinesespace 论\chinesespace 文
+    } \\[48bp]
 
-  \fontsize{16pt}{16pt}\selectfont{\bfseries\zh@thetitle} \\
-  \vspace{-15pt}
-  \rule{5.9in}{.5pt} \\
-  \fontsize{12pt}{12pt}\selectfont（题名和副题名）\\[36bp]
-  \fontsize{16pt}{16pt}\selectfont{\bfseries\zh@theauthor} \\
-  \vspace{-15pt}
-  \rule{1.63in}{.5pt} \\
-  \fontsize{12pt}{12pt}\selectfont（作者姓名） \\[36bp]
+    \fontsize{16pt}{16pt}\selectfont{\bfseries\zh@thetitle} \\
+    \vspace{-15pt}
+    \rule{5.9in}{.5pt} \\
+    \fontsize{12pt}{12pt}\selectfont（题名和副题名）\\[36bp]
+    \fontsize{16pt}{16pt}\selectfont{\bfseries\zh@theauthor} \\
+    \vspace{-15pt}
+    \rule{1.63in}{.5pt} \\
+    \fontsize{12pt}{12pt}\selectfont（作者姓名） \\[36bp]
 
-  \begin{tabular}{>{\fontsize{12pt}{12pt}\selectfont}l
-      >{\centering\arraybackslash\fontsize{16pt}{16pt}\selectfont}
-      p{4.45in}}
-      指导老师 & {\bfseries\zh@theadvisor} \\
-    \cline{2-2}
-      & {\bfseries 电子科技大学\chinesespace 成都} \\
-    \cline{2-2}
-    & \fontsize{12pt}{12pt}\selectfont（姓名、职称、单位名称）
-  \end{tabular}  \\[36bp]
-\end{center}
+    \begin{tabular}{>{\fontsize{12pt}{12pt}\selectfont}l
+        >{\centering\arraybackslash\fontsize{16pt}{16pt}\selectfont}
+        p{4.45in}}
+      指导老师 & {\bfseries\zh@theadvisor}                    \\
+      \cline{2-2}
+           & {\bfseries 电子科技大学\chinesespace 成都}           \\
+      \cline{2-2}
+           & \fontsize{12pt}{12pt}\selectfont（姓名、职称、单位名称）
+    \end{tabular}  \\[36bp]
+  \end{center}
 
   \noindent
   \begin{tabular}{>{\fontsize{12pt}{12pt}\selectfont}l
@@ -700,8 +702,8 @@ UDC\textsuperscript{ 注1} \rule[-3pt]{2.5in}{0.5pt} \\[12bp]
       >{\fontsize{12pt}{12pt}\selectfont}l
       >{\centering\arraybackslash\fontsize{14pt}{14pt}\bfseries\selectfont}
       p{2.50in}}
-      申请学位级别 & \chinesedegreename &
-      学科专业 & \zh@themajor \\
+    申请学位级别 & \chinesedegreename &
+    学科专业   & \zh@themajor         \\
     \cline{2-2}
     \cline{4-4}
   \end{tabular} \\
@@ -711,68 +713,68 @@ UDC\textsuperscript{ 注1} \rule[-3pt]{2.5in}{0.5pt} \\[12bp]
       >{\fontsize{12pt}{12pt}\selectfont}l
       >{\centering\arraybackslash\fontsize{14pt}{14pt}\bfseries\selectfont}
       p{1.59in}}
-      提交论文日期 & \thedatesubmit &
-      论文答辩日期 & \thedateoral \\
+    提交论文日期 & \thedatesubmit &
+    论文答辩日期 & \thedateoral     \\
     \cline{2-2}
     \cline{4-4}
   \end{tabular} \\
   \begin{tabular}{>{\fontsize{12pt}{12pt}\selectfont}l
       >{\centering\arraybackslash\fontsize{14pt}{14pt}\bfseries\selectfont}
       p{4.02in}}
-      学位授予单位和日期 & 电子科技大学\chinesespace{} \thedateconfer \\
+    学位授予单位和日期 & 电子科技大学\chinesespace{} \thedateconfer \\
     \cline{2-2}
   \end{tabular} \\
   \begin{tabular}{>{\fontsize{12pt}{12pt}\selectfont}l
       >{\centering\arraybackslash\fontsize{14pt}{14pt}\heiti\selectfont}
       p{2.29in}}
-      答辩委员会主席 & \\
+    答辩委员会主席 & \\
     \cline{2-2}
   \end{tabular} \\
   \begin{tabular}{>{\fontsize{12pt}{12pt}\selectfont}l
       >{\centering\arraybackslash\fontsize{14pt}{14pt}\heiti\selectfont}
       p{5.03in}}
-      评阅人 & \\
+    评阅人 & \\
     \cline{2-2}
   \end{tabular}
 
-\vspace{0.54in}
-\noindent
-\hspace{12pt}注1：注明《国际十进分类法UDC》的类号。
+  \vspace{0.54in}
+  \noindent
+  \hspace{12pt}注1：注明《国际十进分类法UDC》的类号。
 
-\newpage
-\thispagestyle{empty}\null
-\par{\vspace{2.3cm}}
-\noindent
-\begin{minipage}[t][1.52cm][t]{\textwidth}
-  \fontsize{18pt}{20pt}\selectfont
-  \bfseries\centering\en@thetitle
-\end{minipage}
-\par{\vspace{6.3cm}}
-\noindent
-\begin{minipage}[t][1.52cm][t]{\textwidth}
-  \fontsize{15pt}{17pt}\selectfont
-  \centering\noindent
-  A \englishbooktitle{} Submitted to \\
-  University of Electronic Science and Technology of China
-\end{minipage}
-\par{\vspace{3.2cm}}
-\noindent
-\begin{tabular}{>{\fontsize{16pt}{16pt}\selectfont}r
-  >{\centering\arraybackslash\bfseries\fontsize{16pt}{16pt}\selectfont}
-  p{10.6cm}}
-  Discipline: & \multirow[t]{2}{*}{\en@themajor} \\
-\cline{2-2}
-& \\
-\cline{2-2}
-Author: & \en@theauthor \\
-\cline{2-2}
-Student ID: & \thestudentnumber \\
-\cline{2-2}
-Supervisor: & \en@theadvisor \\
-\cline{2-2}
-School: & \en@theschool \\
-\cline{2-2}
-\end{tabular}
+  \newpage
+  \thispagestyle{empty}\null
+  \par{\vspace{2.3cm}}
+  \noindent
+  \begin{minipage}[t][1.52cm][t]{\textwidth}
+    \fontsize{18pt}{20pt}\selectfont
+    \bfseries\centering\en@thetitle
+  \end{minipage}
+  \par{\vspace{6.3cm}}
+  \noindent
+  \begin{minipage}[t][1.52cm][t]{\textwidth}
+    \fontsize{15pt}{17pt}\selectfont
+    \centering\noindent
+    A \englishbooktitle{} Submitted to \\
+    University of Electronic Science and Technology of China
+  \end{minipage}
+  \par{\vspace{3.2cm}}
+  \noindent
+  \begin{tabular}{>{\fontsize{16pt}{16pt}\selectfont}r
+      >{\centering\arraybackslash\bfseries\fontsize{16pt}{16pt}\selectfont}
+      p{10.6cm}}
+    Discipline: & \multirow[t]{2}{*}{\en@themajor} \\
+    \cline{2-2}
+                &                                  \\
+    \cline{2-2}
+    Author:     & \en@theauthor                    \\
+    \cline{2-2}
+    Student ID: & \thestudentnumber                \\
+    \cline{2-2}
+    Supervisor: & \en@theadvisor                   \\
+    \cline{2-2}
+    School:     & \en@theschool                    \\
+    \cline{2-2}
+  \end{tabular}
 }
 
 \newcommand{\bindpdfcover}[1]{
@@ -782,40 +784,40 @@ School: & \en@theschool \\
 }
 
 \newcommand{\originalitydeclaration}{
-\newpage
-\thispagestyle{empty}
-\begin{spacing}{1.9}
-  \ifchinesebook{\pdfbookmark{独创性声明}{originalitydeclaration}}
+  \newpage
+  \thispagestyle{empty}
+  \begin{spacing}{1.9}
+    \ifchinesebook{\pdfbookmark{独创性声明}{originalitydeclaration}}
     {\pdfbookmark{Originality Declaration}{originalitydeclaration}}
-  \noindent\begin{center}
-  \fontsize{18pt}{20pt}\selectfont\bfseries 独创性声明
-  \end{center}
+    \noindent\begin{center}
+      \fontsize{18pt}{20pt}\selectfont\bfseries 独创性声明
+    \end{center}
     \par{\fontsize{14pt}{16pt}\selectfont\noindent\null\hspace{28pt}%
-    本人声明所呈交的学位论文是本人在导师指导下进行的研究工作及取得的研究成果。%
-    据我所知，除了文中特别加以标注和致谢的地方外，论文中不包含其他人已经发表或撰写过的研究成果，%
-    也不包含为获得电子科技大学或其它教育机构的学位或证书而使用过的材料。%
-    与我一同工作的同志对本研究所做的任何贡献均已在论文中作了明确的说明并表示谢意。}
-  \\[14pt]
-  \fontsize{14pt}{16pt}\selectfont\noindent\null\hspace{35pt}作者签名：\rule[-3pt]{4.1cm}{0.5pt}\hspace{42pt}%
-  日期：\chinesespace\chinesespace 年\hspace{21pt}月\hspace{21pt}日 \\
-  \noindent\begin{center}
-    \fontsize{18pt}{20pt}\selectfont\bfseries 论文使用授权
-  \end{center}
-  \par{\fontsize{14pt}{14pt}\selectfont\noindent\null\hspace{28pt}%
-    本学位论文作者完全了解电子科技大学有关保留、使用学位论文的规定，%
-    的规定，同意学校有权保留并向国家有关部门或机构送交论文的复印件和数字文档，%
-    允许论文被查阅。本人授权电子科技大学可以将学位论文的全部或部分内容编入有关数据库进行检索及下载，%
-    可以采用影印、扫描等复制手段保存、汇编学位论文。
-}
-  \par{\fontsize{14pt}{14pt}\selectfont\noindent\null\hspace{22pt}%
-  \chineseleftparenthesis%
-  涉密的学位论文须按照国家及学校相关规定管理，在解密后适用于本授权%
-  \chineserightparenthesis} \\[14pt]
-  \fontsize{14pt}{16pt}\selectfont\noindent\null\hspace{35pt}作者签名：\rule[-3pt]{4.1cm}{0.5pt}\hspace{12pt}%
-  导师签名：\rule[-3pt]{4.1cm}{0.5pt} \\[6pt]
-  \null\hspace{259pt} 日期：\chinesespace\chinesespace 年\hspace{21pt}月\hspace{21pt}日
-\end{spacing}
-\newpage\setcounter{page}{0}\setcounter{pseudopage}{0}
+      本人声明所呈交的学位论文是本人在导师指导下进行的研究工作及取得的研究成果。%
+      据我所知，除了文中特别加以标注和致谢的地方外，论文中不包含其他人已经发表或撰写过的研究成果，%
+      也不包含为获得电子科技大学或其它教育机构的学位或证书而使用过的材料。%
+      与我一同工作的同志对本研究所做的任何贡献均已在论文中作了明确的说明并表示谢意。}
+    \\[14pt]
+    \fontsize{14pt}{16pt}\selectfont\noindent\null\hspace{35pt}作者签名：\rule[-3pt]{4.1cm}{0.5pt}\hspace{42pt}%
+    日期：\chinesespace\chinesespace 年\hspace{21pt}月\hspace{21pt}日 \\
+    \noindent\begin{center}
+      \fontsize{18pt}{20pt}\selectfont\bfseries 论文使用授权
+    \end{center}
+    \par{\fontsize{14pt}{14pt}\selectfont\noindent\null\hspace{28pt}%
+      本学位论文作者完全了解电子科技大学有关保留、使用学位论文的规定，%
+      的规定，同意学校有权保留并向国家有关部门或机构送交论文的复印件和数字文档，%
+      允许论文被查阅。本人授权电子科技大学可以将学位论文的全部或部分内容编入有关数据库进行检索及下载，%
+      可以采用影印、扫描等复制手段保存、汇编学位论文。
+    }
+    \par{\fontsize{14pt}{14pt}\selectfont\noindent\null\hspace{22pt}%
+      \chineseleftparenthesis%
+      涉密的学位论文须按照国家及学校相关规定管理，在解密后适用于本授权%
+      \chineserightparenthesis} \\[14pt]
+    \fontsize{14pt}{16pt}\selectfont\noindent\null\hspace{35pt}作者签名：\rule[-3pt]{4.1cm}{0.5pt}\hspace{12pt}%
+    导师签名：\rule[-3pt]{4.1cm}{0.5pt} \\[6pt]
+    \null\hspace{259pt} 日期：\chinesespace\chinesespace 年\hspace{21pt}月\hspace{21pt}日
+  \end{spacing}
+  \newpage\setcounter{page}{0}\setcounter{pseudopage}{0}
 }
 
 \newcommand{\signatureofdeclaration}[1]{
@@ -841,10 +843,10 @@ School: & \en@theschool \\
   \newpage
   \checkoddpage
   \ifoddpage
-      \newpage
-    \else
-      \blankpage
-    \fi
+    \newpage
+  \else
+    \blankpage
+  \fi
   \fancyhf{}
   \ifchinesebook{
     \fancyhead[C]{\fontsize{10.5pt}{12.6pt}\selectfont 目录}
@@ -889,7 +891,7 @@ School: & \en@theschool \\
 \pretocmd{\@chapter}{
   \ifdefined\@BODY
   \else
-  \ifnum\value{chapter}=0
+    \ifnum\value{chapter}=0
       \thesiscontent
     \fi
   \fi
@@ -923,7 +925,7 @@ School: & \en@theschool \\
   \ifchinesebook{}{\addtocontents{toc}{\protect\addtolength{\cftchapnumwidth}{12pt}}}
   \addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
   \titleformat{\chapter}[block]
-    {\centering\fontsize{15pt}{15pt}\selectfont\strong\thispagestyle{fancy}}{\thechapter}{7.5pt}{}
+  {\centering\fontsize{15pt}{15pt}\selectfont\strong\thispagestyle{fancy}}{\thechapter}{7.5pt}{}
   \ifchinesebook{
     \renewcommand{\thechapter}{附录\Alph{chapter}}
     \renewcommand{\appendixname}{附录}
@@ -950,16 +952,16 @@ School: & \en@theschool \\
   \interlinepenalty=0
   \addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
   \titleformat{\chapter}[block]
-    {\centering\fontsize{15pt}{15pt}\selectfont\strong\thispagestyle{fancy}}{附\hspace{12pt}录}{7.5pt}{}
+  {\centering\fontsize{15pt}{15pt}\selectfont\strong\thispagestyle{fancy}}{附\hspace{12pt}录}{7.5pt}{}
   %\renewcommand{\thechapter}{附\hspace{12pt}录}
   \ifchinesebook{
     \renewcommand{\appendixname}{附录}
   }{
     \renewcommand{\appendixname}{Appendix}
   }
-  
+
   \renewcommand{\thesection}{A.\arabic{section}}
-  
+
   \renewcommand{\theequation}{a-\arabic{equation}}
   \renewcommand{\thetable}{a-\arabic{table}}
   \renewcommand{\thefigure}{a-\arabic{figure}}
@@ -969,7 +971,7 @@ School: & \en@theschool \\
   \renewcommand{\thelemma}{a.\arabic{lemma}}
   \renewcommand{\thedefinition}{a.\arabic{definition}}
   \renewcommand{\theexample}{a.\arabic{example}}
-  
+
   \ifchinesebook{
     \chapter*{附\hspace{12pt}录}
     \addcontentsline{toc}{chapter}{附录}
@@ -994,16 +996,16 @@ School: & \en@theschool \\
   \chapter*{\translation@originaltitle}
   \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
   \renewcommand\thesection{\arabic{section}}
-    \setcounter{section}{0}
-    \addcontentsline{toc}{chapter}{\translation@originaltitle}
-    \markboth{\translation@originaltitle}{\translation@originaltitle}
-    \thispagestyle{fancy}
-    \hypersetup{bookmarksdepth=0} 
-    \renewcommand{\theequation}{\arabic{equation}}
-    \renewcommand{\thetable}{\arabic{table}}
-    \renewcommand{\thefigure}{\arabic{figure}}
-    \renewcommand{\figurename}{Figure}
-    \renewcommand{\tablename}{Table}
+  \setcounter{section}{0}
+  \addcontentsline{toc}{chapter}{\translation@originaltitle}
+  \markboth{\translation@originaltitle}{\translation@originaltitle}
+  \thispagestyle{fancy}
+  \hypersetup{bookmarksdepth=0}
+  \renewcommand{\theequation}{\arabic{equation}}
+  \renewcommand{\thetable}{\arabic{table}}
+  \renewcommand{\thefigure}{\arabic{figure}}
+  \renewcommand{\figurename}{Figure}
+  \renewcommand{\tablename}{Table}
 }
 
 \newcommand{\thesistranslationchinese}{
@@ -1011,16 +1013,16 @@ School: & \en@theschool \\
   \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
   \chapter*{\translation@chinesetitle}
   \renewcommand\thesection{\arabic{section}}
-    \setcounter{section}{0}
-    \addcontentsline{toc}{chapter}{\translation@chinesetitle}
-    \markboth{\translation@chinesetitle}{\translation@chinesetitle}
-    \thispagestyle{fancy}
-    \hypersetup{bookmarksdepth=0} 
-    \renewcommand{\theequation}{\arabic{equation}}
-    \renewcommand{\thetable}{\arabic{table}}
-    \renewcommand{\thefigure}{\arabic{figure}}
-    \renewcommand{\figurename}{图}
-    \renewcommand{\tablename}{表}
+  \setcounter{section}{0}
+  \addcontentsline{toc}{chapter}{\translation@chinesetitle}
+  \markboth{\translation@chinesetitle}{\translation@chinesetitle}
+  \thispagestyle{fancy}
+  \hypersetup{bookmarksdepth=0}
+  \renewcommand{\theequation}{\arabic{equation}}
+  \renewcommand{\thetable}{\arabic{table}}
+  \renewcommand{\thefigure}{\arabic{figure}}
+  \renewcommand{\figurename}{图}
+  \renewcommand{\tablename}{表}
 }
 
 \ifchinesebook{
@@ -1038,9 +1040,9 @@ School: & \en@theschool \\
   \begin{thebibliography}{lo}
     \interlinepenalty=10000
     \begin{spacing}{1.667}
-    \thispagestyle{fancy}
-    \small
-}{
+      \thispagestyle{fancy}
+      \small
+      }{
     \end{spacing}
   \end{thebibliography}
 }
@@ -1049,9 +1051,9 @@ School: & \en@theschool \\
   \thispagestyle{fancy}
   \interlinepenalty=10000
   \begin{spacing}{1.667}
-}{}{}
+    }{}{}
 
-\apptocmd{\bibliography}{
+    \apptocmd{\bibliography}{
   \end{spacing}
 }{}{}
 
@@ -1082,13 +1084,13 @@ School: & \en@theschool \\
   \nociteaccomplish{*}
   \renewcommand{\bibname}{\thesisaccomplishtitle}
   \begin{thebibliography}{lo}
-  \interlinepenalty=10000
-  \setlength{\itemsep}{0bp}\setlength{\parskip}{0pt}
-  \begin{spacing}{1.667}
-  \thispagestyle{fancy}
-  \small
-}{
-  \end{spacing}
+    \interlinepenalty=10000
+    \setlength{\itemsep}{0bp}\setlength{\parskip}{0pt}
+    \begin{spacing}{1.667}
+      \thispagestyle{fancy}
+      \small
+      }{
+    \end{spacing}
   \end{thebibliography}
   \renewcommand{\bibname}{\thesisbibname}
 }
@@ -1099,8 +1101,8 @@ School: & \en@theschool \\
   \renewcommand{\bstlabelmark}{lo}
   \thispagestyle{fancy}
   \begin{spacing}{1.667}
-  \bibliographystyleaccomplish{thesis-uestc}
-  \bibliographyaccomplish{#1}
+    \bibliographystyleaccomplish{thesis-uestc}
+    \bibliographyaccomplish{#1}
   \end{spacing}
   \renewcommand{\bibname}{\thesisbibname}
 }
@@ -1147,8 +1149,8 @@ School: & \en@theschool \\
   \topsep0pt \partopsep0pt
   \trivlist
   \item[\hskip5\labelsep
-    \strong
-  #1\@addpunct{:}]\ignorespaces
+              \strong
+              #1\@addpunct{:}]\ignorespaces
 }{
   \popQED\endtrivlist\@endpefalse
 }

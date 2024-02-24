@@ -1,120 +1,579 @@
+\documentclass[promaster]{thesis-uestc}
+\title{基于极化信息辅助的SAR目标分类方法研究}{Research on SAR target classification method based on polarization information assistance}
 
-\documentclass[master]{thesis-uestc}
-
-\title{时域积分方程时间步进算法及其快速算法}{The Time Marching Scheme of Time Domain
-    Integral Equation and Corresponding Fast Algorithm}
-
-\author{王稳}{Wang Wen}
-\advisor{赖生建\chinesespace 副教授}{Dr. Shengjian Lai}
-\school{物理电子学院}{School of Physical Electronics}
-\major{无线电物理}{Radio Physics}
-\studentnumber{201421040223}
+\author{林小惟}{Xiaowei Lin}
+\advisor{杨建宇\chinesespace 教授}{Dr. Jianyu Yang}
+\school{信息与通信工程学院}{School of Information and Communication Engineering}
+\major{ 通信工程(含宽带网络、移动通信等)}{Communications engineering}
+\studentnumber{202122011004}
 
 \begin{document}
 
 \makecover
 
 \begin{chineseabstract}
-为了适应日益增长的宽带信号和非线性系统的工程应用，用于分析瞬态电磁散射问题的时域积分方程方法研究日趋活跃。本文以时域积分方程时间步进算法及其快速算法为研究课题，重点研究了时间步进算法的数值实现技术、后时稳定性问题以及两层平面波算法加速计算等，主要研究内容分为四部分。
+    为了适应日益增长的宽带信号和非线性系统的工程应用，用于分析瞬态电磁散射问题的时域积分方程方法研究日趋活跃。本文以时域积分方程时间步进算法及其快速算法为研究课题，重点研究了时间步进算法的数值实现技术、后时稳定性问题以及两层平面波算法加速计算等，主要研究内容分为四部分。
 
-……
+    ……
 
-\chinesekeyword{时域电磁散射，时域积分方程，时间步进算法，后时不稳定性，时域平面波算法}
+    \chinesekeyword{时域电磁散射，时域积分方程，时间步进算法，后时不稳定性，时域平面波算法}
 \end{chineseabstract}
 
 \begin{englishabstract}
-With the widespread engineering applications ranging from broadband signals and non-linear systems, time-domain integral equations (TDIE) methods for analyzing transient electromagnetic scattering problems are becoming widely used nowadays. TDIE-based marching-on-in-time (MOT) scheme and its fast algorithm are researched in this dissertation, including the numerical techniques of MOT scheme, late-time stability of MOT scheme, and two-level PWTD-enhanced MOT scheme. The contents are divided into four parts shown as follows.
+    With the widespread engineering applications ranging from broadband signals and non-linear systems, time-domain integral equations (TDIE) methods for analyzing transient electromagnetic scattering problems are becoming widely used nowadays. TDIE-based marching-on-in-time (MOT) scheme and its fast algorithm are researched in this dissertation, including the numerical techniques of MOT scheme, late-time stability of MOT scheme, and two-level PWTD-enhanced MOT scheme. The contents are divided into four parts shown as follows.
 
-\englishkeyword{Time-domain Electromagnetic Scattering, Time-domain Integral Equation, Marching-on In-time (MOT) Scheme, Late-time Instability, Plane Wave Time-domain (PWTD) Algorithm}
+    \englishkeyword{Time-domain Electromagnetic Scattering, Time-domain Integral Equation, Marching-on In-time (MOT) Scheme, Late-time Instability, Plane Wave Time-domain (PWTD) Algorithm}
 \end{englishabstract}
 
 \thesistableofcontents
 
 \chapter{绪\hspace{6pt}论}
 
-\section{研究工作的背景与意义}
+\section{课题研究背景及意义}
 
 计算电磁学方法\citing{wang1999sanwei, liuxf2006, zhu1973wulixue, chen2001hao, gu2012lao, feng997he}从时、频域角度划分可以分为频域方法与时域方法两大类。频域方法的研究开展较早，目前应用广泛的包括：矩量法（MOM）\citing{xiao2012yi,zhong1994zhong}及其快速算法多层快速多极子（MLFMA）\citing{clerc2010discrete}方法、有限元（FEM）\citing{wang1999sanwei,zhu1973wulixue}方法、自适应积分（AIM）\citing{gu2012lao}方法等，这些方法是目前计算电磁学商用软件\footnote{脚注序号“\ding{172}，……，\ding{180}”的字体是“正文”，不是“上标”，序号与脚注内容文字之间空1个半角字符，脚注的段落格式为：单倍行距，段前空0磅，段后空0磅，悬挂缩进1.5字符；中文用宋体，字号为小五号，英文和数字用Times New Roman字体，字号为9磅；中英文混排时，所有标点符号（例如逗号“，”、括号“（）”等）一律使用中文输入状态下的标点符号，但小数点采用英文状态下的样式“.”。}（例如：FEKO、Ansys 等）的核心算法。由文献\cite{feng997he,clerc2010discrete,xiao2012yi}可知
 
-\section{时域积分方程方法的国内外研究历史与现状}
+\section{国内外相关研究现状}
 时域积分方程方法的研究始于上世纪60 年代，C.L.Bennet 等学者针对导体目标的瞬态电磁散射问题提出了求解时域积分方程的时间步进（marching-on in-time, MOT）算法。
 
-\section{本文的主要贡献与创新}
+\subsection{极化信息提取研究现状}
+\subsection{极化SAR目标分类研究现状}
+
+\section{本文的主要内容及章节安排}
 本论文以时域积分方程时间步进算法的数值实现技术、后时稳定性问题以及两层平面波加速算法为重点研究内容，主要创新点与贡献如下：
 
-\section{本论文的结构安排}
+\subsection{本文的主要研究内容}
+\subsection{本文的章节安排}
 本文的章节结构安排如下：
 
-\chapter{时域积分方程基础}
-时域积分方程（TDIE）方法作为分析瞬态电磁波动现象最主要的数值算法之一，常用于求解均匀散射体和表面散射体的瞬态电磁散射问题。
+\chapter{极化SAR与深度学习相关理论基础}
 
-\section{时域积分方程的类型}
+\section{引言}
+极化SAR技术通过发送和接收不同极化方式的电磁波，提供丰富的目标极化散射信息，具有全天时、全天候成像特点。因此，近年来，极化SAR在军事、农业、民用等多个领域有着广泛的应用。极化SAR数据中蕴含丰富的极化信息，如何挖掘这些极化信息，是极化SAR目标分类任务的关键步骤。同时，深度学习技术以其在遥感数据处理中的卓越表现，为极化SAR目标分类任务提供了新的思路和解决方法。本章将介绍极化SAR与深度学习方法的相关理论基础，主要包括目标散射机理介绍，极化数据的表征形式和几种典型的目标分解方法，同时还介绍了深度学习方法理论。
 
-\section{空间基函数与时间基函数}
-利用数值算法求解时域积分方程，首先需要选取适当的空间基函数与时间基函数对待求感应电流进行离散。
-
-\subsection{空间基函数}
-RWG 基函数是定义在三角形单元上的最具代表性的基函数。它的具体定义如下：
-\begin{equation}
-f_n(\bm{r})=
-\begin{cases}
-\frac{l_n}{2A_n^+}\bm{\rho}_n^+=\frac{l_n}{2A_n^+}(\bm{r}-\bm{r}_+)&\bm{r}\in T_n^+\\
-\frac{l_n}{2A_n^-}\bm{\rho}_n^-=\frac{l_n}{2A_n^-}(\bm{r}_--\bm{r})&\bm{r}\in T_n^-\\
-0&\text{otherwise}
-\end{cases}
-\end{equation}
-
-其中，$l_n$为三角形单元$T_n^+$和$T_n^-$公共边的长度，$A_n^+$和$A_n^-$分别为三角形单元$T_n^+$和$T_n^-$的面积（如图\ref{pica}所示）。
+\section{极化电磁波表征方式}
+电场与磁场的相互作用产生电磁波。在电磁波传播过程中，电场与磁场振荡平面始终保持垂直，并且都与电磁波的传播方向相垂直，如图\ref{电磁波传输过程示意图}所示：
 
 \begin{figure}[h]
-\includegraphics{pica.pdf}
-\caption{RWG 基函数几何参数示意图}
-\label{pica}
+    \includegraphics[width=7.3cm]{pic/chapter2/电磁波传输过程.pdf}
+    \caption{电磁波传输过程示意图}
+    \label{电磁波传输过程示意图}
 \end{figure}
 
-由于时域混合场积分方程是时域电场积分方程与时域磁场积分方程的线性组合，因此时域混合场积分方程时间步进算法的阻抗矩阵特征与时域电场积分方程时间步进算法的阻抗矩阵特征相同。
+极化是电磁波的基本特性之一，是指在固定的空间点处，电场振荡方向随着时间的变化方式。在笛卡尔坐标系中，设定电磁波的传播方向为$\hat{z}$轴正方向，电场与磁场的关系可以使用麦克斯韦方程组表示\cite{}：
+
+\begin{gather}
+    \label{Maxwell1}
+    \nabla \times \boldsymbol{H}(z,t)=\epsilon \frac{\partial \boldsymbol{E}(z,t)}{\partial t} \\
+    \nabla \times \boldsymbol{E}(z,t)=-\mu \frac{\partial \boldsymbol{H}(z,t)}{\partial t}     \\
+    \nabla \cdot \boldsymbol{H}(z,t)=0                                                         \\
+    \label{Maxwell4}
+    \nabla \cdot \boldsymbol{E}(z,t)=0
+\end{gather}
+对公式\ref{Maxwell1}等号左右两边取旋度，有：
 \begin{equation}
-\label{latent_binary_variable}
-\bm{r}_{i,j}=
-\begin{cases}
-1,f(\bm{x}^{i};\bm{w})\cdot f(\bm{x}^{j};\bm{w})\geq u(\lambda),\\
-0,f(\bm{x}^{i};\bm{w})\cdot f(\bm{x}^{j};\bm{w})< l(\lambda), 1\leq i,j\leq n.\\
-f(\bm{x}^{i};\bm{w})\cdot f(\bm{x}^{j};\bm{w}),\text{otherwise},
-\end{cases}
+    \nabla \times(\nabla \times \boldsymbol{E})=-\mu \frac{\partial}{\partial t}(\nabla \times \boldsymbol{H})
 \end{equation}
-
-时域积分方程时间步进算法的阻抗元素直接影响算法的后时稳定性，因此阻抗元素的计算是算法的关键之一，采用精度高效的方法计算时域阻抗元素是时域积分方程时间步进算法研究的重点之一。
-
-
-\subsection{时间基函数}
-
-\subsubsection{时域方法特有的展开函数}
-
-\subsubsection{频域方法特有的展开函数}
-
-\section{入射波}
-
-如图\ref{picb}和图\ref{picc}所示分别给出了参数$E_0=\hat{x}$，$a_n=-\hat{z}$，$f_0=250MHz$，$f_w=50MHz$，$t_w=4.2\sigma$时，调制高斯脉冲的时域与频域归一化波形图。
+通过矢量恒等式$\nabla \times(\nabla \times \boldsymbol{E})=\nabla(\nabla \cdot \boldsymbol{E})-\nabla^2 \boldsymbol{E}$和公式\ref{Maxwell4}可以得出电磁波的波动方程：
+\begin{equation}
+    \nabla^2 \boldsymbol{E}(z, t)-\mu \epsilon \frac{\partial^2 \boldsymbol{E}(z, t)}{\partial t^2}=0
+\end{equation}
+SAR系统与地面目标之间的距离满足远场条件，可以将SAR工作过程中收发的电磁波近似为平面波。通过波动方程，可以得到平面波的表达式：
+\begin{equation}
+    \label{平面波}
+    \boldsymbol{E}(z, t)=\left[\begin{array}{c}
+            E_x(z, t) \\
+            E_y(z, t) \\
+            0
+        \end{array}\right]=\left[\begin{array}{c}
+            E_{0 x} \cos \left(\omega t-k z+\delta_x\right) \\
+            E_{0 y} \cos \left(\omega t-k z+\delta_y\right) \\
+            0
+        \end{array}\right]
+\end{equation}
+其中，$E_{0x}$, $E_{0y}$, $\delta_x$ 和 $\delta_y$分别表示电场在$x$与$y$方向上的幅度和初始相位，$k$ 表示传播常量。
+\subsection{极化椭圆}
+在空间中某个固定的点处电场矢量端点的轨迹可以用来描述电磁波的极化状态。对于某个时刻$t$，由公式\ref{平面波}可得：
+\begin{equation}
+    \label{轨迹方程}
+    \left(\frac{E_x(z, t)}{E_{x_0}}\right)^2-2\left(\frac{E_x(z, t) E_y(z, t)}{E_{x_0} E_{y_0}}\right) \cos (\delta)+\left(\frac{E_y(z, t)}{E_{y_0}}\right)^2=\sin ^2(\delta)
+\end{equation}
+其中，$\delta=\delta_x-\delta_y$，$-\pi \leqslant \delta \leqslant \pi$。
 
 \begin{figure}[h]
-\subfloat[]{
-    \label{picb}
-    \includegraphics[width=7.3cm]{picb.pdf}
-}
-\subfloat[]{
-    \label{picc}
-    \includegraphics[width=6.41cm]{picc.pdf}
-}
-\caption{调制高斯脉冲时域与频率波形，时域阻抗元素的存储技术也是时间步进算法并行化的关键技术之一。(a)调制高斯脉冲信号的时域波形；(b)调制高斯脉冲信号的频域波形}
-\label{fig1}
+    \includegraphics[width=7.3cm]{pic/chapter2/极化椭圆.jpg}
+    \caption{极化椭圆示意图}
+    \label{极化椭圆示意图}
 \end{figure}
 
-时域阻抗元素的存储技术\citing{xiao2012yi}也是时间步进算法并行化的关键技术之一，采用合适的阻抗元素存储方式可以很大的提高并行时间步进算法的计算效率。
+由公式\ref{轨迹方程}在$z_0$处的运动轨迹可以得到极化椭圆，如图\ref{极化椭圆示意图}所示。对于任意一个极化椭圆。可以通过椭圆幅度$A$,椭圆方向角$\chi \in [-\frac{\pi}{4}, \frac{\pi}{4}]$和椭圆孔径$\varphi \in [-\frac{\pi}{2}, \frac{\pi}{2}]$进行唯一表示：
+\begin{gather}
+    \mathbf{A}=\sqrt{\left|E_{x_0}\right|^2+\left|E_{y_0}\right|^2}                                                                \\
+    \tan 2 \varphi=\frac{2\left|E_{x_0}\right|\left|E_{y_0}\right|^2}{\left|E_{x_0}\right|^2-\left|E_{y_0}\right|^2} \cos (\delta) \\
+    \sin 2 \chi=\frac{2\left|E_{x_0}\right|\left|E_{y_0}\right|^2}{\left|E_{x_0}\right|^2+\left|E_{y_0}\right|^2} \sin (\delta)
+\end{gather}
+根据电场矢量的旋转方向,可以将极化电磁波分为左旋和右旋两种类型。当椭圆方向角$\chi > 0$时,表示左旋极化波；当椭圆方向角$\chi < 0$时，表示左旋极化波。
+\subsection{琼斯矢量}
+为了简化平面电磁波极化状态的描述方式，还可以通过琼斯矢量\cite{}的形式表示。将公式\ref{平面波}使用复数的形式表示为：
+\begin{equation}
+    \boldsymbol{E}(z, t)=\left[\begin{array}{c}
+            E_{0 x} \cos \left(\omega t-k z+\delta_x\right) \\
+            E_{0 y} \cos \left(\omega t-k z+\delta_y\right)
+        \end{array}\right]=\operatorname{Re}\left\{\left[\begin{array}{l}
+            E_{0 x} e^{j \delta_x} \\
+            E_{0 y} e^{j \delta_y}
+        \end{array}\right] e^{j \omega t} e^{-j k z}\right\}
+\end{equation}
+其中，$Re(\cdot)$表示取实部。琼斯矢量可以定义为：
+\begin{equation}
+    E_{\text {Jones }}=\left[\begin{array}{l}
+            E_x \\
+            E_y
+        \end{array}\right]=\left[\begin{array}{l}
+            E_{0 x} e^{j \delta_x} \\
+            E_{0 y} e^{j \delta_y}
+        \end{array}\right]
+\end{equation}
+极化椭圆描述的极化波状态与琼斯矢量表示是等价的，可以使用椭圆极化的描述参数来表示琼斯矢量：
+\begin{equation}
+    E_{\text {Jones }}=\mathbf{A} e^{i a}\left[\begin{array}{l}
+            \cos \varphi \cos \chi-i \sin \varphi \sin \chi \\
+            \sin \varphi \cos \chi+i \cos \varphi \sin \chi
+        \end{array}\right]
+\end{equation}
+其中，$\alpha$表示绝对相位项。琼斯矢量可以通过更加简洁的矩阵形式表示，定义为：
+\begin{equation}
+    E_{\text {Jones }}=\mathbf{A} e^{i a}\left[\begin{array}{cc}
+            \cos \varphi & -\sin \varphi \\
+            \sin \varphi & \cos \varphi
+        \end{array}\right]\left[\begin{array}{c}
+            \cos \chi \\
+            i \sin \chi
+        \end{array}\right]
+\end{equation}
+\subsection{Stokes矢量}
+与琼斯矢量使用两个复数表示电磁波的极化状态不同，Stokes矢量使用$[g_0,g_1,g_2,g_3]$四个实数从电磁波功率的角度来描述电磁波的极化状态，Stokes参数定义如下：
+\begin{equation}
+    \label{Stokes}
+    \left\{\begin{array}{l}
+        g_0=\left|E_x\right|^2+\left|E_y\right|^2         \\
+        g_1=\left|E_x\right|^2-\left|E_y\right|^2         \\
+        g_2=2\left|E_x\right|\left|E_y\right| \cos \delta \\
+        g_3=2\left|E_x\right|\left|E_y\right| \sin \delta
+    \end{array}\right.
+\end{equation}
+其中，$E_x$和$E_y$分别表示电场矢量在x轴和y轴上的幅度；$\delta$表示电场矢量在x轴和y轴上的相位差；$g_0$表示电磁波总功率；$g_1$表示水平或垂直极化分量的功率；$g_2$表示$\pm 45^{\operatorname{\omicron}}$线性极化分量的功率；$g_3$表示左右旋极化分类的功率之和。
+
+可以使用极化椭圆参数表示公式\ref{Stokes}，具体如下：
+\begin{equation}
+    \boldsymbol{g}=\left[\begin{array}{c}
+            A^2                             \\
+            A^2 \cos (2 \phi) \cos (2 \tau) \\
+            A^2 \sin (2 \phi) \cos (2 \tau) \\
+            A^2 \sin (2 \tau)
+        \end{array}\right]
+\end{equation}
+
+\section{极化散射数据表征方式}
+极化SAR系统通过发射水平和垂直两种不同极化方式的电磁波，对目标进行探测，当电磁波遇到目标后，部分被目标体吸收，另外一部分通过目标辐射，形成反射回波。由于散射回波因目标的散射特性而异，因此可以通过分析回波的特性来推断目标的特征。为了能够表征目标的极化散射特性，需要引入不同的参数来描述各个极化通道散射回波在幅度相位上的差异。\cite{}
+\subsection{极化散射矩阵和Mueller矩阵}
+极化SAR系统从发射的不同极化形式的电磁波信号，到以不同的极化方式接收经过目标反射的电磁波，目标的反射过程可以看做电磁波对应琼斯矢量的线性转换的过程。为了描述这个线性转换的过程，引入极化散射矩阵\cite{}，又称为Sinclair矩阵，简写为$S$，通常使用$2\times2$的复数矩阵表示，具体如下：
+\begin{equation}
+    \left[ S \right] =\left[ \begin{matrix}
+            S_{HH} & S_{HV} \\
+            S_{VH} & S_{VV} \\
+        \end{matrix} \right]
+\end{equation}
+其中，$H$和$V$分别表示水平和垂直的极化方式，$S_{XY}(X,Y=H,V)$表示发射$X$极化波、接收$Y$极化波的后向散射系数，在满足单站互易条件下，$S_{HV}=S_{VH}$。此时，极化散射矩阵可以表示为如下形式：
+\begin{equation}
+    \left[ S \right] =\left[ \begin{matrix}
+            S_{HH} & S_{HV} \\
+            S_{HV} & S_{VV} \\
+        \end{matrix} \right]
+\end{equation}
+
+以上的极化散射矩阵适用于表述完全极化波对应的琼斯矢量的入射与散射之间的线性关系，但是通常情况下，入射与散射的电磁波都是部分极化电磁波，这种情况下，需要引入Mueller矩阵\cite{}来进行表示它们之间的关系。
+
+Mueller矩阵是一个$4\times4$的矩阵，简写为$M$，具体表示如下：
+\begin{equation}
+    \label{Mueller}
+    M=R\left( S\otimes S^* \right) R^{-1}
+\end{equation}
+其中，$S$是Sinclair矩阵，$R$是转换系数矩阵，具体如下：
+\begin{equation}
+    \label{R}
+    R=\left[ \begin{matrix}
+            1 & 0 & 0  & 1  \\
+            1 & 0 & 0  & -1 \\
+            0 & 1 & 1  & 0  \\
+            0 & i & -i & 0  \\
+        \end{matrix} \right]
+\end{equation}
+
+从公式\ref{Mueller}和公式\ref{R}可以看出，$M$实际上是经过$S$运算得到，因此$M$与$S$属于一一对应的关系，但是$S$相比于$M$还多具备了绝对的相位信息。
+
+\subsection{极化相干矩阵和协方差矩阵}
+在极化SAR系统成像过程中，目标的散射回波中往往还夹杂了周围其他散射体的散射杂波。为了减少散射杂波的影响，在实际应用过程中通常会对极化散射矩阵$S$进行矢量化分解，得到二阶统计的极化相干矩阵和极化协方差矩阵\cite{}。
+
+通常利用正交的矩阵基来对极化散射矩阵进行矢量化分解，矢量化过程表示如下：
+\begin{equation}
+    S=\left[ \begin{matrix}
+            S_{HH} & S_{HV} \\
+            S_{HV} & S_{VV} \\
+        \end{matrix} \right] \Rightarrow K_4=V(S)=\frac{1}{2}\mathrm{Trace(}S\Psi )=\left[ k_0,k_1,k_2,k_3 \right] ^T
+\end{equation}
+其中，$V(\cdot)$表示矢量化操作，$Trace(\cdot)$表示矩阵求迹，$\Psi$表示$2\times2$的复单位矩阵，$T$表示矩阵转置。最常用的有两组标准基，分别是Lexicograhic基$Psi_L$和Pauli基$\Psi_p$，具体如下：
+\begin{gather}
+    \Psi_L=\left\{\left[\begin{array}{ll}
+            2 & 0 \\
+            0 & 0
+        \end{array}\right],\left[\begin{array}{ll}
+            0 & 2 \\
+            0 & 0
+        \end{array}\right],\left[\begin{array}{ll}
+            0 & 0 \\
+            2 & 0
+        \end{array}\right],\left[\begin{array}{ll}
+            0 & 0 \\
+            0 & 2
+        \end{array}\right]\right\}                                    \\
+    \Psi_P=\left\{\sqrt{2}\left[\begin{array}{ll}
+            1 & 0 \\
+            0 & 1
+        \end{array}\right], \sqrt{2}\left[\begin{array}{cc}
+            1 & 0  \\
+            0 & -1
+        \end{array}\right], \sqrt{2}\left[\begin{array}{ll}
+            0 & 1 \\
+            1 & 0
+        \end{array}\right], \sqrt{2}\left[\begin{array}{cc}
+            0 & -i \\
+            i & 0
+        \end{array}\right]\right\}
+\end{gather}
+
+基于以上两组基，分别得到目标散射矢量：
+\begin{gather}
+    \label{4L}
+    k_{4 L}=\left[S_{HH}, S_{HV}, S_{VH}, S_{VV}\right] \\
+    \label{4P}
+    k_{4 P}=\frac{1}{\sqrt{2}}\left[S_{HH}+S_{VV}, S_{HH}-S_{VV}, S_{HV}+S_{VH}, i\left(S_{HV}+S_{VH}\right)\right]
+\end{gather}
+
+由单站互易定理可知$S_{HV}=S_{VH}$，可以将公式\ref{4L}和\ref{4P}简写为：
+\begin{equation}
+    \begin{gathered}
+        k_{3 L}=\left[S_{HH}, \sqrt{2}S_{HV}, S_{VV}\right] \\
+        k_{3 P}=\frac{1}{\sqrt{2}}\left[S_{HH}+S_{VV}, S_{HH}-S_{VV}, 2S_{HV}\right]
+    \end{gathered}
+\end{equation}
+
+通过计算散射矢量$k_{3L}$与其复共轭转置矢量$k_{3L}^{H}$的内积可以得到极化协方差矩阵$C$，具体表示如下：
+\begin{equation}
+    \boldsymbol{C}=\left. \langle k_{3L}\cdot k_{3L}^{^*\boldsymbol{T}} \right. \rangle =\left[ \begin{matrix}
+            \left. \langle \left. S_{HH} \right|^2 \right. \rangle  & \left. \langle \sqrt{2}S_{HH}S_{HV}^{*} \right. \rangle  & \left. \langle S_{HH}S_{VV}^{*} \right. \rangle         \\
+            \left. \langle \sqrt{2}S_{HV}S_{HH}^{*} \right. \rangle & \left. \langle 2\left| S_{HV} \right|^2 \right. \rangle  & \left. \langle \sqrt{2}S_{HV}S_{VV}^{*} \right. \rangle \\
+            \left. \langle S_{VV},S_{HH}^{*} \right. \rangle        & \left. \langle \sqrt{2}S_{VV},S_{HV}^{*} \right. \rangle & \left. \langle \left| S_{VV} \right|^2 \right. \rangle  \\
+        \end{matrix} \right]
+\end{equation}
+
+同理，通过计算散射矢量$k_{3P}$与其复共轭转置矢量$k_{3P}^{H}$的内积可以得到极化相干矩阵$T$，具体表示如下：
+\begin{equation}
+    \begin{aligned}
+        T & =\left. \langle k_{3L}\cdot k_{3L}^{^*\boldsymbol{T}} \right. \rangle                                                                                                                                                                                                                  \\
+          & =\frac{1}{2}\left[ \begin{matrix}
+                                       \langle \left| S_{HH}+S_{VV} \right|^2\rangle                                               & \left. \langle \left( S_{HH}+S_{VV} \right) \left( S_{HH}-S_{VV} \right) ^* \right. \rangle & \left. \langle 2\left( S_{HH}+S_{VV} \right) S_{HV}^{*} \right. \rangle \\
+                                       \left. \langle \left( S_{HH}-S_{VV} \right) \left( S_{HH}+S_{VV} \right) ^* \right. \rangle & \left. \langle \left| S_{HH}-S_{VV} \right|^2 \right. \rangle                               & \left. \langle 2\left( S_{HH}-S_{VV} \right) S_{HV}^{*} \right. \rangle \\
+                                       \left. \langle 2S_{HV}\left( S_{HH}+S_{VV} \right) ^* \right. \rangle                       & \left. \langle 2S_{HV}\left( S_{HH}-S_{VV} \right) ^* \right. \rangle                       & \left. \langle 4\left| S_{HV} \right|^2 \right. \rangle                 \\
+                                   \end{matrix} \right]
+    \end{aligned}
+\end{equation}
+其中，$\langle \cdot \rangle$表示取总体平均，$(\cdot)^*$和$(\cdot)^T$分别表示复共轭和矩阵转置。
+极化协方差矩阵$C$与极化相干矩阵都是半正定的Hermitian矩阵，两者之间可以相互转换：
+\begin{gather}
+    C=U^H T U=U^{-1} T U \\
+    T=U C U^H=U C U^{-1}
+\end{gather}
+其中，$U$表示单位转换矩阵，具体可以表示为：
+\begin{equation}
+    U=\frac{1}{\sqrt{2}}\left[ \begin{matrix}
+            1 & 0        & 1  \\
+            1 & 0        & -1 \\
+            0 & \sqrt{2} & 0  \\
+        \end{matrix} \right]
+\end{equation}
+
+\section{极化目标分解理论基础}
+极化散射矩阵全面的描述了目标的散射特征，可以从中获取到目标表面粗糙度、对称性以及取向性等信息，为深层次地探索目标特性提供了数据支撑。但是，仅仅基于测量到的散射数据并无法直接获取丰富的信息，还需要进一步对测量的散射矩阵进行数据处理，进而从其中提取出能表征目标特征的极化描述。为了更清晰的描述不同目标的极化特性，可以将散射矩阵通过不同的散射模型作为基分解为几个矩阵的线性组合，由于这些基础散射模型具有不同的物理意义，分解矩阵可以表示目标的不同散射特性，为后续的识别、分类任务提供更多的信息。极化目标分解根据分解的数据分为相干分解和非相干分解两种类别：相干分解的分对象是极化散射矩阵，要求目标具有稳定的散射性质和相干的散射波；非相干分解的分解对象是极化相干矩阵或极化协方差矩阵，要求目标具有非相干散射波，散射的特征随时间变化，探测目标可以是分布式目标。\cite{}
+\subsection{极化相干分解}
+极化相干分解的基本思想是通过不同的基础散射模型，将测量得到的散射矩阵分解成多个散射机制之和，如下式所示：
+\begin{equation}
+    S=\sum_{k=1}^N{a_kS_k}
+\end{equation}
+其中，$S$表示极化散射矩阵，$S_k$表示分解得到的经典目标的散射矩阵，$a_k$表示对应的权值。
+
+经典的极化相干分解方法有Pauli分解\cite{}、Krogager分解\cite{}、Cameron分解\cite{}、球坐标分解\cite{}等。下面将介绍Pauli分解和Krogager分解的基本原理。
+\subsubsection{Pauli分解}
+Pauli分解方法是使用Pauli基对极化散射矩阵进行分解，分解过程如下式所示：
+\begin{equation}
+    S=\left[ \begin{matrix}
+            S_{HH} & S_{HV} \\
+            S_{VH} & S_{VV} \\
+        \end{matrix} \right] =aS_a+bS_b+cS_c+dS_d
+\end{equation}
+其中，$a,b,c,d$均是权重系数，$S_a,S_b,S_c,S_d$表示Pauli基，具体如下式所示：
+\begin{equation}
+    S_a=\left[ \begin{matrix}
+            1 & 0 \\
+            0 & 1 \\
+        \end{matrix} \right] ,S_b=\left[ \begin{matrix}
+            1 & 0  \\
+            0 & -1 \\
+        \end{matrix} \right] ,S_c=\left[ \begin{matrix}
+            0 & 1 \\
+            1 & 0 \\
+        \end{matrix} \right] ,S_a=\left[ \begin{matrix}
+            0 & -i \\
+            i & 0  \\
+        \end{matrix} \right]
+\end{equation}
+
+权重系数使用向量的形式，可以表示为：
+\begin{equation}
+    K=\left[ \begin{matrix}
+            a & b & c & d \\
+        \end{matrix} \right] =\frac{1}{\sqrt{2}}\left[ \begin{matrix}
+            S_{HH}+S_{VV} & S_{HH}-S_{VV} & S_{HV}+S_{VH} & i\left( S_{VH}-S_{HV} \right) \\
+        \end{matrix} \right] ^T
+\end{equation}
+
+满足单站互易条件时，可以简化为：
+\begin{equation}
+    K=\left[ \begin{matrix}
+            a & b & c \\
+        \end{matrix} \right] =\frac{1}{\sqrt{2}}\left[ \begin{matrix}
+            S_{HH}+S_{VV} & S_{HH}-S_{VV} & 2S_{HV} \\
+        \end{matrix} \right] ^T
+\end{equation}
+
+对于Pauli分解的每个分量的物理解释如表\ref{Pauli table}所示，分量的伪彩图像如图\ref{Pauli示意图}所示。
+\begin{table}[h]
+    \caption{Pauli分解}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Pauli基                 & 散射类型                & 物理描述                             \\ \hline
+        $\left[ \begin{matrix}
+                            1 & 0 \\
+                            0 & 1 \\
+                        \end{matrix} \right] $ & 奇次散射                & 球体、平坦平面或三面角反射器           \\ \hline
+        $\left[ \begin{matrix}
+                            1 & 0  \\
+                            0 & -1 \\
+                        \end{matrix} \right] $ & 偶次散射                & 二面角反射器                   \\ \hline
+        $\left[ \begin{matrix}
+                            0 & 1 \\
+                            1 & 0 \\
+                        \end{matrix} \right] $ & $\frac{\pi}{4}$偶次散射 & 与水平$\frac{\pi}{4}$倾角的二面角 \\ \hline
+    \end{tabular}
+    \label{Pauli table}
+\end{table}
+\begin{figure}[h]
+    \includegraphics[width=7.3cm]{pic/chapter2/SF-Puali.jpg}
+    \caption{Pauli分解伪彩图(R:$ \left | a \right |^2$，G:$ \left | b \right |^2$，B:$ \left | c \right |^2$)}
+    \label{Pauli示意图}
+\end{figure}
+
+\subsubsection{Krogager分解}
+Krogager分解是将极化散射矩阵$S$分解为球散射、二面角散射以及螺旋体散射三个散射分量的加权和，具体如下：
+\begin{equation}
+    \begin{aligned}
+        S_{(H, V)} & =e^{j \phi}\left\{e^{j \phi_S} k_S S_{sphere}+k_D S_{diplane(\theta)}+k_H S_{helix(\theta)}\right\}                                            \\
+                   & =e^{j \phi}\left\{e^{j \phi_S} k_S\left[\begin{array}{ll}
+                                                                     1 & 0 \\
+                                                                     0 & 1
+                                                                 \end{array}\right]+k_D\left[\begin{array}{cc}
+                                                                                                 \cos 2 \theta & \sin 2 \theta  \\
+                                                                                                 \sin 2 \theta & -\cos 2 \theta
+                                                                                             \end{array}\right]+k_H e^{ \pm j 2 \theta}\left[\begin{array}{cc}
+                                                                                                                                                 1     & \pm j \\
+                                                                                                                                                 \pm j & -1
+                                                                                                                                             \end{array}\right]\right\}
+    \end{aligned}
+\end{equation}
+其中，$k_s$、$k_D$、$k_H$分别表示各个分量的权值，也被称作能量；$\theta$表示取向角；$\phi$表示散射矩阵的绝对相位。
+
+当电磁波以左旋圆极化方式发射，右旋圆极化接收时，Krogager分解可以表示为：
+\begin{equation}
+    \begin{aligned}
+        S_{(R,L)} & =\left[ \begin{matrix}
+                                    S_{RR} & S_{RL} \\
+                                    S_{LR} & S_{LL} \\
+                                \end{matrix} \right]
+        \\
+                  & =e^{j\phi}\left\{ e^{j\phi _S}k_S\left[ \begin{matrix}
+                                                                    0 & j \\
+                                                                    j & 0 \\
+                                                                \end{matrix} \right] +k_D\left[ \begin{matrix}
+                                                                                                    e^{j2\theta} & j              \\
+                                                                                                    j            & -e^{-j2\theta} \\
+                                                                                                \end{matrix} \right] +k_H\left[ \begin{matrix}
+                                                                                                                                    e^{j2\theta} & 0 \\
+                                                                                                                                    0            & 0 \\
+                                                                                                                                \end{matrix} \right] \right\}
+    \end{aligned}
+\end{equation}
+其中，Krogager的参数可以表示为：
+\begin{equation}
+    \label{Krogager参数}
+    \begin{matrix}
+        k_S=\left| S_{RL} \right|,                                    & \phi =\frac{1}{2}\left( \phi _{RR}+\phi _{LL}-\pi \right)          \\
+        \theta =\frac{1}{4}\left( \phi _{RR}-\phi _{LL}+\pi \right) , & \phi _S=\phi _{RL}-\frac{1}{2}\left( \phi _{RR}+\phi _{LL} \right) \\
+    \end{matrix}
+\end{equation}
+
+从公式\ref{Krogager参数}可以看出，目标的左右旋散射特性可以由$S_{RR}$和$S_{LL}$确定。当目标为左螺旋体时：
+\begin{equation}
+    \left| S_{RR} \right|\geqslant \left| S_{LL} \right|\Rightarrow \left\{ \begin{array}{c}
+        k_{D}^{+}=\left| S_{LL} \right|                       \\
+        k_{H}^{+}=\left| S_{RR} \right|-\left| S_{LL} \right| \\
+    \end{array} \right.
+\end{equation}
+
+类似地，当目标为右螺旋体时：
+\begin{equation}
+    \left| S_{RR} \right|\leqslant \left| S_{LL} \right|\Rightarrow \left\{ \begin{array}{c}
+        k_D=\left| S_{RR} \right|                       \\
+        k_H=\left| S_{LL} \right|-\left| S_{RR} \right| \\
+    \end{array} \right.
+\end{equation}
+
+Krogager分解每个分量的物理解释如表\ref{Krogager table}所示，分解分量的伪彩图如图\ref{}所示。
+
+\begin{table}[h]
+    \caption{Krogager分解}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Krogager基                   & 散射类型  & 物理描述                   \\ \hline
+        $\left[ \begin{matrix}
+                            1 & 0 \\
+                            0 & 1 \\
+                        \end{matrix} \right] $      & 球面散射  & 球体、平坦平面或三面角反射器 \\
+        \hline
+        $\left[ \begin{matrix}
+                            cos2\theta & sin2\theta  \\
+                            sin2\theta & -cos2\theta \\
+                        \end{matrix} \right] $ & 二面角散射 & 二面角反射器              \\ \hline
+        $\left[ \begin{matrix}
+                            1     & \pm j \\
+                            \pm j & -1    \\
+                        \end{matrix} \right] $      & 螺旋体散射 & 不对称结构          \\ \hline
+    \end{tabular}
+    \label{Krogager table}
+\end{table}
+
+\subsection{极化非相干分解}
+对于“非确定性”的非相干目标，具有动态的散射特性，因此需要使用统计的方法来对其目标散射特性进行研究，通常是使用二阶统计量的方法展开。非相干分解主要是将极化协方差矩阵$C$或者极化相干矩阵$T$进行分解，使用多个典型的散射模型之和的形式表示。
+\begin{gather}
+    C=\sum_{k=1}^N{p_kC_k}
+    \\
+    T=\sum_{k=1}^N{q_kT_k}
+\end{gather}
+其中，$p_k$和$q_k$均表示每个散射模型分量的权重系数。
+
+经典的非相干分解方法包括Cloude分解\cite{}、Freeman分解\cite{}、Huynen分解\cite{}、Yamaguchi分解\cite{}、Barnes分解\cite{}、Holm分解\cite{}和van Zyl分解\cite{}等。下面将介绍Cloude分解和Freeman分解的原理。
+\subsubsection{Cloude分解}
+Cloude分解是一种矩阵特征空间分解方法，是对极化相干矩阵$T$进行特征分解，得到三组特征值与对应的特征向量。具体如下式所示：
+\begin{equation}
+    \mathrm{T}=\mathrm{U} \Lambda \mathrm{U}^{\mathrm{H}}=\mathrm{U}\left[\begin{array}{ccc}
+            \lambda_1 & 0         & 0         \\
+            0         & \lambda_2 & 0         \\
+            0         & 0         & \lambda_3
+        \end{array}\right] \mathrm{U}^{\mathrm{H}}
+\end{equation}
+其中，$\Lambda$表示矩阵$\mathrm{T}$的三个特征值组成的对角矩阵，并且满足$\lambda_1 \geqslant \lambda_2 \geqslant \lambda_3 \geqslant 0$，$\mathrm{U}$表示三个特征值对应的特征向量构成的矩阵，$\mathrm{H}$表示取复共轭转置。
+
+由以上的特征值与特征向量，Cloude分解定义了平均散射角$\bar{a}$、极化熵$H$以及极化反熵$A$这三个用于描述目标统计的散射机制的量，具体如下表示：
+\begin{gather}
+    \bar{\alpha}=\sum_{i=1}^3{P_i\alpha _i}
+    \\
+    H=\sum_{i=1}^3{P_i\log _3P_i}
+    \\
+    A=\frac{\lambda _2-\lambda _3}{\lambda _2+\lambda _3}
+\end{gather}
+其中，$\alpha_i$表示从特征值$\lambda_i$中得到的散射角，$P_i=\frac{\lambda _i}{\sum_j{\lambda _j}}$。
+
+从Cloude分解的三个散射分类计算式可以看出，平均散射角$\bar{\alpha}$描述了散射角从$0^{\operatorname{\omicron}}$到$90^{\operatorname{\omicron}}$变化过程中，散射特性从单次散射到二面角散射的连续变化的过程；极化熵$H$描述了目标散射特性的随机性，当$H=1$时，目标是一个随机噪声，当$H=0$时，目标的散射特性唯一，相当于一个相干目标；极化反熵$A$是对极化熵的补充量，通常用来作为极化熵难以区分目标的指标量。
+
+Cloude分解每个分量的物理解释如表\ref{Cloude table}所示，分解分量的伪彩图如图\ref{}所示。
+\begin{table}[h]
+    \caption{Cloude分解}
+    \begin{tabularx}{\textwidth}{|l|X|X|}
+        \hline
+        Cloude参数         & 参数表达                                                    & 物理描述                           \\ \hline
+        Entropy          & $H=\sum_{i=1}^3{P_i\log _3P_i}$                         & 散射目标由各向性散射至完全随机散射的随机性          \\ \hline
+        Mean Alpha Angle & $\bar{\alpha}=\sum_{i=1}^3{P_i\alpha _i}$               & 由表面散射至二面角散射的平均随机性              \\ \hline
+        Anisotropy       & $A=\frac{\lambda _2-\lambda _3}{\lambda _2+\lambda _3}$ & 描述了主散射体之外的其余两个相对较弱的散射分量之间的强弱关系 \\ \hline
+    \end{tabularx}
+    \label{Cloude table}
+\end{table}
+
+\subsubsection{Freeman分解}
+Freeman和Durden\cite{}基于van Zyl的目标分解工作，进一步提出了一种非相干的三分量分解方法，将极化协方差矩阵$C$使用单次散射、偶次散射和体散射三种散射机制的加权和表示。具体表示如下：
+\begin{equation}
+    C=f_sC_s+f_dC_d+f_vC_v
+\end{equation}
+其中，
+\begin{gather}
+    C_s=\left[ \begin{matrix}
+            \left| \beta \right|^2 & 0 & \beta \\
+            0                      & 0 & 0     \\
+            \beta ^*               & 0 & 1     \\
+        \end{matrix} \right]
+    \\
+    C_d=\left[ \begin{matrix}
+            \left| \alpha \right|^2 & 0 & \alpha \\
+            0                       & 0 & 0      \\
+            \alpha ^*               & 0 & 1      \\
+        \end{matrix} \right]
+    \\
+    C_v=\left[ \begin{matrix}
+            1           & 0           & \frac{1}{3} \\
+            0           & \frac{2}{3} & 0           \\
+            \frac{1}{3} & 0           & 1           \\
+        \end{matrix} \right]
+\end{gather}
+其中$\beta$ 表示单次散射参数，$\alpha$ 表示偶次散射参数；$C_s$、$C_d$、$C_v$分别表示单次散射模型、偶次散射模型和体散射模型的协方差矩阵分量；$f_s$、$f_d$，$f_v$表示三种散射模型对应的分解系数。
+
+Freeman分解每个分量的物理解释如表\ref{Freeman table}所示，分解分量的伪彩图如图\ref{}所示。
+\begin{table}[!ht]
+    \caption{Freeman分解}
+    \setlength{\tabcolsep}{10mm}{
+        \begin{tabular}{|c|c|c|}
+            \hline
+            Freeman基                                   & 散射类型 & 典型散射体 \\ \hline
+            $\left[ \begin{matrix}
+                                \left| \beta \right|^2 & 0 & \beta \\
+                                0                      & 0 & 0     \\
+                                \beta ^*               & 0 & 1     \\
+                            \end{matrix} \right]$      & 单次散射 & 一阶Bragg表面散射体  \\ \hline
+            $\left[ \begin{matrix}
+                                \left| \alpha \right|^2 & 0 & \alpha \\
+                                0                       & 0 & 0      \\
+                                \alpha ^*               & 0 & 1      \\
+                            \end{matrix} \right]$    & 偶次散射 & 二面角散射器          \\ \hline
+            $\left[ \begin{matrix}
+                                1           & 0           & \frac{1}{3} \\
+                                0           & \frac{2}{3} & 0           \\
+                                \frac{1}{3} & 0           & 1           \\
+                            \end{matrix} \right]$ & 体散射  & 植被冠状层偶极子           \\ \hline
+        \end{tabular}
+    }
+    \label{Freeman table}
+\end{table}
 
 \section{本章小结}
-本章首先从时域麦克斯韦方程组出发推导得到了时域电场、磁场以及混合场积分方程。
-
-\chapter{时域积分方程数值方法研究}
+本章详细介绍了极化电磁波及极化散射数据的相关理论基础。首先介绍了电磁波极化的三种表征方式包括极化椭圆、表征完全极化波的琼斯矢量和表征部分极化波的Stokes矢量。然后，介绍了极化SAR数据的散射特性描述形式，包括几种不同的极化矩阵。最后，详细介绍了极化目标分解的方法以及部分方法的详细理论基础，包括相干目标分解和非相干目标分解的代表方法以及每个参数的具体物理意义，还给出了经典方法的极化分解结果，为后续的极化SAR目标分类任务奠定理论基础。
+\chapter{散射特征引导的计划信息提取方法}
 \section{时域积分方程时间步进算法的阻抗元素精确计算}
 时域积分方程时间步进算法的阻抗元素直接影响算法的后时稳定性，因此阻抗元素的计算是算法的关键之一，采用精度高效的方法计算时域阻抗元素是时域积分方程时间步进算法研究的重点之一。
 
@@ -147,7 +606,7 @@ f(\bm{x}^{i};\bm{w})\cdot f(\bm{x}^{j};\bm{w}),\text{otherwise},
 \section{本章小结}
 本章首先研究了时域积分方程时间步进算法的阻抗元素精确计算技术，分别采用DUFFY变换法与卷积积分精度计算法计算时域阻抗元素，通过算例验证了计算方法的高精度。
 
-\chapter{时域积分方程数值方法研究}
+\chapter{基于极化信息的噪声标签下SAR目标分类方法}
 \section{时域积分方程时间步进算法的阻抗元素精确计算}
 时域积分方程时间步进算法的阻抗元素直接影响算法的后时稳定性，因此阻抗元素的计算是算法的关键之一，采用精度高效的方法计算时域阻抗元素是时域积分方程时间步进算法研究的重点之一。
 
@@ -162,71 +621,71 @@ f(\bm{x}^{i};\bm{w})\cdot f(\bm{x}^{j};\bm{w}),\text{otherwise},
 方式的存储量大小。
 
 \begin{table}[h]
-\caption{计算$2m\times 2m$理想导体平板时域感应电流采用的三种存储方式的存储量比较。}
-\begin{tabular}{cccc}
-\toprule
-\multirow{2}{*}{时间步长} & \multicolumn{3}{c}{存储方式} \\
-\cmidrule{2-4}
-& 非压缩存储方式 & 完全压缩存储方式 & 基权函数压缩存储方式 \\
-\midrule
-0.4ns & 5.59 MB & 6.78 MB & 6.78 MB\\
-0.5ns & 10.17 MB & 5.58 MB & 5.58 MB \\
-0.6ns & 8.38MB & 4.98 MB & 4.98 MB \\
-\bottomrule
-\end{tabular}
-\label{tablea}
+    \caption{计算$2m\times 2m$理想导体平板时域感应电流采用的三种存储方式的存储量比较。}
+    \begin{tabular}{cccc}
+        \toprule
+        \multirow{2}{*}{时间步长} & \multicolumn{3}{c}{存储方式}                         \\
+        \cmidrule{2-4}
+                              & 非压缩存储方式                  & 完全压缩存储方式 & 基权函数压缩存储方式 \\
+        \midrule
+        0.4ns                 & 5.59 MB                  & 6.78 MB  & 6.78 MB    \\
+        0.5ns                 & 10.17 MB                 & 5.58 MB  & 5.58 MB    \\
+        0.6ns                 & 8.38MB                   & 4.98 MB  & 4.98 MB    \\
+        \bottomrule
+    \end{tabular}
+    \label{tablea}
 \end{table}
 
 如图\ref{picd}所示给出了时间步长选取为0.5ns 时采用三种不同存储方式计算的平板中心处$x$方向的感应电流值与IDFT 方法计算结果的比较，……。如图\ref{pice}所示给出了存储方式为基权函数压缩存储方式，时间步长分别取0.4ns、0.5ns、0.6ns时平板中心处$x$方向的感应电流计算结果，从图中可以看出不同时间步长的计算结果基本相同。
 
 \begin{figure}[h]
-\subfloat[]{
-    \label{picd}
-    \includegraphics[width=6.77cm]{picd.pdf}
-}
-\subfloat[]{
-    \label{pice}
-    \includegraphics[width=7.04cm]{pice.pdf}
-}
-\caption{$2m\times 2m$的理想导体平板中心处感应电流$x$分量随时间的变化关系。(a)不同存储方式的计算结果与IDFT方法的结果比较；(b)不同时间步长的计算结果比较比较比较}
-\label{fig2}
+    \subfloat[]{
+        \label{picd}
+        \includegraphics[width=6.77cm]{picd.pdf}
+    }
+    \subfloat[]{
+        \label{pice}
+        \includegraphics[width=7.04cm]{pice.pdf}
+    }
+    \caption{$2m\times 2m$的理想导体平板中心处感应电流$x$分量随时间的变化关系。(a)不同存储方式的计算结果与IDFT方法的结果比较；(b)不同时间步长的计算结果比较比较比较}
+    \label{fig2}
 \end{figure}
 
 由于时域混合场积分方程是时域电场积分方程与时域磁场积分方程的线性组合，因此时域混合场积分方程时间步进算法的阻抗矩阵特征与时域电场积分方程时间步进算法的阻抗矩阵特征相同。
 
 \section{时域积分方程时间步进算法矩阵方程的求解}
 \begin{theorem}
-如果时域混合场积分方程是时域电场积分方程与时域磁场积分方程的线性组合。
+    如果时域混合场积分方程是时域电场积分方程与时域磁场积分方程的线性组合。
 \end{theorem}
 \begin{proof}
-由于时域混合场积分方程是时域电场积分方程与时域磁场积分方程的线性组合，因此时域混合场积分方程时间步进算法的阻抗矩阵特征与时域电场积分方程时间步进算法的阻抗矩阵特征相同。
+    由于时域混合场积分方程是时域电场积分方程与时域磁场积分方程的线性组合，因此时域混合场积分方程时间步进算法的阻抗矩阵特征与时域电场积分方程时间步进算法的阻抗矩阵特征相同。
 \end{proof}
 \begin{corollary}
-时域积分方程方法的研究近几年发展迅速，在本文研究工作的基础上，仍有以下方向值得进一步研究。
+    时域积分方程方法的研究近几年发展迅速，在本文研究工作的基础上，仍有以下方向值得进一步研究。
 \end{corollary}
 \begin{lemma}
-因此时域混合场积分方程时间步进算法的阻抗矩阵特征与时域电场积分方程时间步进算法的阻抗矩阵特征相同。
+    因此时域混合场积分方程时间步进算法的阻抗矩阵特征与时域电场积分方程时间步进算法的阻抗矩阵特征相同。
 \end{lemma}
 
 \section{本章小结}
 本章首先研究了时域积分方程时间步进算法的阻抗元素精确计算技术，分别采用DUFFY 变换法与卷积积分精度计算法计算时域阻抗元素，通过算例验证了计算方法的高精度。
 
-\chapter{全文总结与展望}
+\chapter{总结与展望}
 
-\section{全文总结}
+\section{论文的主要研究成果及创新}
 本文以时域积分方程方法为研究背景，主要对求解时域积分方程的时间步进算法以及两层平面波快速算法进行了研究。
 
-\section{后续工作展望}
+\section{研究展望}
 时域积分方程方法的研究近几年发展迅速，在本文研究工作的基础上，仍有以下方向值得进一步研究：
 
 \thesisacknowledgement
-在攻读博士学位期间，首先衷心感谢我的导师XXX教授
+在攻读硕士学位期间，首先衷心感谢我的导师XXX教授
 
-\thesisappendix
+% \thesisappendix
 
-\chapter{中心极限定理的证明}
+% \chapter{中心极限定理的证明}
 
-\section{高斯分布和伯努利实验}
+% \section{高斯分布和伯努利实验}
 
 
 % Uncomment to list all the entries of the database.
