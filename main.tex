@@ -47,20 +47,19 @@
 本文的章节结构安排如下：
 
 \chapter{极化SAR与深度学习相关理论基础}
-
 \section{引言}
-极化SAR技术通过发送和接收不同极化方式的电磁波，提供丰富的目标极化散射信息，具有全天时、全天候成像特点。因此，近年来，极化SAR在军事、农业、民用等多个领域有着广泛的应用。极化SAR数据中蕴含丰富的极化信息，如何挖掘这些极化信息，是极化SAR目标分类任务的关键步骤。同时，深度学习技术以其在遥感数据处理中的卓越表现，为极化SAR目标分类任务提供了新的思路和解决方法。本章将介绍极化SAR与深度学习方法的相关理论基础，主要包括目标散射机理介绍，极化数据的表征形式和几种典型的目标分解方法，同时还介绍了深度学习方法理论。
+极化SAR技术通过发送和接收不同极化方式的电磁波，提供丰富的目标极化散射信息，具有全天时、全天候成像特点。因此，近年来，极化SAR在城市规划、军事探测、灾害检测、农作物监控等多个领域有着广泛的应用\citing{pramudya2019estimation,dumitru2018sar,liu2019small}。极化SAR数据中蕴含丰富的极化信息，如何挖掘这些极化信息，是极化SAR目标分类任务的关键步骤。同时，深度学习技术以其在遥感数据处理中的卓越表现，为极化SAR目标分类任务提供了新的思路和解决方法\citing{liu2016pol, liu2019task, bi2018graph}。本章将介绍极化SAR与深度学习方法的相关理论基础，主要包括目标散射机理介绍，极化数据的表征形式和几种典型的目标分解方法，同时还介绍了深度学习方法理论。
 
 \section{极化电磁波表征方式}
 电场与磁场的相互作用产生电磁波。在电磁波传播过程中，电场与磁场振荡平面始终保持垂直，并且都与电磁波的传播方向相垂直，如图\ref{电磁波传输过程示意图}所示：
 
 \begin{figure}[h]
-    \includegraphics[width=7.3cm]{pic/chapter2/电磁波传输过程.pdf}
+    \includegraphics[width=10.3cm]{pic/chapter2/电磁波传输过程.pdf}
     \caption{电磁波传输过程示意图}
     \label{电磁波传输过程示意图}
 \end{figure}
 
-极化是电磁波的基本特性之一，是指在固定的空间点处，电场振荡方向随着时间的变化方式。在笛卡尔坐标系中，设定电磁波的传播方向为$\hat{z}$轴正方向，电场与磁场的关系可以使用麦克斯韦方程组表示\cite{}：
+极化是电磁波的基本特性之一，是指在固定的空间点处，电场振荡方向随着时间的变化方式。在笛卡尔坐标系中，设定电磁波的传播方向为$\hat{z}$轴正方向，电场与磁场的关系可以使用麦克斯韦方程组表示\citing{皮亦鸣2007合成孔径雷达成像原理, 路宏敏2006电磁场与电磁波基础}：
 
 \begin{gather}
     \label{Maxwell1}
@@ -102,7 +101,7 @@ SAR系统与地面目标之间的距离满足远场条件，可以将SAR工作�
 
 \begin{figure}[h]
     \includegraphics[width=7.3cm]{pic/chapter2/极化椭圆.jpg}
-    \caption{极化椭圆示意图}
+    \caption{极化椭圆示意图\citing{皮亦鸣2007合成孔径雷达成像原理}}
     \label{极化椭圆示意图}
 \end{figure}
 
@@ -114,7 +113,7 @@ SAR系统与地面目标之间的距离满足远场条件，可以将SAR工作�
 \end{gather}
 根据电场矢量的旋转方向,可以将极化电磁波分为左旋和右旋两种类型。当椭圆方向角$\chi > 0$时,表示左旋极化波；当椭圆方向角$\chi < 0$时，表示左旋极化波。
 \subsection{琼斯矢量}
-为了简化平面电磁波极化状态的描述方式，还可以通过琼斯矢量\cite{}的形式表示。将公式\ref{平面波}使用复数的形式表示为：
+为了简化平面电磁波极化状态的描述方式，还可以通过琼斯矢量的形式表示。将公式\ref{平面波}使用复数的形式表示为：
 \begin{equation}
     \boldsymbol{E}(z, t)=\left[\begin{array}{c}
             E_{0 x} \cos \left(\omega t-k z+\delta_x\right) \\
@@ -175,9 +174,9 @@ SAR系统与地面目标之间的距离满足远场条件，可以将SAR工作�
 \end{equation}
 
 \section{极化散射数据表征方式}
-极化SAR系统通过发射水平和垂直两种不同极化方式的电磁波，对目标进行探测，当电磁波遇到目标后，部分被目标体吸收，另外一部分通过目标辐射，形成反射回波。由于散射回波因目标的散射特性而异，因此可以通过分析回波的特性来推断目标的特征。为了能够表征目标的极化散射特性，需要引入不同的参数来描述各个极化通道散射回波在幅度相位上的差异。\cite{}
+极化SAR系统通过发射水平和垂直两种不同极化方式的电磁波，对目标进行探测，当电磁波遇到目标后，部分被目标体吸收，另外一部分通过目标辐射，形成反射回波。由于散射回波因目标的散射特性而异，因此可以通过分析回波的特性来推断目标的特征。为了能够表征目标的极化散射特性，需要引入不同的参数来描述各个极化通道散射回波在幅度相位上的差异。
 \subsection{极化散射矩阵和Mueller矩阵}
-极化SAR系统从发射的不同极化形式的电磁波信号，到以不同的极化方式接收经过目标反射的电磁波，目标的反射过程可以看做电磁波对应琼斯矢量的线性转换的过程。为了描述这个线性转换的过程，引入极化散射矩阵\cite{}，又称为Sinclair矩阵，简写为$S$，通常使用$2\times2$的复数矩阵表示，具体如下：
+极化SAR系统从发射的不同极化形式的电磁波信号，到以不同的极化方式接收经过目标反射的电磁波，目标的反射过程可以看做电磁波对应琼斯矢量的线性转换的过程。为了描述这个线性转换的过程，引入极化散射矩阵\citing{sinclair1950transmission}，又称为Sinclair矩阵，简写为$S$，通常使用$2\times2$的复数矩阵表示，具体如下：
 \begin{equation}
     \left[ S \right] =\left[ \begin{matrix}
             S_{HH} & S_{HV} \\
@@ -192,7 +191,7 @@ SAR系统与地面目标之间的距离满足远场条件，可以将SAR工作�
         \end{matrix} \right]
 \end{equation}
 
-以上的极化散射矩阵适用于表述完全极化波对应的琼斯矢量的入射与散射之间的线性关系，但是通常情况下，入射与散射的电磁波都是部分极化电磁波，这种情况下，需要引入Mueller矩阵\cite{}来进行表示它们之间的关系。
+以上的极化散射矩阵适用于表述完全极化波对应的琼斯矢量的入射与散射之间的线性关系，但是通常情况下，入射与散射的电磁波都是部分极化电磁波，这种情况下，需要引入Mueller矩阵\citing{guissard1994mueller}来进行表示它们之间的关系。
 
 Mueller矩阵是一个$4\times4$的矩阵，简写为$M$，具体表示如下：
 \begin{equation}
@@ -213,7 +212,7 @@ Mueller矩阵是一个$4\times4$的矩阵，简写为$M$，具体表示如下：
 从公式\ref{Mueller}和公式\ref{R}可以看出，$M$实际上是经过$S$运算得到，因此$M$与$S$属于一一对应的关系，但是$S$相比于$M$还多具备了绝对的相位信息。
 
 \subsection{极化相干矩阵和协方差矩阵}
-在极化SAR系统成像过程中，目标的散射回波中往往还夹杂了周围其他散射体的散射杂波。为了减少散射杂波的影响，在实际应用过程中通常会对极化散射矩阵$S$进行矢量化分解，得到二阶统计的极化相干矩阵和极化协方差矩阵\cite{}。
+在极化SAR系统成像过程中，目标的散射回波中往往还夹杂了周围其他散射体的散射杂波。为了减少散射杂波的影响，在实际应用过程中通常会对极化散射矩阵$S$进行矢量化分解，得到二阶统计的极化相干矩阵和极化协方差矩阵。
 
 通常利用正交的矩阵基来对极化散射矩阵进行矢量化分解，矢量化过程表示如下：
 \begin{equation}
@@ -304,7 +303,7 @@ Mueller矩阵是一个$4\times4$的矩阵，简写为$M$，具体表示如下：
 \end{equation}
 
 \section{极化目标分解理论基础}
-极化散射矩阵全面的描述了目标的散射特征，可以从中获取到目标表面粗糙度、对称性以及取向性等信息，为深层次地探索目标特性提供了数据支撑。但是，仅仅基于测量到的散射数据并无法直接获取丰富的信息，还需要进一步对测量的散射矩阵进行数据处理，进而从其中提取出能表征目标特征的极化描述。为了更清晰的描述不同目标的极化特性，可以将散射矩阵通过不同的散射模型作为基分解为几个矩阵的线性组合，由于这些基础散射模型具有不同的物理意义，分解矩阵可以表示目标的不同散射特性，为后续的识别、分类任务提供更多的信息。极化目标分解根据分解的数据分为相干分解和非相干分解两种类别：相干分解的分对象是极化散射矩阵，要求目标具有稳定的散射性质和相干的散射波；非相干分解的分解对象是极化相干矩阵或极化协方差矩阵，要求目标具有非相干散射波，散射的特征随时间变化，探测目标可以是分布式目标。\cite{}
+极化散射矩阵全面的描述了目标的散射特征，可以从中获取到目标表面粗糙度、对称性以及取向性等信息，为深层次地探索目标特性提供了数据支撑。但是，仅仅基于测量到的散射数据并无法直接获取丰富的信息，还需要进一步对测量的散射矩阵进行数据处理，进而从其中提取出能表征目标特征的极化描述。为了更清晰的描述不同目标的极化特性，可以将散射矩阵通过不同的散射模型作为基分解为几个矩阵的线性组合，由于这些基础散射模型具有不同的物理意义，分解矩阵可以表示目标的不同散射特性，为后续的识别、分类任务提供更多的信息。极化目标分解根据分解的数据分为相干分解和非相干分解两种类别：相干分解的分对象是极化散射矩阵，要求目标具有稳定的散射性质和相干的散射波；非相干分解的分解对象是极化相干矩阵或极化协方差矩阵，要求目标具有非相干散射波，散射的特征随时间变化，探测目标可以是分布式目标。
 \subsection{极化相干分解}
 极化相干分解的基本思想是通过不同的基础散射模型，将测量得到的散射矩阵分解成多个散射机制之和，如下式所示：
 \begin{equation}
@@ -312,7 +311,7 @@ Mueller矩阵是一个$4\times4$的矩阵，简写为$M$，具体表示如下：
 \end{equation}
 其中，$S$表示极化散射矩阵，$S_k$表示分解得到的经典目标的散射矩阵，$a_k$表示对应的权值。
 
-经典的极化相干分解方法有Pauli分解\cite{}、Krogager分解\cite{}、Cameron分解\cite{}、球坐标分解\cite{}等。下面将介绍Pauli分解和Krogager分解的基本原理。
+经典的极化相干分解方法有Pauli分解\cite{cloude1996review}、Krogager分解\cite{krogager1990new}、Cameron分解\cite{cameron1990feature}、球坐标分解\cite{lee2017polarimetric}等。下面将介绍Pauli分解和Krogager分解的基本原理。
 \subsubsection{Pauli分解}
 Pauli分解方法是使用Pauli基对极化散射矩阵进行分解，分解过程如下式所示：
 \begin{equation}
@@ -356,32 +355,38 @@ Pauli分解方法是使用Pauli基对极化散射矩阵进行分解，分解过�
         \end{matrix} \right] ^T
 \end{equation}
 
-对于Pauli分解的每个分量的物理解释如表\ref{Pauli table}所示，分量的伪彩图像如图\ref{Pauli示意图}所示。
+对于Pauli分解的每个分量的物理解释如表\ref{Pauli table}所示。
 \begin{table}[h]
     \caption{Pauli分解}
-    \begin{tabular}{|c|c|c|}
-        \hline
-        Pauli基                 & 散射类型                & 物理描述                             \\ \hline
-        $\left[ \begin{matrix}
-                            1 & 0 \\
-                            0 & 1 \\
-                        \end{matrix} \right] $ & 奇次散射                & 球体、平坦平面或三面角反射器           \\ \hline
-        $\left[ \begin{matrix}
-                            1 & 0  \\
-                            0 & -1 \\
-                        \end{matrix} \right] $ & 偶次散射                & 二面角反射器                   \\ \hline
-        $\left[ \begin{matrix}
-                            0 & 1 \\
-                            1 & 0 \\
-                        \end{matrix} \right] $ & $\frac{\pi}{4}$偶次散射 & 与水平$\frac{\pi}{4}$倾角的二面角 \\ \hline
-    \end{tabular}
+    \linespread{1.5} % 调整整个表格的行高
+    \setlength{\arraycolsep}{10pt} % 调整列之间的空白
+
+    \resizebox{\linewidth}{!}{
+        \begin{tabular}{|c|c|c|}
+            \hline
+            Pauli基                 & 散射类型                & 物理描述                             \\ \hline
+            $\left[ \begin{matrix}
+                                1 & 0 \\
+                                0 & 1 \\
+                            \end{matrix} \right] $ & 奇次散射                & 球体、平坦平面或三面角反射器           \\ \hline
+            $\left[ \begin{matrix}
+                                1 & 0  \\
+                                0 & -1 \\
+                            \end{matrix} \right] $ & 偶次散射                & 二面角反射器                   \\ \hline
+            $\left[ \begin{matrix}
+                                0 & 1 \\
+                                1 & 0 \\
+                            \end{matrix} \right] $ & $\frac{\pi}{4}$偶次散射 & 与水平$\frac{\pi}{4}$倾角的二面角 \\ \hline
+        \end{tabular}
+    }
+
     \label{Pauli table}
 \end{table}
-\begin{figure}[h]
-    \includegraphics[width=7.3cm]{pic/chapter2/SF-Puali.jpg}
-    \caption{Pauli分解伪彩图(R:$ \left | a \right |^2$，G:$ \left | b \right |^2$，B:$ \left | c \right |^2$)}
-    \label{Pauli示意图}
-\end{figure}
+% \begin{figure}[h]
+% 	\includegraphics[width=7.3cm]{pic/chapter2/SF-Puali.jpg}
+% 	\caption{Pauli分解伪彩图(R:$ \left | a \right |^2$，G:$ \left | b \right |^2$，B:$ \left | c \right |^2$)}
+% 	\label{Pauli示意图}
+% \end{figure}
 
 \subsubsection{Krogager分解}
 Krogager分解是将极化散射矩阵$S$分解为球散射、二面角散射以及螺旋体散射三个散射分量的加权和，具体如下：
@@ -447,27 +452,28 @@ Krogager分解是将极化散射矩阵$S$分解为球散射、二面角散射以
     \end{array} \right.
 \end{equation}
 
-Krogager分解每个分量的物理解释如表\ref{Krogager table}所示，分解分量的伪彩图如图\ref{}所示。
-
+Krogager分解每个分量的物理解释如表\ref{Krogager table}所示。
 \begin{table}[h]
     \caption{Krogager分解}
-    \begin{tabular}{|c|c|c|}
-        \hline
-        Krogager基                   & 散射类型  & 物理描述                   \\ \hline
-        $\left[ \begin{matrix}
-                            1 & 0 \\
-                            0 & 1 \\
-                        \end{matrix} \right] $      & 球面散射  & 球体、平坦平面或三面角反射器 \\
-        \hline
-        $\left[ \begin{matrix}
-                            cos2\theta & sin2\theta  \\
-                            sin2\theta & -cos2\theta \\
-                        \end{matrix} \right] $ & 二面角散射 & 二面角反射器              \\ \hline
-        $\left[ \begin{matrix}
-                            1     & \pm j \\
-                            \pm j & -1    \\
-                        \end{matrix} \right] $      & 螺旋体散射 & 不对称结构          \\ \hline
-    \end{tabular}
+    \resizebox{\linewidth}{!}{
+        \begin{tabular}{|c|c|c|}
+            \hline
+            Krogager基                   & 散射类型  & 物理描述                   \\ \hline
+            $\left[ \begin{matrix}
+                                1 & 0 \\
+                                0 & 1 \\
+                            \end{matrix} \right] $      & 球面散射  & 球体、平坦平面或三面角反射器 \\
+            \hline
+            $\left[ \begin{matrix}
+                                cos2\theta & sin2\theta  \\
+                                sin2\theta & -cos2\theta \\
+                            \end{matrix} \right] $ & 二面角散射 & 二面角反射器              \\ \hline
+            $\left[ \begin{matrix}
+                                1     & \pm j \\
+                                \pm j & -1    \\
+                            \end{matrix} \right] $      & 螺旋体散射 & 不对称结构          \\ \hline
+        \end{tabular}
+    }
     \label{Krogager table}
 \end{table}
 
@@ -480,7 +486,7 @@ Krogager分解每个分量的物理解释如表\ref{Krogager table}所示，分�
 \end{gather}
 其中，$p_k$和$q_k$均表示每个散射模型分量的权重系数。
 
-经典的非相干分解方法包括Cloude分解\cite{}、Freeman分解\cite{}、Huynen分解\cite{}、Yamaguchi分解\cite{}、Barnes分解\cite{}、Holm分解\cite{}和van Zyl分解\cite{}等。下面将介绍Cloude分解和Freeman分解的原理。
+经典的非相干分解方法包括Cloude分解\citing{cloude1997entropy}、Freeman分解\citing{freeman1998three}、Huynen分解\citing{huynen1988extraction}、Yamaguchi分解\citing{yamaguchi2005four}、Holm分解\citing{holm1988radar}和van Zyl分解\citing{van1993application}等。下面将介绍Cloude分解和Freeman分解的原理。
 \subsubsection{Cloude分解}
 Cloude分解是一种矩阵特征空间分解方法，是对极化相干矩阵$T$进行特征分解，得到三组特征值与对应的特征向量。具体如下式所示：
 \begin{equation}
@@ -504,69 +510,71 @@ Cloude分解是一种矩阵特征空间分解方法，是对极化相干矩阵$T
 
 从Cloude分解的三个散射分类计算式可以看出，平均散射角$\bar{\alpha}$描述了散射角从$0^{\operatorname{\omicron}}$到$90^{\operatorname{\omicron}}$变化过程中，散射特性从单次散射到二面角散射的连续变化的过程；极化熵$H$描述了目标散射特性的随机性，当$H=1$时，目标是一个随机噪声，当$H=0$时，目标的散射特性唯一，相当于一个相干目标；极化反熵$A$是对极化熵的补充量，通常用来作为极化熵难以区分目标的指标量。
 
-Cloude分解每个分量的物理解释如表\ref{Cloude table}所示，分解分量的伪彩图如图\ref{}所示。
+Cloude分解每个分量的物理解释如表\ref{Cloude table}所示。
 \begin{table}[h]
     \caption{Cloude分解}
-    \begin{tabularx}{\textwidth}{|l|X|X|}
-        \hline
-        Cloude参数         & 参数表达                                                    & 物理描述                           \\ \hline
-        Entropy          & $H=\sum_{i=1}^3{P_i\log _3P_i}$                         & 散射目标由各向性散射至完全随机散射的随机性          \\ \hline
-        Mean Alpha Angle & $\bar{\alpha}=\sum_{i=1}^3{P_i\alpha _i}$               & 由表面散射至二面角散射的平均随机性              \\ \hline
-        Anisotropy       & $A=\frac{\lambda _2-\lambda _3}{\lambda _2+\lambda _3}$ & 描述了主散射体之外的其余两个相对较弱的散射分量之间的强弱关系 \\ \hline
-    \end{tabularx}
+    \resizebox{\linewidth}{!}{
+        \begin{tabularx}{\textwidth}{|l|X|X|}
+            \hline
+            Cloude参数         & 参数表达                                                    & 物理描述                           \\ \hline
+            Entropy          & $H=\sum_{i=1}^3{P_i\log _3P_i}$                         & 散射目标由各向性散射至完全随机散射的随机性          \\ \hline
+            Mean Alpha Angle & $\bar{\alpha}=\sum_{i=1}^3{P_i\alpha _i}$               & 由表面散射至二面角散射的平均随机性              \\ \hline
+            Anisotropy       & $A=\frac{\lambda _2-\lambda _3}{\lambda _2+\lambda _3}$ & 描述了主散射体之外的其余两个相对较弱的散射分量之间的强弱关系 \\ \hline
+        \end{tabularx}
+    }
     \label{Cloude table}
 \end{table}
 
 \subsubsection{Freeman分解}
-Freeman和Durden\cite{}基于van Zyl的目标分解工作，进一步提出了一种非相干的三分量分解方法，将极化协方差矩阵$C$使用单次散射、偶次散射和体散射三种散射机制的加权和表示。具体表示如下：
+Freeman和Durden基于van Zyl的目标分解工作，进一步提出了一种非相干的三分量分解方法，将极化协方差矩阵$C$使用单次散射、偶次散射和体散射三种散射机制的加权和表示。具体表示如下：
 \begin{equation}
     C=f_sC_s+f_dC_d+f_vC_v
 \end{equation}
 其中，
-\begin{gather}
-    C_s=\left[ \begin{matrix}
-            \left| \beta \right|^2 & 0 & \beta \\
-            0                      & 0 & 0     \\
-            \beta ^*               & 0 & 1     \\
-        \end{matrix} \right]
-    \\
-    C_d=\left[ \begin{matrix}
-            \left| \alpha \right|^2 & 0 & \alpha \\
-            0                       & 0 & 0      \\
-            \alpha ^*               & 0 & 1      \\
-        \end{matrix} \right]
-    \\
-    C_v=\left[ \begin{matrix}
-            1           & 0           & \frac{1}{3} \\
-            0           & \frac{2}{3} & 0           \\
-            \frac{1}{3} & 0           & 1           \\
-        \end{matrix} \right]
-\end{gather}
+\begin{equation}
+    \begin{matrix}
+        C_s=\left[ \begin{matrix}
+                           \left| \beta \right|^2 & 0 & \beta \\
+                           0                      & 0 & 0     \\
+                           \beta ^*               & 0 & 1     \\
+                       \end{matrix} \right] , & C_d=\left[ \begin{matrix}
+                                                               \left| \alpha \right|^2 & 0 & \alpha \\
+                                                               0                       & 0 & 0      \\
+                                                               \alpha ^*               & 0 & 1      \\
+                                                           \end{matrix} \right] , & C_v=\left[ \begin{matrix}
+                                                                                                   1   & 0   & 1/3 \\
+                                                                                                   0   & 2/3 & 0   \\
+                                                                                                   1/3 & 0   & 1   \\
+                                                                                               \end{matrix} \right] \\
+    \end{matrix}
+\end{equation}
 其中$\beta$ 表示单次散射参数，$\alpha$ 表示偶次散射参数；$C_s$、$C_d$、$C_v$分别表示单次散射模型、偶次散射模型和体散射模型的协方差矩阵分量；$f_s$、$f_d$，$f_v$表示三种散射模型对应的分解系数。
 
-Freeman分解每个分量的物理解释如表\ref{Freeman table}所示，分解分量的伪彩图如图\ref{}所示。
+Freeman分解每个分量的物理解释如表\ref{Freeman table}所示。
 \begin{table}[!ht]
     \caption{Freeman分解}
     \setlength{\tabcolsep}{10mm}{
-        \begin{tabular}{|c|c|c|}
-            \hline
-            Freeman基                                   & 散射类型 & 典型散射体 \\ \hline
-            $\left[ \begin{matrix}
-                                \left| \beta \right|^2 & 0 & \beta \\
-                                0                      & 0 & 0     \\
-                                \beta ^*               & 0 & 1     \\
-                            \end{matrix} \right]$      & 单次散射 & 一阶Bragg表面散射体  \\ \hline
-            $\left[ \begin{matrix}
-                                \left| \alpha \right|^2 & 0 & \alpha \\
-                                0                       & 0 & 0      \\
-                                \alpha ^*               & 0 & 1      \\
-                            \end{matrix} \right]$    & 偶次散射 & 二面角散射器          \\ \hline
-            $\left[ \begin{matrix}
-                                1           & 0           & \frac{1}{3} \\
-                                0           & \frac{2}{3} & 0           \\
-                                \frac{1}{3} & 0           & 1           \\
-                            \end{matrix} \right]$ & 体散射  & 植被冠状层偶极子           \\ \hline
-        \end{tabular}
+        \resizebox{\linewidth}{!}{
+            \begin{tabular}{|c|c|c|}
+                \hline
+                Freeman基                                   & 散射类型 & 典型散射体 \\ \hline
+                $\left[ \begin{matrix}
+                                    \left| \beta \right|^2 & 0 & \beta \\
+                                    0                      & 0 & 0     \\
+                                    \beta ^*               & 0 & 1     \\
+                                \end{matrix} \right]$      & 单次散射 & 一阶Bragg表面散射体  \\ \hline
+                $\left[ \begin{matrix}
+                                    \left| \alpha \right|^2 & 0 & \alpha \\
+                                    0                       & 0 & 0      \\
+                                    \alpha ^*               & 0 & 1      \\
+                                \end{matrix} \right]$    & 偶次散射 & 二面角散射器          \\ \hline
+                $\left[ \begin{matrix}
+                                    1           & 0           & \frac{1}{3} \\
+                                    0           & \frac{2}{3} & 0           \\
+                                    \frac{1}{3} & 0           & 1           \\
+                                \end{matrix} \right]$ & 体散射  & 植被冠状层偶极子           \\ \hline
+            \end{tabular}
+        }
     }
     \label{Freeman table}
 \end{table}

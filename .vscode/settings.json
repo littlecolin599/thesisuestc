@@ -1,0 +1,10 @@
+{
+    "name": "xe->bib->xe->xe",
+    "tools": [
+        "xelatex",
+        "bibtex",
+        "xelatex",
+        "xelatex"
+    ]
+}
+

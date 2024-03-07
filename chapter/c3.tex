@@ -79,7 +79,7 @@
 \section{基于双通道注意力的极化信息提取方法}
 考虑到极化SAR图像原始数据可以由极化散射特征和极化目标分解特征进行表征，存在数据量大、信息复杂度高的问题，如果直接简单堆叠使用，甚至会导致模型性能下降。鉴于不同的地物目标之间散射特性存在差异，因此对极化SAR特征的重新标定校准是必不可少的，根据目标散射特性，自适应地增强有效特征，而抑制无效特征。为了高效地提取极化SAR数据中的有效信息，本章提出了一种基于双通道注意力的极化信息提取方法，旨在通过注意力机制来捕捉原始特征中的关键信息，充分考虑了不同极化特征之间的差异与联系，注重不同极化通道或空间中的关联性和权重分布，从而提高信息表征的准确性和效率。该方法可以作为一种即插即用的插件式网络结构，应用在后续的目标检测、地物分类任务中，为其提供更为可靠的基础极化信息表示。下面将详细介绍基于双通道注意力的极化信息提取方法的设计原理和实现步骤。
 
-\subsection{双通道极化信息提取网络框架}
+\subsection{双通道注意力极化信息提取网络框架}
 % 图\ref{DPEN_framework}是基于双通道注意力的极化信息提取算法示意图。该极化信息提取模型由两个注意力通道构成：极化目标分解通道和极化散射特征通道。该方法的主要思路是：首先通过设计双注意力通道的结构，将目标分解特征和散射特征隔离输入，保证模型对不同层次的特征具有感知能力。然后，在每一个通道内，依次采用空间注意力和通道注意力来捕获输入特征的关键信息。为了强化极化信息的感知能力，设计了极化注意力调整模块，聚合不同层次的关键信息，对得到的注意力权重进行修正。其次，为了进一步提升模型的空间信息学习能力，引入跨空间学习模块，聚合不同尺寸的极化特征。最后，将两个通道的极化信息拼接形成最终的注意力增强的极化特征，用于下游分类任务的输入。
 
 图\ref{DPEN_framework}是基于双通道注意力的极化信息提取算法示意图。该极化信息提取方法主要目的是充分考虑散射特征和目标分解特征的关联性，通过设计合理网络结构来对两类信息的有效提取和整合。该算法框架的主要思路是：首先，通过双通道的结构形式，分别处理极化散射特征和目标分解特征，以实现对不同信息的有针对性提取，避免相互之间的干扰。其中一个通道专注于提取散射特征中的有效信息，而另一个通道专门处理目标分解特征。其次，在每个通道内部，采用通道注意力和空间注意力模块，以捕捉关键信息并增强空间、通道关键位置的权重，从而优化极化信息提取的准确性和处理效率。然后，设计了极化注意力调整模块，旨在通过极化散射的一致性修正两个通道之间的注意力权重，增强两者之间的协同作用。同时，为了对空间特征信息的建模，每个通道内部设置两个不同尺寸的分支，通过跨空间学习模块来保证模型对极化信息的全面感知能力。最后，通过拼接操作对两个通道中重新标定的特征进行融合输出，得到最终的有效极化信息表示，为后续任务提供可靠的数据基础。
@@ -129,45 +129,60 @@
 \end{align}
 其中，$Attention_s$和$Attention_c$分别表示空间和通道注意力计算函数，$i \in {1,2}$表示散射特征或目标分解特征。
 
-（3）极化特征引导的注意力修正。
+（3）极化特征引导的注意力修正。为了整合目标分解通道和极化散射通道全局信息，通过该极化特征引导的注意力修正模块来增强两个不同类型极化信息的关联，以获取更全局、更丰富的极化信息。该模块以目标分解注意力权重和散射特征注意力权重为输入，利用卷积与乘加的方式，来对两种信息进行整合，最后通过Sigmoid激活函数将联合的权重映射为修正后的注意力权重。
 
-（4）跨空间特征学习。
+（4）跨空间特征学习。尽管通过空间、通道注意力方法能够构建起空间中的依赖关系，但是仅仅考虑了通道分支和空间分支的表示能力，对于不同空间维度方向的关系表示还有所欠缺。通过设计$3\times 3$和$1 \times 1$两个卷积分支结构，用于对全局信息编码和远程依赖关系建模。
 
-（5）极化信息聚合。
+（5）极化信息聚合。通过上述步骤之后，两个通道得到修正的极化特征，通过拼接操作将两种类型的特征进行拼接，得到最终的极化信息输出，用于后续任务的输入。
 
 最后将上述双通道注意力极化信息提取算法伪代码总结为表\ref{}。
 
 \begin{algorithm}[H]
     \KwData{this text}
     \KwResult{how to write algorithm with \LaTeX2e}
-    initialization\;
-    \While{not at end of this document}{
-        read current\;
-        \eIf{understand}{
-            go to next section\;
-            current section becomes this one\;
-        }{
-            go back to the beginning of current section\;
-        }
-    }
+    极化特征表示\;
+    空间、通道注意力机制捕捉关键信息\;
+    极化特征引导的注意力权重修正\;
+    跨空间极化特征聚合\;
+    特征拼接\;
+    后续分类\;
     \caption{双通道注意力极化信息提取算法}
 \end{algorithm}
 
 
 \subsection{空间和通道注意力模块}
-图\ref{}展示了本方法使用的注意力提取模块详细结构。
+引入空间和通道注意力模块，旨在进一步提升对应层次特征通道中特征的可鉴别特性。通过通道注意力自适应地校准每个通道特征图的权重、空间注意力来捕捉像素级的空间信息，在重要的特征上得到增强，而在不相关的特征上权重较小，从而改善信息提取模型的性能。本文采用（spatial and channel Squeeze Excitation, scSE）\citing{}中的空间通道注意力结构。图\ref{scSE}为scSE的结构图，包含了两个并行的模块，分别是用于提取通道注意力的cSE（channel Squeeze Excitation, cSE）和用于提取空间注意力的sSE（spatial Squeeze Excitation, sSE），输入的特征图$F$经过这两个模块的重新校准，输出校准后的特征图$F_{sSE}$和$F_{cSE}$。基于以上的校准模型，能够学习到空间、通道两种维度上更加有意义的信息。
 
-\subsection{极化注意力调整模块}
+图\ref{DPEN_WFM}展示了极化注意力调整模块详细结构。
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm]{pic/chapter3/scSE.jpg}
+    \caption{scSE结构图}
+    \label{scSE}
+\end{figure}
+如图\ref{scSE}所示，相比于SE模块的全连接层，sSE空间注意力模块采用卷积操作来获取全局信息，从而赋予其更多的非线性捕捉能力，更好的拟合不同空间位置之间的复杂相关性，显著减少参数量和计算量。如图\ref{scSE}所示，sSE模块首先对每个通道素具进行压缩，利用$1\times 1 \times 1$卷积，将输入的特征图$F$的特征维度从$H \times W \times C$压缩为$H \times W \times 1$，然后利用Sigmoid激活函数得到空间注意力系数图。系数图中的每一个像素点代表了所有通道的特征图在该空间位置信息的重要程度。基于空间注意力系数图能够使模型更加关注与任务相关的空间位置信息，而抑制不相关的位置信息。
+
+cSE模块首先对输入的特征图在特征通道上进行压缩，通过全局平均池化的方式，将特征维度为$H \times W \times C$的输入特征压缩为$1 \times 1 \times C$维度。全局平均池化操作对输入特征图的空间依赖性进行拆解，并通过逐个学习每个通道生成反映各个通道重要性的特征图。随后，这些特征图经过两个卷积层进行信息处理，最终被转换为$C$维向量。经过Sigmoid激活函数处理后，得到相应的通道注意力权重系数，该系数用于表示不同通道特征图的重要性。利用通道注意力权重系数，动态调整每个通道的重要程度，以更加精准地捕捉有助于任务的特征信息，提升模型对关键特征的敏感性。
+
+\subsection{极化注意力修正模块}
 图\ref{DPEN_WFM}展示了极化注意力调整模块详细结构。
 \begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{pic/chapter3/DPEN_WFM.png}
-    \caption{极化注意力调整模块}
+    \caption{极化注意力修正模块}
     \label{DPEN_WFM}
 \end{figure}
 
+极化信息引导的注意力修正模块利用两种不同类型的注意力权重，通过极化权重与散射权重之间的相关引导，进行修正。该模块的表达式如下所示：
+
+
 \subsection{跨空间学习模块}
-跨空间学习模块的网络结构如图\ref{DPEN_CSL}所示。
+跨空间学习模块的网络结构如图\ref{DPEN_CSL}所示。跨空间学习模块提供了一种不同空间维度方向的极化信息聚合方法，来实现多尺度下的极化特征聚合。引入两个分支的张量，分别是$1\times 1$分支的输出和$3 \times 3$分支的输出。随后利用二维全局平均池化对$1\times 1$分支的输出中的全局极化空间信息进行编码，用于编码全局信息和建模远程依赖关系。二维全局池化操作可以表示为：
+\begin{equation}
+    z_c=\frac{1}{H\times W}\sum_{j}^{H}\sum_{i}^{W}x_c(i,j)
+\end{equation}
+
+在以上二维全局平均池化的输出处采用二维高斯映射的自然非线性函数Softmax来拟合线性变换，进而提升计算效率。通过将上述并行处理的输出与矩阵点积运算相乘，得出了第一个空间注意力图。同样利用二维全局平均池化在$3\times 3$分支编码全局空间信息，将每组内的输出特征映射计算为生成的两个空间注意力权重值的集合，然后使用Sigmoid函数映射成空间位置对应的权重关系。通过捕获像素级的成对关系，突出显示所有像素的全局上下文信息。
 \begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{pic/chapter3/DPEN_CSL.png}
@@ -175,9 +190,15 @@
     \label{DPEN_CSL}
 \end{figure}
 
+
 \section{实验结果与分析}
-为了验证本章方法的有效性，本节对本章提出的方法在多个极化SAR数据集上进行验证实验。采用多个常规的性能评价指标作为实验的数值量化标准：总体分类准确率（OA）、各个类别分类准确率（AA）和kappa系数。
 \subsection{实验模型介绍}
+本章实验所使用的计算环境为一台CPU为Intel Core i7-8700K和配备了NVIDIA GPU（GeForce RTX 3090, 24G）的计算机设备。操作系统采用Ubuntu 20.04 LTS。深度学习框架选择PyTorch，版本为1.9.0，同时依赖CUDA深度神经网络库（cuDNN）版本8.0.5。在科学计算方面，实验使用NumPy库，版本为1.19.5。
+
+学习率作为深度学习模型训练的关键参数之一，其值的选择对于模型的收敛速度至关重要。在训练过程中，如果学习率设置的过大或者过小，均会可能给模型的分类准确度产生负面影响。通常情况下，在模型的训练初始阶段，采用较大的学习率能够使模型快速收敛到最优点附近。随着训练的执行，逐渐减小学习率，以更加精确地接近嘴有点。在本章所采用的模型中，初始学习率为$3\times 10^{-4}$，在训练至第30至60个epoch期间，学习率经过衰减变为原值的0.1倍。这里的epoch表示训练集中素有样本完成一次正向传递和反向传播的过程，本章中模型训练的epoch设置为100。Batch size表示每次训练中选择的样本数量，其值的大小会影响网络的优化速度和执行效率。在本章模型中，batch size被设置为64。
+
+实验中，使用两组真实极化SAR数据集分别是荷兰Flevoland区域和德国Oberpfaffenhofen地区数据来验证本章方法的有效性，并利用常规的性能指标总体分类准确率（OA）、各个类别分类准确率和Kappa系数对分类结果进行数值量化。同时对分类的可视化结果进行视觉评估。在给定的极化SAR标准数据集中，一部分像素是没有标签的，所以在计算分类准确率的时候只统计数据集中那些有标签的样本被正确分类的百分比，并认为该指标可以表征数据集中整体的分类性能。
+
 本章实验在双通道注意力极化信息（Dual-Attention Polarization Information Extraction, DAPIE）提取方法基础上，构建端到端的极化特征提取与分类方法，记为DAPIE-CNN。DAPIE-CNN的结构如图\ref{}所示，分为极化信息提取和分类器两个部分。DAPIE模块作为模型的极化信息提取方法，用于对输入的高维极化特征进行有价值信息的激发和无价值信息的抑制。分类模块是对提取的极化信息进行精确的分类。
 
 输入的极化特征如表\ref{pol-features}所示。
@@ -214,8 +235,9 @@
 \begin{equation}
     H(p,q)=\sum_{i=1}^{n}p(x_i)log(q(x_i))
 \end{equation}
-其中，$p(x)$表示真实值分布概率，$q(x)$表示模型预测分布概率。交叉熵值的变化与模型的训练效果密切相关，优越的训练效果会让预测概率分布逐渐趋近于真实值概率分布，相应的交叉熵值会逐渐减少。Sigmoid和Softmax损失函数是两个被广泛应用的交叉熵损失函数。Sigmoid损失函数主要应用于多标签分类任务，其中分类目标可以同时拥有多个标签。这一损失函数模拟了模型对多个独立事件的概率预测，每个事件的概率值落在$[0,1]$区间内。Softmax损失函数被广泛应用在多类别分类任务重，其中每个样本仅能关联一个类别。Softmax函数将预测模型的原始输出转化为表示类别概率的分布，确保所有类别的概率之和为1，并且模型的输出是互斥的。本章的极化SAR图像目标分类任务属于多分类语义分割任务，每个像素都有唯一的正确类别。因此选择多分类交叉熵损失函数，即Softmax损失函数作为模型的损失函数，这个选择侄子有效的应对单一正确标签的分类问题，并为模型训练提供有力的优化目标。
+其中，$p(x)$表示真实值分布概率，$q(x)$表示模型预测分布概率。交叉熵值的变化与模型的训练效果密切相关，优越的训练效果会让预测概率分布逐渐趋近于真实值概率分布，相应的交叉熵值会逐渐减少。Sigmoid和Softmax损失函数是两个被广泛应用的交叉熵损失函数。Sigmoid损失函数主要应用于多标签分类任务，其中分类目标可以同时拥有多个标签。这一损失函数模拟了模型对多个独立事件的概率预测，每个事件的概率值落在$[0,1]$区间内。Softmax损失函数被广泛应用在多类别分类任务重，其中每个样本仅能关联一个类别。Softmax函数将预测模型的原始输出转化为表示类别概率的分布，确保所有类别的概率之和为1，并且模型的输出是互斥的。本章的极化SAR图像目标分类任务属于多分类语义分割任务，每个像素都有唯一的正确类别。因此选择多分类交叉熵损失函数，即Softmax损失函数作为模型的损失函数，为模型训练提供有力的优化目标。
 
+为了对本章提出的极化信息提取方法进行全面地评估和对比，选择了多种替代方案进行比较，主要涉及两个方面的变化：一方面是对特征输入的处理改变，另一方面是对极化信息提取模块的替代策略。首先在特征输入方面，验证了不同极化特征表示对目标分类任务的影响。利用本章提出的基于双通道注意力的极化信息提取方法结合CNN分类模块进行分类、仅使用极化相干矩阵中的元素结合CNN分类方法（记为CNN-T）、仅使用极化目标分解特征结合CNN分类方法（记为CNN-P）、基于散射特征和分解特征简单叠加结合CNN的分类方法（记为CNN-F）作为不同的对比方法，验证本章方法在极化特征表示方面的有效性。其次是在极化信息提取模块层面进行替换，利用基于压缩和激励网络结合CNN分类方法（记为CNN-SE）和基于空间通道注意力结合CNN分类方法（记为CNN-CBAM）作为不同的对比方法，验证本章方法在极化特征表示方面的优越性。在每组实验中，从每个类别选择1\%的带标签像素，以这些带标签像素为中心，在其周围利用$15 \times 15$的窗口截取图像，形成训练集的样本表示。
 
 \subsection{精度评价方法}
 精度评价是对实际数据和模型分类结果进行比较的重要步骤，旨在确定分类模型的准确性，是衡量分类结果可靠性的关键指标。混淆矩阵（Confusion Matrix）通常作为遥感图像分类准确性能的评判指标，并且可以通过混淆矩阵计算得到多种常用的评价参数指标，例如总体分类准确率（Overall Accuracy, OA）、各个类别分类准确率、各个类别平均分类准确率（Average Accuracy, AA）、Kappa系数等。
@@ -265,16 +287,16 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
 \begin{table}[ht]
     \caption{Kappa统计值与分类精度映射关系}
     \begin{tabular}{cc}
-        \hline \hline
+        \toprule[1.5bp]
         Kappa系数 & 分类精度 \\
-        \hline
+        \midrule[0.75bp]
         <0      & 较差   \\
         0-0.2   & 差    \\
         0.2-0.4 & 正常   \\
         0.4-0.6 & 好    \\
         0.6-0.8 & 较好   \\
         0.8-1   & 非常好  \\
-        \hline \hline
+        \bottomrule[1.5bp]
     \end{tabular}
     \label{kappa}
 \end{table}
@@ -284,16 +306,16 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
 \begin{figure}[ht]
     \subfloat[]{
         \label{flevoland_pauli}
-        \includegraphics[width=7.04cm]{pic/chapter3/flevoland_pauli.png}
+        \includegraphics[width=7.04cm]{pic/chapter3/fle/pauli.png}
     }
     \subfloat[]{
         \label{flevoland_gt}
-        \includegraphics[width=7.04cm]{pic/chapter3/flevoland_gt.png}
+        \includegraphics[width=7.04cm]{pic/chapter3/fle/gt.png}
     }
-    \quad
+
     \subfloat[]{
         \label{pice}
-        \includegraphics[width=9.04cm]{pic/chapter3/flevoland_label.png}
+        \includegraphics[width=9.04cm]{pic/chapter3/fle/label.png}
     }
     \caption{Flevoland地区实验数据集。(a)Pauli分解伪彩色图像；(b)实验数据地面真值；(c)颜色与类别对应关系}
     \label{fig2}
@@ -301,153 +323,261 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
 
 \begin{table}[h]
     \caption{Felvoand地区实验数据集有标签样本数量}
-    \resizebox{\linewidth}{!}{
-        \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
-            \hline 类别 & steambeen & barley & bare soil & potato & beet     & wheat1 & peas  & lucerne \\
-            \hline 数目 & 6338      & 7595   & 5109      & 16156  & 10033    & 11159  & 9582  & 10181   \\
-            \hline 类别 & grass     & wheat2 & rapeseed  & wheat3 & building & forest & water &         \\
-            \hline 数目 & 7058      & 16386  & 13863     & 22241  & 735      & 18044  & 13232 &         \\
-            \hline
-        \end{tabular}
-    }
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+        \hline 类别 & 干豆   & 大麦    & 裸土    & 土豆    & 甜菜    & 小麦 1  & 豌豆    & 苜蓿
+        \\
+        \hline 数目 & 6338 & 7595  & 5109  & 16156 & 10033 & 11159 & 9582  & 10181 \\
+        \hline 类别 & 草地   & 小麦 2  & 油菜籽   & 小麦 3  & 建筑物   & 森林    & 水域    &       \\
+        \hline 数目 & 7058 & 16386 & 13863 & 22241 & 735   & 18044 & 13232 &       \\
+        \hline
+    \end{tabular}
     \label{flevoland_smaple}
 \end{table}
 
+图\ref{fig:fle_res}展示了各个对比方法的可视化分类结果。根据图\ref{fig:fle_T}，仅使用散射特征的分类方法，在大麦、草地和小麦区域都有较多的错分样本，这是因为只使用了散射特征而忽略了目标分解特征，没有全面综合利用所有的极化信息导致的。图\ref{fig:fle_P}展示了仅使用目标分解特征的分类结果，在甜菜、小麦区域也存在大量的错分样本，这可能是由于没有综合使用极化信息导致的，相干矩阵代表的散射特征是极化SAR中最基本、重要的特征。图\ref{fig:fle_F}展示的简单叠加散射特征与目标分解特征的分类结果，该方法的分类结果要优于前面两种方法，类间错分孤立点相对减少，具有更少的错分样本，这反映了综合利用极化信息对目标分类具有一定的优势。图\ref{fig:fle_SE}与图\ref{fig:fle:CBAM}展示了使用经典注意力方法的分类结果图，相比于直接叠加特征，并没有带来明显的分类性能提升，少量的错分孤立点依然存在。图\ref{fig:fle_DP}展示了基于双通道注意力方法的分类结果，可以看出本方法分类结果更加平滑，错分像素减少，特别是是在小麦、草地区域，这也验证了本章方法结合散射特征和目标分解特征的有效性，证明本章方法提取的极化信息表示是优越的。
+\begin{figure}[ht]
+    \subfloat[]{
+        \label{fig:fle_T}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/CNN-T.png}
+    }
+    \subfloat[]{
+        \label{fig:fle_P}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/CNN-P.png}
+    }
+    \subfloat[]{
+        \label{fig:fle_F}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/CNN-F.png}
+    }
 
-为了对本章提出的极化信息提取方法进行全面地评估和对比，选择了多种替代方案进行比较，主要涉及两个方面的变化：一方面是对特征输入的处理改变，另一方面是对极化信息提取模块的替代策略。首先在特征输入方面，探索了不同极化特征表示对目标分类任务的影响，包括输入极化特征为相干矩阵T的卷积网络（CNN-T）、输入为极化目标分解特征的卷积网络（CNN-P）、输入为全极化特征的卷积网络（CNN-F）以及以极化特征驱动的卷积网络（SF-CNN）\citing{}。其次，为了验证极化信息提取模块的有效性，尝试不同极化信息注意力调整模块和不同的结构进行对比，包括压缩和激励网络（SE-CNN）和空间通道注意力（CBAM）两种方法。
+    \subfloat[]{
+        \label{fig:fle_SE}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/CNN-T.png}
+    }
+    \subfloat[]{
+        \label{fig:fle_CBAM}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/CNN-P.png}
+    }
+    \subfloat[]{
+        \label{fig:fle_DP}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/CNN-F.png}
+    }
+    \caption{AIRSAR Flevoland地区数据分类可视化结果图。(a) CNN-T; (b) CNN-P; (c) CNN-F; (d) CNN-SE; (e) CNN-CBAM; (f) 本章方法}
+    \label{fig:fle_res}
+\end{figure}
 
-在每组实验中，从每个类别选择1\%的带标签像素，以这些带标签像素为中心，在其周围利用$15 \times 15$的窗口截取图像，形成训练集的特征表示。将从可视化分类结果、可视化特征分布以及精确量化结果来进行分析不同方法的性能。图\ref{}展示了不同方法的可视化分类结果。
+为了进一步探索极化信息提取模块的性能，引入t-SNE（t-distributed Stochastic Neighbor Embedding）\citing{}特征分布图作为衡量极化信息提取模块的可视化评估指标。t-SNE是一种非线性降维技术，能够有效地将高维数据映射到二维或三维空间，以便更直观地观察样本在特征空间的分布。
+
+图\ref{fig:fle-tSNE}展示了不同方法特征特征使用t-SNE可视化的分布情况。根据图\ref{fig:fle_t_t}、图\ref{fig:fle_t_p}和图\ref{fig:fle_t_f}所展示的仅散射特征、仅分解特征和直接堆叠特征三种不同的特征分布情况，可以看出大多数类别相互之间有交叠的情况，并且类内的样本分布较为散乱，因而容易造成类间错分的情况，导致分类性能优先。而图\ref{fig:fle_t_se}和图\ref{fig:fle_t_cbam}展示的使用经典的注意力信息提取方法的特征分布图，可以看出经典的注意力方法由于没有考虑极化SAR的数据特性，不同类别之间的重叠情况依然存在，并且类内样本特征分布散乱，证明了在信息提取时不考虑极化SAR数据特征对分类模型的性能提升是有限的。根据图\ref{fig:fle_t_dp}所展示的基于双通道注意力的极化信息提取方法的特征分布图，可以看到相比于其他的特征分布情况，类间的交叠现象有了明显的改善，同时类内样本特征分布更加紧凑，提升类间可分性，进而带来分类性能上的提升。
+
 
 \begin{figure}[ht]
     \subfloat[]{
-        \includegraphics[width=4.04cm]{pic/pica.pdf}
+        \label{fig:fle_t_t}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/tSNE-T.png}
     }
     \subfloat[]{
-        \includegraphics[width=4.04cm]{pic/pica.pdf}
+        \label{fig:fle_t_p}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/tSNE-P.png}
     }
     \subfloat[]{
-        \includegraphics[width=4.04cm]{pic/pica.pdf}
+        \label{fig:fle_t_f}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/tSNE-F.png}
     }
-    \quad
+
     \subfloat[]{
-        \includegraphics[width=4.04cm]{pic/pica.pdf}
+        \label{fig:fle_t_se}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/tSNE-SE.png}
     }
     \subfloat[]{
-        \includegraphics[width=4.04cm]{pic/pica.pdf}
+        \label{fig:fle_t_cbam}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/tSNE-CBAM.png}
     }
     \subfloat[]{
-        \includegraphics[width=4.04cm]{pic/pica.pdf}
+        \label{fig:fle_t_dp}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/tSNE-DP.png}
     }
-    \caption{AIRSAR Flevoland地区数据分类可视化结果图。（a）CNN-T；（b）CNN-P；（c）CNN-F；（d）SF-CNN；（e）CNN-T；（f）CNN-T}
-    \label{fig2}
+
+    \subfloat[]{
+        \includegraphics[width=10.04cm]{pic/chapter3/fle/tSNE-label.png}
+    }
+    \caption{AIRSAR Flevoland地区数据不同方法特征分布。（(a) CNN-T; (b) CNN-P; (c) CNN-F; (d) CNN-SE; (e) CNN-CBAM; (f) 本章方法; (g) 颜色与类别对应关系}
+    \label{fig:fle-tSNE}
 \end{figure}
 
-可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析可视化结果分析
+表\ref{tab:fle_result}展示了不同方法的分类数值结果。仅使用散射特征的分类方法，在草地和建筑物区域的分类准确率较低，分别为89.41\%和91.17\%，这可能是因为仅使用相干矩阵作为极化特征的分类方法，并不能完全反应这两类地物目标的散射特性，导致分类准确率较低。仅使用目标分解特征作为特征的分类方法，在小麦区域取得了较好的分类情况，这是因为目标分解特征中包含有具体物理意义的极化表征，但是在建筑物油菜籽区域的分类准确率较低，反映了目标分解特征与散射特征相互补充，都是必不可少的极化特征表示方法。直接堆叠极化特征的分类方法在分类总体准确率、平均准确率以及大麦等区域准确率反而下降，这表明了直接堆叠极化特征导致特征维数增加，分类器无法有效分清两种类型的主次关系，导致分类准确率有所下降。根据基于经典注意力方法的分类结果，尽管分类结果准确率指标有小幅度提升，但是实质上没有明显的数值提升，也是因为经典的注意力方法并没有考虑极化特征的特点，并不适用于极化信息提取领域。根据本章方法的分类数值结果，在大多数的类别都具有最高的分类准确率，并且在总体准确率、平均准确率、Kappa系数分别提升1.02\%、0.8\%和1.14\%，表明了基于双通道注意力的极化信息提取方法对于极化SAR目标分类具有优势，验证了本章方法的有效性和优越性。
 
-为了进一步探索极化信息提取模块的性能，引入t-SNE（t-distributed Stochastic Neighbor Embedding）\citing{}特征分布图作为衡量极化信息提取模块的可视化评估指标。t-SNE是一种非线性降维技术，能够有效地将高维数据映射到二维或三维空间，以便更直观地观察样本在特征空间的分布。图\ref{}展示了不同数据特征通过t-SNE降维后的特征分布图。
-\begin{figure}[ht]
-    \subfloat[]{
-        \includegraphics[width=4.04cm]{pic/pica.pdf}
-    }
-    \subfloat[]{
-        \includegraphics[width=4.04cm]{pic/pica.pdf}
-    }
-    \subfloat[]{
-        \includegraphics[width=4.04cm]{pic/pica.pdf}
-    }
-    \quad
-    \subfloat[]{
-        \includegraphics[width=4.04cm]{pic/pica.pdf}
-    }
-    \subfloat[]{
-        \includegraphics[width=4.04cm]{pic/pica.pdf}
-    }
-    \subfloat[]{
-        \includegraphics[width=4.04cm]{pic/pica.pdf}
-    }
-    \caption{AIRSAR Flevoland地区数据分类可视化结果图。（a）CNN-T；（b）CNN-T；（c）CNN-T；（d）CNN-T；（e）CNN-T；（f）CNN-T}
-    \label{fle-tSNE}
-\end{figure}
-
-t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析t-SNE结果分析
-
-采用总体准确率（OA）、平均准确率（AA）和Kappa系数三个指标对分类性能进行定量评价。精确分类量化评估结果如表\ref{fle_result}所示。
 \begin{table}[ht!]
-    % \renewcommand{\arraystretch}{1.5}
-    % \setlength\tabcolsep{11pt}
-    % \vspace{3cm} %调整图片与上文的垂直距离
-    \centering
-    \label{fle_result}
+    \label{tab:fle_res}
     \caption{AIRSAR Flevoland地区数据分类数值结果(\%)}
-    \begin{tabular}{ccccccc}
-        \hline\hline
-        \text { Method }           & \text { SVM } & \text { SVM } & \text { SVM } & \text { Wishart } & \text { RSL } & \text { Ours } \\
-        \hline \text { Buildings } & 37.26         & 37.26         & 37.26         & 32.64             & 35.34         & 96.38          \\
-        \text { Rapeseed }         & 31.35         & 31.35         & 31.35         & 15.58             & 46.64         & 92.01          \\
-        \text { Beet }             & 74.17         & 74.17         & 74.17         & 09.87             & 99.01         & 95.67          \\
-        \text { Stembeans }        & 14.61         & 14.61         & 14.61         & 14.02             & 54.63         & 96.92          \\
-        \text { Peas }             & 50.20         & 50.20         & 50.20         & 22.90             & 96.39         & 99.11          \\
-        \text { Forest }           & 66.31         & 66.31         & 66.31         & 41.52             & 94.34         & 96.80          \\
-        \text { Lucerne }          & 62.92         & 62.92         & 62.92         & 17.71             & 70.53         & 96.19          \\
-        \text { Potatoes }         & 53.54         & 53.54         & 53.54         & 26.89             & 83.10         & 95.49          \\
-        \text { Bare soil }        & 64.25         & 64.25         & 64.25         & 11.36             & 95.05         & 91.02          \\
-        \text { Grass }            & 19.64         & 19.64         & 19.64         & 17.27             & 60.43         & 87.65          \\
-        \text { Barley }           & 80.89         & 80.89         & 80.89         & 10.48             & 100.00        & 96.26          \\
-        \text { Water }            & 76.90         & 76.90         & 76.90         & 59.90             & 59.32         & 97.37          \\
-        \text { Wheat 1 }          & 59.13         & 59.13         & 59.13         & 40.18             & 91.83         & 97.71          \\
-        \text { Wheat 2 }          & 45.27         & 45.27         & 45.27         & 46.52             & 70.16         & 94.82          \\
-        \text { Wheat 3 }          & 75.74         & 75.74         & 75.74         & 43.69             & 98.85         & 97.05          \\
-        \hline \text { OA }        & 58.98         & 58.98         & 58.98         & 49.78             & 89.13         & \textbf{95.85} \\
-        \text { AA }               & 58.98         & 58.98         & 58.98         & 49.78             & 89.13         & \textbf{95.85} \\
-        \text { Kappa }            & 56.02         & 56.02         & 56.02         & 47.16             & 89.12         & \textbf{95.47} \\
-        \hline\hline
+    \renewcommand\arraystretch{1.0}
+    \begin{tabular}{cccccccc}
+        \toprule[1.5bp]
+        序号                        & 类别    & CNN-T          & CNN-P          & CNN-F          & CNN-SE         & CNN-CBAM       & 本章方法           \\
+        \midrule[0.75bp]
+        1                         & 建筑物   & 91.17          & 90.2           & 94.01          & \textbf{99.79} & 94.14          & 97.67          \\
+        2                         & 油菜籽   & 94.33          & 91.78          & 89.78          & 94.54          & 92.32          & \textbf{95.98} \\
+        3                         & 甜菜    & 96.57          & 96.62          & 96.99          & 97.92          & 95.74          & \textbf{98.18} \\
+        4                         & 干豆    & \textbf{99.66} & 99.26          & 98.86          & 97.08          & 98.83          & 99.15          \\
+        5                         & 豌豆    & 96.72          & 97.03          & 96.54          & 99.8           & 95.72          & \textbf{98.96} \\
+        6                         & 森林    & 98.13          & 97.37          & 96.42          & 98.85          & 98.61          & \textbf{98.71} \\
+        7                         & 苜蓿    & 96.03          & 95.96          & 95.07          & 96.11          & 95.48          & \textbf{96.12} \\
+        8                         & 土豆    & 96.61          & 97.03          & \textbf{97.54} & 97.33          & 95.59          & 97.22          \\
+        9                         & 裸土    & 95.02          & 97.19          & 98.44          & 98.51          & 96.8           & \textbf{98.65} \\
+        10                        & 草地    & 89.41          & 93.11          & 92.32          & 96.19          & 94.25          & \textbf{96.7}  \\
+        11                        & 大麦    & 93.63          & 95.45          & 87.34          & 95.64          & 89.34          & \textbf{98.11} \\
+        12                        & 水域    & 99.94          & 99.7           & 99.66          & 93.3           & 99.83          & \textbf{99.96} \\
+        13                        & 小麦 1  & 97.53          & 96.74          & 97.36          & 97.27          & 97.6           & \textbf{97.65} \\
+        14                        & 小麦 2  & 93.62          & \textbf{94.48} & 94.21          & 97.53          & 92.25          & 94.46          \\
+        15                        & 小麦 3  & 96.88          & 97.05          & 98.06          & 94.85          & 98.51          & \textbf{99.14} \\
+        \midrule[0.75bp]
+        \multicolumn{2}{c}{OA}    & 96.4  & 96.41          & 95.9           & 96.76          & 96.13          & \textbf{97.82}                  \\
+        \multicolumn{2}{c}{AA}    & 95.68 & 95.93          & 95.51          & 96.98          & 95.67          & \textbf{97.78}                  \\
+        \multicolumn{2}{c}{Kappa} & 96.07 & 96.08          & 95.53          & 96.48          & 95.77          & \textbf{97.62}                  \\
+        \bottomrule[1.5bp]
     \end{tabular}
-
 \end{table}
 
-数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析数值结果分析
+图\ref{fig:fle_conf_matrix}展示了本章方法分类结果的混淆矩阵可视化图。从图中可以看到，混淆矩阵的可视化结果显示本章方法在对角线上具有较高的主对角元素，说明在大多数类别上取得了良好的分类性能。
 
-混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵混淆矩阵
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10.4cm]{pic/chapter3/fle/conf-matrix.png}
+    \caption{本章方法在Flevoland图像中分类结果混淆矩阵图}
+    \label{fig:fle_conf_matrix}
+\end{figure}
 
-\subsection{AIRSAR San Francisco数据实验}
-该数据集是由NASA/JPL的AIRSAR系统机载L波段的数据，测量了美国San Francisco Bay地区。该数据经过4视处理，具有高质量的全极化信息，是极化SAR目标分类研究的经典数据集之一。数据集大小为$1024\times 900$像素，入射角范围介于10°至60°之间。该数据集在方位向和距离向具有$10m \times 10m$的分辨率，利用Lee相干斑滤波器对其进行滤波处理。图\ref{san_pauli}和图\ref{san_gt}分别展示了该数据集的Pauli伪彩色图像和地面真值图像。
+
+\subsection{E-SAR Oberpfaffenhofen数据实验}
+该数据集是通过E-SAR机载平台在德国Oberpfaffenhofen地区拍摄获取到的L波段极化SAR数据。该数据集经过多视处理，具有高质量的全极化信息，是极化SAR目标分类研究的经典数据集之一。数据集在方位向和距离向具有$3m \times 3m$的分辨率，大小为$1300 \times 1200$，总计包含三种类型的地物目标，分别是：建筑、林地和开放区域。图\ref{fig:ober_pauli}展示了该数据集的Pauli伪彩色图像，图\ref{fig:ober_gt}展示了该数据集的人工标记的地面真值参考图。地面真值图中黑色的区域表示未标记的区域。表\ref{fig:ober_label}展示了各类地物目标样本数量情况。
 
 \begin{figure}[ht]
     \subfloat[]{
-        \label{san_pauli}
-        \includegraphics[width=7.04cm]{pic/chapter3/san_pauli.jpg}
+        \label{fig:ober_pauli}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/Pauli.png}
     }
     \subfloat[]{
-        \label{san_gt}
-        \includegraphics[width=7.04cm]{pic/chapter3/san_gt.png}
+        \label{fig:ober_gt}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/gt.png}
     }
-    \quad
-    \quad
+
     \subfloat[]{
-        \label{pice}
-        \includegraphics[width=9.04cm]{pic/chapter3/图片9.bmp}
+        \label{fig:ober_label}
+        \includegraphics[width=7.04cm]{pic/chapter3/ober/label.png}
     }
-    \caption{San Francisco地区实验数据集。(a)Pauli分解伪彩色图像；(b)实验数据地面真值；(c)颜色与类别对应关系}
-    \label{San}
+    \caption{E-SAR Oberpfaffenhofen区域数据。(a)Pauli分解伪彩色图像；(b)实验数据地面真值；(c)颜色与类别对应关系}
 \end{figure}
 
-如图\ref{San}所示，该数据呈现了多样的地物目标景观，包含六种地面物体：建筑物、裸土、植被、山、水和其他地物。其中，图像的四周具有广阔的海洋区域，而左上角区域被茂密的植被覆盖，由金门大桥建筑区域与下方的地物连接。图像中部为公园区域，公园周围属于城市居民区域，而图像的右方则呈现出一个近似三角形的植被覆盖区域。这些不同的地物类型分布丰富多彩，为地物分类和遥感研究提供了丰富的实例和场景。
-
-图像中每个类别带有标签的样本数量如表\ref{san_smaple}所示。
-
-\begin{table}[h]
-    \caption{San Francisco地区实验数据集有标签样本数量}
-    \resizebox{\linewidth}{!}{
-        \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
-            \hline 类别 & steambeen & barley & bare soil & potato & beet     & wheat1 & peas  & lucerne \\
-            \hline 数目 & 6338      & 7595   & 5109      & 16156  & 10033    & 11159  & 9582  & 10181   \\
-            \hline 类别 & grass     & wheat2 & rapeseed  & wheat3 & building & forest & water &         \\
-            \hline 数目 & 7058      & 16386  & 13863     & 22241  & 735      & 18044  & 13232 &         \\
-            \hline
-        \end{tabular}
-    }
-    \label{san_smaple}
+\begin{table}[ht]
+    \caption{ESAR Oberpfaffenhofen数据样本数量}
+    \label{tab:ober_sample}
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        类别 & 建筑      & 林地      & 开放区     \\ \hline
+        数目 & 269,184 & 388,503 & 779,962 \\ \hline
+    \end{tabular}
 \end{table}
+
+图\ref{fig:ober_res}展示了不同方法的分类结果可视化图像。根据图\ref{fig:ober_T}展示的仅使用极化相干矩阵为特征的分类结果图，尽管在开放区域的分类效果较好，但是在建筑物区域存在大量被错分的样本，将建筑物区域样本错误分类为开放区域，并且错分的现象较为严重。这可能是因为仅使用极化相干矩阵作为特征时并没有完全利用其他的目标分解特征导致的，说明了综合考虑极化SAR图像中的其他极化特性和辅助特征的在分类任务中的重要性。相比之下，图\ref{fig:ober_P}与图\ref{fig:ober_F}在建筑物区域中的错分样本相对较少，但是在各类区域中也存在着部分错分的样本。其中将开放区域中的少数像素分类为建筑物的错分情况依然存在，这反映了极化目标分解特征提供的反映目标物理散射特性的信息为分类任务带来了一定的优势，是极化SAR图像中的重要的基本特征。图\ref{fig:ober_SE}和图\ref{fig:ober_CBAM}展示了基于经典注意力方法的特征表示分类结果，从结果图中可以看出，分类效果仅有微小的变化，错分像素相对减少但是依然存在，这可能是极化SAR图像与光学图像存在较大的差异，经典的注意力方法并没有考虑极化SAR图像的数据特征特点。图\ref{fig:ober_DP}展示了基于本章提出的双通道注意力极化信息提取方法的分类结果图，从图中直观可以看出，在建筑物区域的错分样本明显减少，并且每个类中的小块错误区域数量也相对减少，整体分类结果得到明显改善，证明了本章方法的有效性。
+
+\begin{figure}[ht]
+    \subfloat[]{
+        \label{fig:ober_T}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/CNN-T.png}
+    }
+    \subfloat[]{
+        \label{fig:ober_P}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/CNN-P.png}
+    }
+    \subfloat[]{
+        \label{fig:ober_F}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/CNN-F.png}
+    }
+
+    \subfloat[]{
+        \label{fig:ober_SE}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/CNN-SE.png}
+    }
+    \subfloat[]{
+        \label{fig:ober_CBAM}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/CNN-CBAM.png}
+    }
+    \subfloat[]{
+        \label{fig:ober_DP}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/CNN-DP.png}
+    }
+
+    \caption{E-SAR Oberpfaffenhofen地区数据分类可视化结果图。(a) CNN-T; (b) CNN-P; (c) CNN-F; (d) CNN-SE; (e) CNN-CBAM; (f) 本章方法}
+    \label{fig:ober_res}
+\end{figure}
+
+图\ref{fig:ober-tSNE}展示了不同方法数据特征使用tSNE可视化的分布情况。根据图\ref{fig:ober_t_t}、图\ref{fig:ober_t_p}、图\ref{fig:ober_t_f}展示的仅散射特征、仅分解特征和直接堆叠的三种特征分布情况，可以看出三种特征分布情况并没有本质性的差异，尽管都可以看出各类之间存在不同的分布情况，但是也能清晰看出，类间存在分布交叠的部分，这也导致了部分样本的错分情况。根据图\ref{fig:ober_t_se}和图\ref{fig:ober_t_cbam}展示的使用经典注意力信息提取方法的特征分布图，可以看出虽然类间交叠的情况有细微改善，但是依然有大量的特征存在交叠，这也映照了分类结果改善不大的结果。图\ref{fig:ober_t_dp}展示了使用本章方法的特征分布情况，可以看出类间交叠的情况得到优化，各类之间分布间距增大，增强了类间可分性，进而带来分类性能的提升。
+
+\begin{figure}[ht!]
+    \subfloat[]{
+        \label{fig:ober_t_t}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/tSNE-P.png}
+    }
+    \subfloat[]{
+        \label{fig:ober_t_p}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/tSNE-P.png}
+    }
+    \subfloat[]{
+        \label{fig:ober_t_f}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/tSNE-F.png}
+    }
+
+    \subfloat[]{
+        \label{fig:ober_t_se}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/tSNE-SE.png}
+    }
+    \subfloat[]{
+        \label{fig:ober_t_cbam}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/tSNE-CBAM.png}
+    }
+    \subfloat[]{
+        \label{fig:ober_t_dp}
+        \includegraphics[width=4.04cm]{pic/chapter3/ober/tSNE-P.png}
+    }
+
+    \subfloat[]{
+        \includegraphics[width=7.04cm]{pic/chapter3/ober/tSNE-label.png}
+    }
+    \caption{E-SAR Oberpfaffenhofen地区数据地区数据不同方法特征分布。(a) CNN-T; (b) CNN-P; (c) CNN-F; (d) CNN-SE; (e) CNN-CBAM; (f) 本章方法}
+    \label{fig:ober-tSNE}
+\end{figure}
+
+表\ref{tab:ober_res}展示了各个方法的分类数值结果。本章提出的基于双通道注意力的极化信息提取方法总体准确率达到94.6\%，相比于其他验证方法提升了3.73\%。本章方法的散射特征时，在建筑物区域的分类准确率仅为63.16\%，这可能是因为建筑物区域目标散射回波差异性大，导致仅使用散射特征时，不能完全表征建筑物目标的特性，进而导致在建筑物区域可分性较低。与仅使用目标分解特征相比，直接堆叠极化特征在平均准确率指标反而下降1.32\%，这可能是由于该方法仅仅是对两类的特征进行简单的堆叠，堆叠后的特征维数过高，分类模型对于高维特征输入无法有效利用两种不同类型特征间的主次关系。本章方法在总体准确率、平均准确率、Kappa系数等指标上均有提升，验证了本章方法能有效的提升极化特征的表征方式，提升分类准确度。
+
+图\ref{fig:ober_conf_matrix}展示了本章方法分类结果的混淆矩阵可视化图。混淆矩阵的可视化结果显示本章方法在对角线上具有较高的主对角元素，说明在大多数类别上取得了良好的分类性能。
+
+%TODO:
+\begin{table}[ht!]
+    \caption{E-SAR Oberpfaffenhofen地区数据分类数值结果(\%)}
+    \label{tab:ober_res}
+    \begin{tabular}{cccccccc}
+        \toprule[1.5bp]
+        序号                        & 类别    & CNN-T          & CNN-P & CNN-F & CNN-SE & CNN-CBAM       & 本章方法           \\
+        \midrule[0.75bp]
+        1                         & 建筑    & \textbf{96.68} & 83.9  & 80.1  & 80.42  & 83.92          & 90.96          \\
+        2                         & 林地    & 83.35          & 91.99 & 90.5  & 92.44  & 91.61          & \textbf{92.45} \\
+        3                         & 开放区域  & 89.83          & 90.04 & 91.37 & 91.63  & 91.41          & \textbf{96.89} \\
+        \midrule[0.75bp]
+        \multicolumn{2}{c}{OA}    & 89.56 & 88.97          & 88.52 & 89.13 & 90.27  & \textbf{94.6}                   \\
+        \multicolumn{2}{c}{AA}    & 89.95 & 88.64          & 87.32 & 88.16 & 89.98  & \textbf{93.43}                  \\
+        \multicolumn{2}{c}{Kappa} & 81.63 & 83.51          & 82.73 & 83.58 & 85.24  & \textbf{90.78}                  \\
+        \bottomrule[1.5bp]
+    \end{tabular}
+\end{table}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=10.4cm]{pic/chapter3/ober/conf-matrix.png}
+    \caption{本章方法在E-SAR Oberpfaffenhofen图像中分类结果混淆矩阵图}
+    \label{fig:ober_conf_matrix}
+\end{figure}
+
+
 
 \section{本章小结}
 本章针对极化ASR图像信息利用中所面临的信息冗余问题，提出了一种基于双通道注意力的极化信息提取方法。通过构建极化散射特征通道和目标分解特征通道的双通道结构，结合空间、通道注意力机制，能够有效地提取出两种不同类型的极化特征中的关键极化信息。为了增强两种信息的关联，设计了散射特征导向的注意力修正方法，对注意力权重进行修正，从而全面聚合关键极化信息。最后设计多尺度特征学习模块，赋能模型对不同尺度极化信息的捕捉能力。最后通过视觉和数据量化两个层面进行性能评估，结果表明本章提出的方法能够有效地提升极化数据中的信息表征方式，从而提升极化SAR图像的分类精度。
