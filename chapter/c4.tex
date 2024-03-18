@@ -129,7 +129,7 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
 % 近年来，各种应对于标签噪声问题的鲁棒性学习方法层出不穷，文献\cite{zhang2021understanding,wang2018iterative}指出，尽管基于深度网络模型的分类网络具有对噪声标签的记忆能力，但在训练过程中是先学习主要的分类规则，然后才开始记忆噪声的分类模式。本章对此进行了进一步的研究，提出了一个端到端的标签噪声条件下的鲁棒性训练方法。
 
 
-\subsection{基于混合模型与边界增强的目标分类方法算法框架}
+\subsection{基于混合模型与边界增强的目标分类算法框架}
 
 % 在极化SAR图像目标分类中，标签噪声的存在通常会导致传统分类方法性能下降，基于卷积网络的模型往往也会陷入过拟合的问题，学习到错误的分类规则。标签噪声通常是由于地物杂波、系统误差、人工标记错误等因素引入，导致训练集中包含错误的标签。为了解决这个问题，本章方法提出了一种针对极化SAR的鲁棒性分类方法。图\ref{BBM_framework}展示了BBM算法的框架图。由于深度网络模型总是趋向于先学习简单样本，之后通过足够的迭代去拟合困难的样本。在标签噪声下的深度网络训练过程中，会呈现双峰的损失函数分布情况。因此，与传统的分类方法相同，本方法首先通过深度网络进行特征提取和分类器进行分类，计算每个训练样本的损失函数。得到的损失函数值并不直接参与模型的反向传播中，而是通过二分量的贝塔混合模型来拟合所有的损失函数的分布，通过损失函数的观测值来得到贝塔混合模型的参数估计。确定噪声分量的噪声概率密度函数之后，即可根据损失函数值得到对应的样本噪声概率。其次，由于极化SAR目标分布存在空间一致性，空间连续的样本往往属于同一个类别。并且，空间连续区域标注简单，标签噪声更加趋向于出现在类别边界区域。基于该特性，还设计了边界样本增强分支，对极化SAR图像进行Pauli分解，得到对应的伪彩图，在伪彩图中利用Sobel边界提取算子并通过边界膨胀，获得图像大致的膨胀边界。对于属于膨胀边界内的样本模型应该付出更多的注意，来拟合其中的特征。最后，由于训练集数量有限，如果直接丢弃属于噪声的样本，可能会导致丢失其中必要的空间信息。因此，引入了动态的鲁棒性损失函数，即赋予模型动态的根据噪声概率去选择训练集标签或者模型预测值作为交叉熵损失的计算基准。通过以上的鲁棒性训练方法，最终获得对标签噪声具备鲁棒性的分类模型。
 
@@ -272,12 +272,12 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
   }
   \subfloat[]{
     \label{fig:CNN}
-    \includegraphics[width=4.04cm]{pic/chapter4/fle/RSL-10.png}
+    \includegraphics[width=4.04cm]{pic/chapter4/fle/CNN-10.png}
   }
 
   \subfloat[]{
     \label{fig:RSL}
-    \includegraphics[width=4.04cm]{pic/chapter4/fle/CNN-10.png}
+    \includegraphics[width=4.04cm]{pic/chapter4/fle/RSL-10.png}
   }
   \subfloat[]{
     \label{fig:BEL}
@@ -295,7 +295,7 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
     \includegraphics[width=4.04cm]{pic/chapter4/fle/label.png}
   }
 
-  \caption{AIRSAR Flevoland地区数据对称标签噪声下分类可视化结果图。(a) SVM;(b)Wishart; (c) RSL; (d) CNN; (e) BEL; (f) BEL + DP; (g) 地面真值；(h) 颜色与类别对应关系}
+  \caption{AIRSAR Flevoland地区数据对称标签噪声下分类可视化结果图。(a) SVM;(b)Wishart; (c) CNN; (d) RSL; (e) BEL; (f) BEL + DP; (g) 地面真值；(h) 颜色与类别对应关系}
   \label{fig:fle_res_4}
 \end{figure}
 
@@ -346,20 +346,20 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
 \begin{figure}[ht!]
   \subfloat[]{
     \label{fig:SVM_random}
-    \includegraphics[width=4.04cm]{pic/chapter4/fle/SVM-10.png}
+    \includegraphics[width=4.04cm]{pic/chapter4/fle/SVM_random.png}
   }
   \subfloat[]{
     \label{fig:wishart_random}
-    \includegraphics[width=4.04cm]{pic/chapter4/fle/Wishart-10.png}
+    \includegraphics[width=4.04cm]{pic/chapter4/fle/Wishart_random.png}
   }
   \subfloat[]{
     \label{fig:CNN_random}
-    \includegraphics[width=4.04cm]{pic/chapter4/fle/RSL-10.png}
+    \includegraphics[width=4.04cm]{pic/chapter4/fle/CNN_random.png}
   }
 
   \subfloat[]{
     \label{fig:RSL_random}
-    \includegraphics[width=4.04cm]{pic/chapter4/fle/CNN_random.png}
+    \includegraphics[width=4.04cm]{pic/chapter4/fle/RSL_random.png}
   }
   \subfloat[]{
     \label{fig:BEL_random}
@@ -377,7 +377,7 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
     \includegraphics[width=4.04cm]{pic/chapter4/fle/label.png}
   }
 
-  \caption{AIRSAR Flevoland地区数据非对称标签噪声下分类可视化结果图。(a) SVM;(b)Wishart; (c) RSL; (d) CNN; (e) BEL; (f) BEL + DP; (g) 地面真值；(h) 颜色与类别对应关系}
+  \caption{AIRSAR Flevoland地区数据非对称标签噪声下分类可视化结果图。(a) SVM;(b)Wishart; (c) CNN; (d) RSL; (e) BEL; (f) BEL + DP; (g) 地面真值；(h) 颜色与类别对应关系}
   \label{fig:fle_random}
 \end{figure}
 
@@ -472,7 +472,7 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
     \includegraphics[width=2.04cm]{pic/chapter4/ober/label.png}
   }
 
-  \caption{AIRSAR Flevoland地区数据对称标签噪声下分类可视化结果图。(a) SVM; (b) Wishart; (c) RSL; (d) CNN; (e) BEL; (f) BEL + DP; (g) 地面真值；(h) 颜色与类别对应关系}
+  \caption{AIRSAR Flevoland地区数据对称标签噪声下分类可视化结果图。(a) SVM;(b)Wishart; (c) CNN; (d) RSL; (e) BEL; (f) BEL + DP; (g) 地面真值；(h) 颜色与类别对应关系}
   \label{fig:ober_res_random}
 \end{figure}
 
@@ -522,7 +522,7 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
 
   \subfloat[]{
     \label{fig:ober_RSL_random}
-    \includegraphics[width=4.04cm]{pic/chapter4/ober/RSL-10.png}
+    \includegraphics[width=4.04cm]{pic/chapter4/ober/RSL-10-random.png}
   }
   \subfloat[]{
     \label{fig:ober_BEL_random}
@@ -540,7 +540,7 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
     \includegraphics[width=2.04cm]{pic/chapter4/ober/label.png}
   }
 
-  \caption{AIRSAR Flevoland地区数据非对称标签噪声下分类可视化结果图。(a) SVM; (b) Wishart; (c) RSL; (d) CNN; (e) BEL; (f) BEL + DP; (g) 地面真值；(h) 颜色与类别对应关系}
+  \caption{AIRSAR Flevoland地区数据非对称标签噪声下分类可视化结果图。(a) SVM;(b)Wishart; (c) CNN; (d) RSL; (e) BEL; (f) BEL + DP; (g) 地面真值；(h) 颜色与类别对应关系}
   \label{fig:fle_res_random}
 \end{figure}
 
