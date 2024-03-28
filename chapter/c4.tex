@@ -1,10 +1,10 @@
 \chapter{基于混合模型的极化SAR目标分类方法}
 \section{引言}
 % 问题引入
-深度卷积神经网络（Deep Convolutional Neural Network, DCNN）由于其对大规模数据进行端到端的学习能力以及强大的特征学习能力，在极化SAR图像分类领域取得了显著的成果\citing{9625939,8771134,liu2019task}。DCNN的优越分类性能依赖于数量充足的高质量标记样本，而极化SAR样本标注工作都是通过人工标记完成，很可能因为人工标注错误、自动标注辅助技术误差、地面覆盖类型不准确等因素存在错误标记的情况，引入标签噪声\citing{tu2020robust,ni2022dnn}。DCNN方法在存在标签噪声的训练集中训练时，由于其强大的拟合能力甚至会学习到噪声的特征，出现过拟合的现象，导致分类性能有限\citing{malach2017decoupling,bengio2009curriculum}。而现有的大多数基于DCNN的极化SAR图像分类方法都是在理想的训练集中完成模型训练，很少有考虑标签噪声问题。因此研究对标签噪声的极化SAR图像分类方法具有重要的价值与意义。
+深度卷积神经网络（Deep Convolutional Neural Network, DCNN）由于其对大规模数据进行端到端的学习能力以及强大的特征学习能力，在极化SAR图像分类领域取得了显著的成果\citing{9625939,8771134,liu2019task}。不同于光学图像，由于SAR的复杂成像机制，极化SAR图像不可避免受到相干斑噪声影响，部分图像中目标边缘及内部存在类别模糊和特征信息不可靠问题。极化SAR样本标注工作都是通过人工标记完成，很可能因为人工标注错误、自动标注辅助技术误差、地面覆盖类型不准确等因素存在错误标记的情况，引入标签噪声\citing{tu2020robust,ni2022dnn}。DCNN的优越分类性能依赖于数量充足的高质量标记样本，在存在标签噪声的训练集中训练时，由于其强大的拟合能力甚至会学习到噪声的特征，出现过拟合的现象，导致分类性能下降\citing{malach2017decoupling,bengio2009curriculum}。而现有的大多数基于DCNN的极化SAR图像分类方法都是在理想的训练集中完成模型训练，很少有考虑标签噪声问题。因此研究对标签噪声的极化SAR图像分类方法具有重要的价值与意义。
 
 % 本章方法
-本章着力于含标签噪声的极化SAR图像分类方法研究，提出了一种基于混合模型的极化SAR图像分类方法。首先，根据噪声样本与干净样本的损失函数分布差异特性，使用混合模型对分布差异进行拟合，以估计样本的噪声概率。其次，根据极化SAR图像标签噪声更多存在于类别边界区域特性，通过捕获类别边界区域，对边界样本施加额外的惩罚，充分利用边界样本信息。最后，基于改进的自学习优化损失函数，训练过程中通过引入模型的预测来增加感知项，对损失函数进行纠正，完成模型的鲁棒参数优化过程。
+本章着力于含标签噪声的极化SAR图像分类方法研究，提出了一种基于混合模型估计的极化SAR图像分类方法。首先，根据噪声样本与准确样本的损失函数分布差异特性，使用混合模型对分布差异进行拟合，以估计样本的噪声概率。其次，根据极化SAR图像标签噪声更多存在于类别边界区域特性，通过捕获类别边界区域，对边界样本施加额外的惩罚，使分类模型能够有效利用边缘知识增强识别性能。最后，基于改进的自学习优化损失函数，训练过程中通过引入模型的预测来增加感知项，对损失函数进行纠正，完成模型的鲁棒参数优化过程。
 
 \section{有限混合模型}
 DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分类规则，之后再花足够的时间来对错误信息进行过拟合\citing{arazo2019unsupervised}。相比于干净的标记样本，随机标记的错误样本需要更长的时间来学习，这意味着有噪声样本在训练的前期阶段具有更高的损失，这使得干净样本与噪声样本可以通过损失值的分布情况进行区分。由于对观测值的建模能力，有限混合模型适用于估计干净样本与噪声样本的损失分布估计的场景。
@@ -90,7 +90,7 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
     \label{BMM}
 \end{figure}
 
-\section{混合模型与边界增强的标签噪声分类方法}
+\section{混合模型与边界增强的极化SAR目标分类方法}
 \subsection{标签噪声问题建模}
 % 由于极化SAR的复杂成像机制，获取足够数量的训练样本是一项非常耗时和耗力的任务。而且，现有数据集中的标注虽然可能近似完美，但实际上存在一些错误标记的样本。这种标签噪声可能由于人工标记的错误、边界区域的模糊性以及场景图像的错误等原因产生。在使用混合标签噪声的训练集进行训练时，模型可能学习到噪声样本的特征，从而对原有的分类规则造成干扰，导致过拟合的问题。
 给定一个包含N个类别的干净PolSAR数据的训练集，表示为：
@@ -129,7 +129,7 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
 % 近年来，各种应对于标签噪声问题的鲁棒性学习方法层出不穷，文献\cite{zhang2021understanding,wang2018iterative}指出，尽管基于深度网络模型的分类网络具有对噪声标签的记忆能力，但在训练过程中是先学习主要的分类规则，然后才开始记忆噪声的分类模式。本章对此进行了进一步的研究，提出了一个端到端的标签噪声条件下的鲁棒性训练方法。
 
 
-\subsection{基于混合模型估计的目标分类算法框架}
+\subsection{混合模型与边界增强的极化SAR目标分类算法框架}
 
 % 在极化SAR图像目标分类中，标签噪声的存在通常会导致传统分类方法性能下降，基于卷积网络的模型往往也会陷入过拟合的问题，学习到错误的分类规则。标签噪声通常是由于地物杂波、系统误差、人工标记错误等因素引入，导致训练集中包含错误的标签。为了解决这个问题，本章方法提出了一种针对极化SAR的鲁棒性分类方法。图\ref{BBM_framework}展示了BBM算法的框架图。由于深度网络模型总是趋向于先学习简单样本，之后通过足够的迭代去拟合困难的样本。在标签噪声下的深度网络训练过程中，会呈现双峰的损失函数分布情况。因此，与传统的分类方法相同，本方法首先通过深度网络进行特征提取和分类器进行分类，计算每个训练样本的损失函数。得到的损失函数值并不直接参与模型的反向传播中，而是通过二分量的贝塔混合模型来拟合所有的损失函数的分布，通过损失函数的观测值来得到贝塔混合模型的参数估计。确定噪声分量的噪声概率密度函数之后，即可根据损失函数值得到对应的样本噪声概率。其次，由于极化SAR目标分布存在空间一致性，空间连续的样本往往属于同一个类别。并且，空间连续区域标注简单，标签噪声更加趋向于出现在类别边界区域。基于该特性，还设计了边界样本增强分支，对极化SAR图像进行Pauli分解，得到对应的伪彩图，在伪彩图中利用Sobel边界提取算子并通过边界膨胀，获得图像大致的膨胀边界。对于属于膨胀边界内的样本模型应该付出更多的注意，来拟合其中的特征。最后，由于训练集数量有限，如果直接丢弃属于噪声的样本，可能会导致丢失其中必要的空间信息。因此，引入了动态的鲁棒性损失函数，即赋予模型动态的根据噪声概率去选择训练集标签或者模型预测值作为交叉熵损失的计算基准。通过以上的鲁棒性训练方法，最终获得对标签噪声具备鲁棒性的分类模型。
 
@@ -262,17 +262,17 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
 图\ref{fig:fle_noise_uniform}展示了10\%噪声比例下对称标签噪声的噪声转移矩阵，每个类别正确标记的概率为90\%，10\%的标签噪声均匀地分布在其他类别中。
 \begin{figure}[h]
     \centering
-    \includegraphics[width=10.04cm]{pic/chapter4/fle/noise_uniform.png}
+    \includegraphics[width=8.04cm]{pic/chapter4/fle/noise_uniform.png}
     \caption{AIRSAR Flevoland数据10\%对称噪声转移矩阵}
     \label{fig:fle_noise_uniform}
 \end{figure}
 
-图\ref{fig:fle_res_4}展示了不同实验方法在10\%对称噪声类型下分类结果图。根据图\ref{fig:SVM}、图\ref{wishart}展示的SVM与Wishart分类器的分类结果，在大多数的类别中都存在着严重的错分情况，这可能是由于这两类分类器都无法有效地应对标签噪声的影响，错误的信息对分类规则噪声严重的负面影响，进而导致分类性能下降的现象。而图\ref{fig:CNN}展示的在交叉熵损失函数优化的CNN分类器的分类结果，可以看到小麦区域和干豆存在大量的错分情况，将小麦错分为水域，将干豆区域错分为土豆，这是因为这两类目标本身散射特性比较接近，容易造成错分，同时该分类模型并没有对标签噪声进行处理，模型过拟合学习到了错误的类别信息，导致错分的情况。图\ref{fig:RSL}展示了使用鲁棒分类方法的分类结果，可以看到大量连续错分的情况得到改善，但是在草地等区域出现了小块的错分样本，将草地错分为大麦，这可能是草地覆盖区域较小，又存在噪声的情况，导致有效的训练样本数量不足，同时RSL方法是将判断为噪声的样本直接丢弃也丢失了一部分信息，在这一块区域中的分类性能有限。图\ref{fig:BEL}与图\ref{fig:BEL_DP}均是本章提出的标签噪声下鲁棒性分类方法的分类结果图，从图中可以直观看出分类效果得到提升，错分的情况大大减少，仅有少数的错分情况，并且使用极化信息提取器后在油菜籽区域的错分情况也得到视觉上的改善，这也验证了本章方法的有效性。
+图\ref{fig:fle_res_4}展示了不同实验方法在10\%对称噪声类型下分类结果图，其中每个分类结果图下方依次为A、B、C区域的局部放大图。根据图\ref{fig:SVM}、图\ref{wishart}展示的SVM与Wishart分类器的分类结果，在大多数的类别中都存在着严重的错分情况，这可能是由于这两类分类器都无法有效地应对标签噪声的影响，错误的信息对分类规则噪声严重的负面影响，进而导致分类性能下降的现象。而图\ref{fig:CNN}展示的在交叉熵损失函数优化的CNN分类器的分类结果，可以看到小麦区域和干豆存在大量的错分情况，将小麦错分为水域，将干豆区域错分为土豆，这是因为这两类目标本身散射特性比较接近，容易造成错分，同时该分类模型并没有对标签噪声进行处理，模型过拟合学习到了错误的类别信息，导致错分的情况。图\ref{fig:RSL}展示了使用鲁棒分类方法的分类结果，可以看到大量连续错分的情况得到改善，但是在草地等区域出现了小块的错分样本，将草地错分为大麦，这可能是草地覆盖区域较小，又存在噪声的情况，导致有效的训练样本数量不足，同时RSL方法是将判断为噪声的样本直接丢弃也丢失了一部分信息，在这一块区域中的分类性能有限。图\ref{fig:BEL}与图\ref{fig:BEL_DP}均是本章提出的标签噪声下鲁棒性分类方法的分类结果图，从图中可以直观看出分类效果得到提升，错分的情况大大减少，仅有少数的错分情况，并且使用极化信息提取器后在油菜籽区域的错分情况也得到视觉上的改善，这也验证了本章方法的有效性。
 
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \subfloat[]{
         \label{fig:SVM}
-        \includegraphics[width=4.04cm]{pic/chapter4/fle/SVM-10.png}
+        \includegraphics[width=4.04cm]{pic/chapter4/fle/SVM-10-1.png}
     }
     \subfloat[]{
         \label{fig:wishart}
@@ -282,6 +282,28 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
         \label{fig:CNN}
         \includegraphics[width=4.04cm]{pic/chapter4/fle/CNN-10.png}
     }
+
+    \begin{minipage}[b]{4.04cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/0_SVM-10.PNG} % 第一张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/1_SVM-10.PNG} % 第二张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/2_SVM-10.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \begin{minipage}[b]{4.04cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/0_Wishart-10.PNG} % 第一张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/1_Wishart-10.PNG} % 第二张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/2_Wishart-10.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \begin{minipage}[b]{4.04cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/0_CNN-10.PNG} % 第一张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/1_CNN-10.PNG} % 第二张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/2_CNN-10.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
 
     \subfloat[]{
         \label{fig:RSL}
@@ -296,6 +318,28 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
         \includegraphics[width=4.04cm]{pic/chapter4/fle/BEL+DP-10.png}
     }
 
+    \begin{minipage}[b]{4.04cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/0_RSL-10.PNG} % 第一张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/1_RSL-10.PNG} % 第二张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/2_RSL-10.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \begin{minipage}[b]{4.04cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/0_BEL-10.PNG} % 第一张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/1_BEL-10.PNG} % 第二张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/2_BEL-10.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \begin{minipage}[b]{4.04cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/0_BEL+DP-10.PNG} % 第一张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/1_BEL+DP-10.PNG} % 第二张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/2_BEL+DP-10.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+
     \subfloat[]{
         \includegraphics[width=4.04cm]{pic/chapter4/fle/gt.png}
     }
@@ -303,7 +347,7 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
         \includegraphics[width=4.04cm]{pic/chapter4/fle/label.png}
     }
 
-    \caption{AIRSAR Flevoland地区数据对称标签噪声下分类可视化结果图。(a) SVM;(b)Wishart; (c) CNN; (d) RSL; (e) BEL; (f) BEL + DP; (g) 地面真值；(h) 颜色与类别对应关系}
+    \caption{AIRSAR Flevoland地区数据对称标签噪声下分类可视化结果图。(a)SVM；(b)Wishart；(c)CNN；(d)SVM局部误差图；(e)Wishart局部误差图；(f)CNN局部误差图；(g)RSL；(h)BEL；(i)BEL + DP；(j)RSL局部误差图；(k)BEL局部误差图；(l)BEL + DP局部误差图；(m)地面真值；(n)颜色与类别对应关系}
     \label{fig:fle_res_4}
 \end{figure}
 
@@ -343,18 +387,18 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
 图\ref{fig:fle_noise_random}展示了10\%噪声比例下非对称标签噪声的噪声转移矩阵，每个类别正确标记的概率为90\%，10\%的标签噪声随机映射到另外的一个类别中。
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=10.04cm]{pic/chapter4/fle/noise_random.png}
+    \includegraphics[width=8.04cm]{pic/chapter4/fle/noise_random1.png}
     \caption{AIRSAR Flevoland数据10\%非对称噪声转移矩阵}
     \label{fig:fle_noise_random}
 \end{figure}
 
 %TODO:
-图\ref{fig:fle_random}展示了10\%非对称标签噪声下不同对比方法的分类结果。图\ref{fig:SVM_random}与图\ref{fig:wishart_random}依然存在大量的错分情况，并且区域内部存在大量斑点状的错误区域。图\ref{fig:CNN_random}展示了交叉熵损失下的CNN分类结果，由于训练集中油菜籽区域部分像素被标记为小麦，导致在分类结果中也存在相同的错分情况，这表明该分类方法在错误标记训练集上过拟合，学习了错误的分类规则。图\ref{fig:RSL_random}展示了RSL方法的分类结果，可以看出在油菜籽、大麦区域依然存在大块连续的错分区域，将大麦错分为苜蓿，这是因为RSL对大量的错误样本过滤性能有限。图\ref{fig:BEL_random}与图\ref{fig:BEL_DP_random}展示了BEL与BEL+DP方法的分类结果，可以看到由于对称噪声标签的影响，在小麦、林地、油菜籽区域出现了一定的错分情况，但是在其他大部分区域分类结果较平滑，错分样本较少，以上结果证明了本章方法在非对称噪声标签下的有效性与优越性。
+图\ref{fig:fle_random}展示了10\%非对称标签噪声下不同对比方法的分类结果，其中每个分类结果图下方依次为A、B、C区域的局部放大图。图\ref{fig:SVM_random}与图\ref{fig:wishart_random}依然存在大量的错分情况，并且区域内部存在大量斑点状的错误区域。图\ref{fig:CNN_random}展示了交叉熵损失下的CNN分类结果，由于训练集中油菜籽区域部分像素被标记为小麦，导致在分类结果中也存在相同的错分情况，这表明该分类方法在错误标记训练集上过拟合，学习了错误的分类规则。图\ref{fig:RSL_random}展示了RSL方法的分类结果，可以看出在油菜籽、大麦区域依然存在大块连续的错分区域，将大麦错分为苜蓿，这是因为RSL对大量的错误样本过滤性能有限。图\ref{fig:BEL_random}与图\ref{fig:BEL_DP_random}展示了BEL与BEL+DP方法的分类结果，可以看到由于对称噪声标签的影响，在小麦、林地、油菜籽区域出现了一定的错分情况，但是在其他大部分区域分类结果较平滑，错分样本较少，以上结果证明了本章方法在非对称噪声标签下的有效性与优越性。
 
 \begin{figure}[ht!]
     \subfloat[]{
         \label{fig:SVM_random}
-        \includegraphics[width=4.04cm]{pic/chapter4/fle/SVM_random.png}
+        \includegraphics[width=4.04cm]{pic/chapter4/fle/SVM_random-1.png}
     }
     \subfloat[]{
         \label{fig:wishart_random}
@@ -364,6 +408,29 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
         \label{fig:CNN_random}
         \includegraphics[width=4.04cm]{pic/chapter4/fle/CNN_random.png}
     }
+
+    \begin{minipage}[b]{4.04cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/0_SVM_random.PNG} % 第一张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/1_SVM_random.PNG} % 第二张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/2_SVM_random.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \begin{minipage}[b]{4.04cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/0_Wishart_random.PNG} % 第一张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/1_Wishart_random.PNG} % 第二张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/2_Wishart_random.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \begin{minipage}[b]{4.04cm} % 添加minipage环境，4.74cm是子图的宽度
+        \centering
+        \subfloat[]{
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/0_CNN_random.PNG} % 第一张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/1_CNN_random.PNG} % 第二张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/2_CNN_random.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
 
     \subfloat[]{
         \label{fig:RSL_random}
@@ -378,14 +445,35 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
         \includegraphics[width=4.04cm]{pic/chapter4/fle/BEL+DP_random.png}
     }
 
+    \begin{minipage}[b]{4.04cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/0_RSL_random.PNG} % 第一张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/1_RSL_random.PNG} % 第二张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/2_RSL_random.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \begin{minipage}[b]{4.04cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/0_BEL_random.PNG} % 第一张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/1_BEL_random.PNG} % 第二张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/2_BEL_random.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \begin{minipage}[b]{4.04cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/0_BEL+DP_random.PNG} % 第一张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/1_BEL+DP_random.PNG} % 第二张子图的路径
+            \includegraphics[width=1.2cm]{pic/chapter4/fle/sub-images/2_BEL+DP_random.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+
     \subfloat[]{
         \includegraphics[width=4.04cm]{pic/chapter4/fle/gt.png}
     }
     \subfloat[]{
         \includegraphics[width=4.04cm]{pic/chapter4/fle/label.png}
     }
-
-    \caption{AIRSAR Flevoland地区数据非对称标签噪声下分类可视化结果图。(a) SVM;(b)Wishart; (c) CNN; (d) RSL; (e) BEL; (f) BEL + DP; (g) 地面真值；(h) 颜色与类别对应关系}
+    \caption{AIRSAR Flevoland地区数据非对称标签噪声下分类可视化结果图。(a)SVM；(b)Wishart；(c)CNN；(d)SVM局部误差图；(e)Wishart局部误差图；(f)CNN局部误差图；(g)RSL；(h)BEL；(i)BEL + DP；(j)RSL局部误差图；(k)BEL局部误差图；(l)BEL + DP局部误差图；(m)地面真值；(n)颜色与类别对应关系}
     \label{fig:fle_random}
 \end{figure}
 
@@ -426,12 +514,12 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
 
 \begin{figure}[ht!]
     \subfloat[]{
-        \includegraphics[width=6.24cm]{pic/chapter4/fle/noise_sy.pdf}
+        \includegraphics[width=6.24cm]{pic/chapter4/fle/noise_sy1.pdf}
     }
     \subfloat[]{
-        \includegraphics[width=8.04cm]{pic/chapter4/fle/noise_in.pdf}
+        \includegraphics[width=7.74cm]{pic/chapter4/fle/noise_in1.pdf}
     }
-    \caption{AIRSAR Flevoland地区数据不同噪声比例下分类准确率结果。(a) 对称噪声源； (b) 非对称噪声源}
+    \caption{AIRSAR Flevoland地区数据不同噪声比例下分类准确率结果。(a)对称噪声源；(b)非对称噪声源}
     \label{fig:fle_noise}
 \end{figure}
 
@@ -480,7 +568,7 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
         \includegraphics[width=2.04cm]{pic/chapter4/ober/label.png}
     }
 
-    \caption{AIRSAR Flevoland地区数据对称标签噪声下分类可视化结果图。(a) SVM;(b)Wishart; (c) CNN; (d) RSL; (e) BEL; (f) BEL + DP; (g) 地面真值；(h) 颜色与类别对应关系}
+    \caption{AIRSAR Flevoland地区数据对称标签噪声下分类可视化结果图。(a)SVM；(b)Wishart；(c)CNN；(d)RSL；(e)BEL；(f)BEL + DP；(g)地面真值；(h)颜色与类别对应关系}
     \label{fig:ober_res_random}
 \end{figure}
 
@@ -548,7 +636,7 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
         \includegraphics[width=2.04cm]{pic/chapter4/ober/label.png}
     }
 
-    \caption{AIRSAR Flevoland地区数据非对称标签噪声下分类可视化结果图。(a) SVM;(b)Wishart; (c) CNN; (d) RSL; (e) BEL; (f) BEL + DP; (g) 地面真值；(h) 颜色与类别对应关系}
+    \caption{AIRSAR Flevoland地区数据非对称标签噪声下分类可视化结果图。(a)SVM；(b)Wishart；(c)CNN；(d)RSL；(e)BEL；(f)BEL + DP；(g)地面真值；(h)颜色与类别对应关系}
     \label{fig:fle_res_random}
 \end{figure}
 
@@ -575,12 +663,12 @@ DCNN模型在含标签噪声样本集上训练时，总是先学习简单的分�
 
 \begin{figure}[ht!]
     \subfloat[]{
-        \includegraphics[width=6.24cm]{pic/chapter4/ober/noise_sy.pdf}
+        \includegraphics[width=6.24cm]{pic/chapter4/ober/noise_sy1.pdf}
     }
     \subfloat[]{
-        \includegraphics[width=8.04cm]{pic/chapter4/ober/noise_in.pdf}
+        \includegraphics[width=7.74cm]{pic/chapter4/ober/noise_in1.pdf}
     }
-    \caption{ESAR Oberpfaffenhofen地区数据不同噪声比例下分类准确率结果。(a) 对称噪声源 (b) 非对称噪声源}
+    \caption{ESAR Oberpfaffenhofen地区数据不同噪声比例下分类准确率结果。(a)对称噪声源 (b)非对称噪声源}
     \label{fig:ober_noise}
 \end{figure}
 

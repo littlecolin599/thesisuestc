@@ -2,7 +2,7 @@
 \section{引言}
 极化SAR通过以不同的极化方式发射和接收电磁波信号，从而实现对地物目标探测，并提供丰富的后向散射信息。通过使用四种极化方式（HH、HV、VH、VV）进行探测，可以获得包含目标散射特性的散射矩阵。使用具有不同物理含义的散射基进行进一步解析，可以获取代表目标不同散射意义的目标分解特征。不同的极化特征从不同的角度描述地物目标的散射特性。挖掘极化SAR数据中的有效极化信息一直是遥感探测领域的难点与重点之一。通过采用适合于极化SAR数据特性的特征提取技术，可以使极化特征具有良好的类内相聚、类间远离的可分性，从而提升系统对目标特性的感知能力，成为极化SAR图像解译研究中的关键步骤之一。
 
-根据文献\cite{刘高峰2014极化,1017062722.nh}，没有一个单一特征能在所有分类中均取得完美的表现，每个方法提取的特征具有其长处以及特征见具有互补性。而目前在极化SAR目标分类研究中，主要存在以下问题：首先，绝大多数的极化SAR分类方法直接采用相干矩阵作为输入，却忽略了目标分解特征的表示方式\citing{zhou2016polarimetric,liu2018polarimetric}提供的目标物理散射信息。二，直接堆叠所有的极化特征作为输入会导致信息冗余且计算量大，甚至降低分类准确度\citing{ren2021mutual}。
+根据文献\cite{刘高峰2014极化,1017062722.nh,1021744178.nh}，没有一个单一特征能在所有分类中均取得完美的表现，每个方法提取的特征具有其长处以及特征见具有互补性。而目前在极化SAR目标分类研究中，主要存在以下问题：首先，绝大多数的极化SAR分类方法直接采用相干矩阵作为输入，却忽略了目标分解特征的表示方式\citing{zhou2016polarimetric,liu2018polarimetric}提供的目标物理散射信息。二，直接堆叠所有的极化特征作为输入会导致信息冗余且计算量大，甚至降低分类准确度\citing{ren2021mutual}。
 
 本章提出了一种基于双通道注意力的极化SAR目标分类方法，讨论了多类型极化特征信息的利用方法。该方法以注意力机制为基础，通过利用极化散射特征与极化目标分解特征之间的差异性与互补性，构建了两种类型特征之间的融合表征关系，从而增强了极化信息的表征性能，并提高了分类任务的准确率。实验部分通过两组真实极化SAR数据验证本方法的有效性与优越性。
 
@@ -380,7 +380,7 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
     \label{flevoland_smaple}
 \end{table}
 
-图\ref{fig:fle_res}展示了各个对比方法的可视化分类结果。根据图\ref{fig:fle_T}，仅使用散射特征的分类方法，在草地（区域A）、油菜籽（区域B）和土豆（区域C）都有较多的错分样本，这是因为只使用了散射特征而忽略了目标分解特征，没有全面综合利用所有的极化信息导致的。图\ref{fig:fle_P}展示了仅使用目标分解特征的分类结果，在草地、油菜籽、土豆区域也存在大量的错分样本，这可能是由于没有综合使用极化信息导致的，相干矩阵代表的散射特征是极化SAR中最基本、重要的特征。图\ref{fig:fle_F}展示的简单叠加散射特征与目标分解特征的分类结果，该方法的分类结果几乎与前两种方法相同，仍然在草地、油菜籽区域存在大量错分样本，这反映了直接简单堆叠使用极化特征带来的准确率提升有限。图\ref{fig:fle_SE}与图\ref{fig:fle_CBAM}展示了使用经典注意力方法的分类结果图，相比于直接叠加特征，并没有带来明显的分类性能提升，少量的错分孤立点与草地中错分的块状区域依然存在，这表明不考虑极化SAR数据特征的特征细化方法并不能为极化SAR分类任务带来优势。图\ref{fig:fle_DP}展示了基于双通道注意力方法的分类结果，可以看出本方法分类结果更加平滑，错分像素减少，特别是是在小麦、油菜籽区域，类间错分孤立点相对减少，这也验证了本章方法结合散射特征和目标分解特征的有效性，证明本章方法提取的极化信息表示是优越的。
+图\ref{fig:fle_res}展示了各个对比方法的可视化分类结果，其中每个分类结果图下方依次为A、B、C区域的局部放大图。根据图\ref{fig:fle_T}，仅使用散射特征的分类方法，在草地（区域A）、油菜籽（区域B）和土豆（区域C）都有较多的错分样本，这是因为只使用了散射特征而忽略了目标分解特征，没有全面综合利用所有的极化信息导致的。图\ref{fig:fle_P}展示了仅使用目标分解特征的分类结果，在草地、油菜籽、土豆区域也存在大量的错分样本，这可能是由于没有综合使用极化信息导致的，相干矩阵代表的散射特征是极化SAR中最基本、重要的特征。图\ref{fig:fle_F}展示的简单叠加散射特征与目标分解特征的分类结果，该方法的分类结果几乎与前两种方法相同，仍然在草地、油菜籽区域存在大量错分样本，这反映了直接简单堆叠使用极化特征带来的准确率提升有限。图\ref{fig:fle_SE}与图\ref{fig:fle_CBAM}展示了使用经典注意力方法的分类结果图，相比于直接叠加特征，并没有带来明显的分类性能提升，少量的错分孤立点与草地中错分的块状区域依然存在，这表明不考虑极化SAR数据特征的特征细化方法并不能为极化SAR分类任务带来优势。图\ref{fig:fle_DP}展示了基于双通道注意力方法的分类结果，可以看出本方法分类结果更加平滑，错分像素减少，特别是是在小麦、油菜籽区域，类间错分孤立点相对减少，这也验证了本章方法结合散射特征和目标分解特征的有效性，证明本章方法提取的极化信息表示是优越的。
 
 
 % 该方法的分类结果要优于前面两种方法，类间错分孤立点相对减少，具有更少的错分样本，这反映了综合利用极化信息对目标分类具有一定的优势。
@@ -398,6 +398,28 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
         \includegraphics[width=4.74cm]{pic/chapter3/fle/CNN-F.png}
     }
 
+    \begin{minipage}[b]{4.74cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/0_CNN-T.PNG} % 第一张子图的路径
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/1_CNN-T.PNG} % 第二张子图的路径
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/2_CNN-T.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \begin{minipage}[b]{4.74cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/0_CNN-P.PNG} % 第一张子图的路径
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/1_CNN-P.PNG} % 第二张子图的路径
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/2_CNN-P.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \begin{minipage}[b]{4.74cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/0_CNN-F.PNG} % 第一张子图的路径
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/1_CNN-F.PNG} % 第二张子图的路径
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/2_CNN-F.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+
     \subfloat[]{
         \label{fig:fle_SE}
         \includegraphics[width=4.74cm]{pic/chapter3/fle/CNN-SE.png}
@@ -410,7 +432,29 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
         \label{fig:fle_DP}
         \includegraphics[width=4.74cm]{pic/chapter3/fle/CNN-DP.png}
     }
-    \caption{AIRSAR Flevoland地区数据分类可视化结果图。(a) CNN-T; (b) CNN-P; (c) CNN-F; (d) CNN-SE; (e) CNN-CBAM; (f) 本章方法}
+
+    \begin{minipage}[b]{4.74cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/0_CNN-SE.PNG} % 第一张子图的路径
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/1_CNN-SE.PNG} % 第二张子图的路径
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/2_CNN-SE.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \begin{minipage}[b]{4.74cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/0_CNN-CBAM.PNG} % 第一张子图的路径
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/1_CNN-CBAM.PNG} % 第二张子图的路径
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/2_CNN-CBAM.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \begin{minipage}[b]{4.74cm} % 添加minipage环境，4.74cm是子图的宽度
+        \subfloat[]{
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/0_CNN-DP.PNG} % 第一张子图的路径
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/1_CNN-DP.PNG} % 第二张子图的路径
+            \includegraphics[width=1.4cm]{pic/chapter3/fle/sub-images/2_CNN-DP.PNG} % 第三张子图的路径
+        }
+    \end{minipage}
+    \caption{AIRSAR Flevoland地区数据分类可视化结果图。(a)CNN-T；(b)CNN-P；(c)CNN-F；(d)CNN-T局部误差图；(e)CNN-P局部误差图；(f)CNN-F局部误差图；(g)CNN-SE；(h)CNN-CBAM；(i)本章方法；(j)CNN-SE局部误差图；(h)CNN-CBAM局部误差图；(i)本章方法局部误差图}
     \label{fig:fle_res}
 \end{figure}
 
@@ -449,7 +493,7 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
     \subfloat[]{
         \includegraphics[width=10.04cm]{pic/chapter3/fle/tSNE-label.png}
     }
-    \caption{AIRSAR Flevoland地区数据不同方法特征分布。（(a) CNN-T; (b) CNN-P; (c) CNN-F; (d) CNN-SE; (e) CNN-CBAM; (f) 本章方法; (g) 颜色与类别对应关系}
+    \caption{AIRSAR Flevoland地区数据不同方法特征分布。(a)CNN-T；(b)CNN-P；(c)CNN-F；(d)CNN-SE；(e)CNN-CBAM；(f)本章方法；(g)颜色与类别对应关系}
     \label{fig:fle-tSNE}
 \end{figure}
 
@@ -557,7 +601,7 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
         \includegraphics[width=4.04cm]{pic/chapter3/ober/CNN-DP.png}
     }
 
-    \caption{E-SAR Oberpfaffenhofen地区数据分类可视化结果图。(a) CNN-T; (b) CNN-P; (c) CNN-F; (d) CNN-SE; (e) CNN-CBAM; (f) 本章方法}
+    \caption{E-SAR Oberpfaffenhofen地区数据分类可视化结果图。(a)CNN-T；(b)CNN-P；(c)CNN-F；(d)CNN-SE；(e)CNN-CBAM；(f)本章方法}
     \label{fig:ober_res}
 \end{figure}
 
