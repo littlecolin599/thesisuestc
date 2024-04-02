@@ -2,7 +2,7 @@
 \title{基于深度学习的极化SAR图像目标分类方法研究}{Research on Target Classification Method of Polarimetric SAR Images Based on Deep Learning}
 
 \author{林小惟}{Xiaowei Lin}
-\advisor{杨建宇\chinesespace 教授}{Dr. Jianyu Yang}
+\advisor{杨建宇\chinesespace 教授}{Prof. Jianyu Yang}
 \school{信息与通信工程学院}{School of Information and Communication Engineering}
 \major{ 通信工程(含宽带网络、移动通信等)}{Communications engineering}
 \studentnumber{202122011004}
@@ -15,6 +15,10 @@
 \begin{document}
 
 \makecover
+\thesisfigurelist % 图目录，仅在需要时添加，一般情况下请注释
+
+% \bindpdfcover{cover.pdf} %用于提交最终版论文的独创性声明，即有电子签名
+\originalitydeclaration %用于提交审阅版本时的独创性声明，即无电子签名
 
 % This is a template of mutiple files.
 % The folders chapters/ and misc/ have the related files
@@ -27,11 +31,11 @@
 \thesistableofcontents
 
 % thesis contents
-% \input{chapter/c1}
-% \input{chapter/c2}
+\input{chapter/c1}
+\input{chapter/c2}
 \input{chapter/c3}
 \input{chapter/c4}
-% \input{chapter/c5}
+\input{chapter/c5}
 
 % misc
 \input{misc/acknowledgement}
@@ -48,8 +52,15 @@
 \bibliography{reference}
 %
 
-\thesisaccomplish{publications}
+% \thesisaccomplish{publications}
 % \input{misc/translate_original}
 % \input{misc/translate_chinese}
+
+\begin{thesistheaccomplish}
+    \section*{已发表或录用的论文：}
+    \bibitem{111} \textbf{Lin X}, Ma Y, et al. Beta Mixture Model And Boundary Amplification Guided Label Noise Mitigation For PolSAR Image Classification[C]. IEEE International Geoscience and Remote Sensing Symposium 2024 (IGARSS 2024). (已录用)
+    \section*{已申请的国家发明专利：}
+
+\end{thesistheaccomplish}
 
 \end{document}

@@ -1,10 +1,10 @@
-\chapter{基于双通道注意力的极化SAR目标分类方法}
+\chapter{基于双通道注意力的极化SAR目标分类}
 \section{引言}
 极化SAR通过以不同的极化方式发射和接收电磁波信号，从而实现对地物目标探测，并提供丰富的后向散射信息。通过使用四种极化方式（HH、HV、VH、VV）进行探测，可以获得包含目标散射特性的散射矩阵。使用具有不同物理含义的散射基进行进一步解析，可以获取代表目标不同散射意义的目标分解特征。不同的极化特征从不同的角度描述地物目标的散射特性。挖掘极化SAR数据中的有效极化信息一直是遥感探测领域的难点与重点之一。通过采用适合于极化SAR数据特性的特征提取技术，可以使极化特征具有良好的类内相聚、类间远离的可分性，从而提升系统对目标特性的感知能力，成为极化SAR图像解译研究中的关键步骤之一。
 
-根据文献\cite{刘高峰2014极化,1017062722.nh,1021744178.nh}，没有一个单一特征能在所有分类中均取得完美的表现，每个方法提取的特征具有其长处以及特征见具有互补性。而目前在极化SAR目标分类研究中，主要存在以下问题：首先，绝大多数的极化SAR分类方法直接采用相干矩阵作为输入，却忽略了目标分解特征的表示方式\citing{zhou2016polarimetric,liu2018polarimetric}提供的目标物理散射信息。二，直接堆叠所有的极化特征作为输入会导致信息冗余且计算量大，甚至降低分类准确度\citing{ren2021mutual}。
+根据文献\cite{刘高峰2014极化,1017062722.nh,1021744178.nh}，没有一个单一特征能在所有分类中均取得完美的表现，每个方法提取的特征具有其长处以及特征见具有互补性。而目前在极化SAR目标分类研究中，主要存在以下问题：首先，现有的部分极化SAR分类方法直接采用相干矩阵作为输入，却忽略了目标分解特征的表示方式\citing{zhou2016polarimetric,liu2018polarimetric}提供的目标物理散射信息。其次，同一目标具有的多个极化特征也意味着存在较强的相关和冗余，且固定的极化特征表示方式无法应用在多元的目标分类场景中，导致目标分类性能受到限制\citing{ren2021mutual}。
 
-本章提出了一种基于双通道注意力的极化SAR目标分类方法，讨论了多类型极化特征信息的利用方法。该方法以注意力机制为基础，通过利用极化散射特征与极化目标分解特征之间的差异性与互补性，构建了两种类型特征之间的融合表征关系，从而增强了极化信息的表征性能，并提高了分类任务的准确率。实验部分通过两组真实极化SAR数据验证本方法的有效性与优越性。
+针对上述问题，本章提出了一种基于双通道注意力的极化SAR目标分类方法。该方法以注意力机制为基础，通过利用极化散射特征与极化目标分解特征之间的差异性与互补性，构建了两种类型特征之间的融合表征关系，从而增强了极化信息的表征性能，并提高了分类任务的准确率。实验部分通过两组实测极化SAR数据验证本方法的有效性与优越性。
 
 \section{注意力机制介绍}
 \label{sec:sce3_1}
@@ -47,7 +47,7 @@
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=14cm]{pic/chapter3/SAM.png}
+    \includegraphics[width=12cm]{pic/chapter3/SAM.png}
     \caption{SAM 结构图\citing{woo2018cbam}}
     \label{SAM}
 \end{figure}
@@ -72,15 +72,15 @@
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=14cm]{pic/chapter3/CBAM.jpg}
+    \includegraphics[width=12cm]{pic/chapter3/CBAM.jpg}
     \caption{CBAM 结构图\citing{woo2018cbam}}
     \label{CBAM}
 \end{figure}
 
-\section{双通道注意力的极化SAR目标分类方法}
+\section{双通道注意力的极化SAR目标分类}
 注意力机制方法已广泛应用于图像处理领域，尤其在计算机视觉和深度学习任务中。这些方法通过在网络结构中引入注意力机制，对图像中特定区域进行加权关注，使模型能够更加关注关键的信息，从而提升分类性能。区别于光学图像，极化SAR图像具有独特的数据特征，包括复杂的多通道信息和多维度的散射机制，直接将通用的注意力机制方法应用于极化SAR图像处理任务中无法取得理想的效果。本章充分考虑了极化SAR图像数据特点，基于后向散射信息与目标分解信息的差异性与互补性，提出了专适用于极化SAR图像的目标分类方法，即基于双通道注意力的极化SAR目标分类方法。该方法充分挖掘两类极化特征的差异信息与互补信息，以提供更加全面、充分的极化信息表示方式，从而提升分类准确率。
 
-\subsection{双通道注意力极化SAR目标分类方法框架}
+\subsection{目标分类方法框架}
 如图\ref{DPEN_framework}所示，展示了基于双通道注意力的极化SAR目标分类算法示意图。该方法构建了端到端的极化特征校准与分类网络结构，以挖掘多类型极化特征中的隐藏信息为目的，实现两类型极化特征的信息提取与有效融合，增强极化特征的可表征性能。
 
 该方法主要分为极化特征校准模块与分类器模块，分别用于多类型极化特征细化以及目标分类任务。其主要思路是：首先，为了充分挖掘两类不同类型极化特征的有效信息，设计双通道网络结构，在两个独立的通道中依次利用注意力方法增强有效信息而抑制无关冗余信息。其次，利用极化注意力调整模块，基于两类型特征的互补特性，对空间和通道注意力图进行联合动态修正，充分挖掘两类极化特征之间的互补信息。之后， 考虑到极化SAR图像具有较大的空间尺寸，设计多尺度学习方法，旨在聚合不同尺寸的极化特征。最后，将重新调整的极化特征进行拼接，形成注意力增强的极化特征输入到分类器网络，得到目标分类结果。值得注意的是，该方法中的极化特征校准模块可以作为一个即插即用的插件式模块，应用到其他下游的目标检测、分类识别任务中。
@@ -96,7 +96,7 @@
 
 （1）通道1：后向散射特征
 
-根据公式\ref{eq:T}，极化相干矩阵$T$非主对角线元素均是复数，而主对角线元素均是实数，并且关于主对角线共轭对称。因此，可以使用矩阵的上三角6个元素代表极化相干矩阵，考虑到复数性质，使用一个包含9个元素的一维数组表示极化相干矩阵，具体如下式所示：
+根据公式\eqref{eq:T}，极化相干矩阵$T$非主对角线元素均是复数，而主对角线元素均是实数，并且关于主对角线共轭对称。因此，可以使用矩阵的上三角6个元素代表极化相干矩阵，考虑到复数性质，使用一个包含9个元素的一维数组表示极化相干矩阵，具体如下式所示：
 \begin{equation}
     \mathbf{V}=[T_{11}, T_{22}, \text{Re}(T_{33}), \text{Re}(T_{12}), \text{Re}(T_{13}), \text{Im}(T_{23}), \text{Im}(T_{33}), \text{Im}(T_{12}), \text{Im}(T_{13}), \text{Im}(T_{23})]
 \end{equation}
@@ -139,14 +139,12 @@
 综合以上算法描述，图\ref{流程图}对本章算法结合分类器进行目标分类的整体流程进行总结。
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=8cm]{pic/chapter3/DP流程图.pdf}
+    \includegraphics[width=10cm]{pic/chapter3/DP流程图.pdf}
     \caption{双通道注意力极化SAR目标分类算法流程图}
     \label{流程图}
 \end{figure}
 
 \subsection{空间和通道注意力模块}
-\label{sec:空间和通道注意力模块}
-
 注意力方法通过强调或抑制输入特征中的不同部分，在深度学习领域，被广泛应用到各种任务中。本文通过引入空间和通道注意力方法，旨在对输入的极化信息动态调整关注度，提升模型对关键信息的感知能力。图\ref{fig:spatial}为本方法中的空间注意力模块网络结构。空间注意力方法采用卷积操作来获取全局信息，从而赋予其更多的非线性捕捉能力，更好的拟合不同空间位置之间的复杂相关性，显著减少参数量和计算量。计算公式如下所示：
 \begin{equation}
     A_s=\sigma(f^{7\times 7}(AvgPool(S);\Gamma(MaxPool(S))))
@@ -157,6 +155,7 @@
 \end{equation}
 其中，$\otimes$ 表示逐元素乘积。通过空间注意力方法，在空间维度进行有效信息激发而抑制无效信息，得到空间注意力图校准的极化特征$S_S$。
 
+\label{sec:空间和通道注意力模块}
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=14cm]{pic/chapter3/Spatial.png}
@@ -181,7 +180,6 @@
     \label{fig:channel}
 \end{figure}
 
-
 \subsection{极化注意力修正模块}
 \label{sec:极化注意力修正模块}
 
@@ -204,7 +202,12 @@
     S_{1i}^{\prime}=\sum_j{\Phi _i\left( j \right) \cdot S_{2}^{\prime}\left( j \right)}
 \end{equation}
 
-
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=14cm]{pic/chapter3/极化注意力修正.pdf}
+    \caption{极化注意力修正模块网络结构示意图}
+    \label{DPEN_WFM}
+\end{figure}
 
 % 极化注意力修正模块利用输入的一路极化特征作为主要引导，对另外一路特征进行修正。其中主要包含卷积与残差运算，计算公式如下所示：
 % \begin{gather}
@@ -215,16 +218,17 @@
 %     S_{out}=S_1+\left( S_{1}^{\prime}\times S_{2}^{\prime} \right)
 % \end{gather}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=14cm]{pic/chapter3/极化注意力修正.pdf}
-    \caption{极化注意力修正模块网络结构示意图}
-    \label{DPEN_WFM}
-\end{figure}
 
 
 \subsection{多尺度学习模块}
 \label{sec:多尺度学习模块}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=14cm]{pic/chapter3/跨空间学习.pdf}
+    \caption{多尺度学习模块网络结构示意图}
+    \label{DPEN_CSL}
+\end{figure}
+
 多尺度学习模块的网络结构如图\ref{DPEN_CSL}所示，提供了一种不同空间维度方向的极化信息聚合方法，以实现多尺度下的极化特征聚合。引入两个分支的张量，分别代表了$1\times 1$分支的输出和$3 \times 3$分支的输出。通过二维全局平均池化对$1\times 1$分支的输出进行操作，以编码其中的全局极化空间信息，用于对全局信息进行编码和建模远程依赖关系。二维全局池化操作可以表达为：
 \begin{equation}
     z_c=\frac{1}{H\times W}\sum_{j}^{H}\sum_{i}^{W}x_c(i,j)
@@ -242,14 +246,8 @@ $1\times 1$分支特征图在进行二维全局平均池化后，采用自然非
 \end{gather}
 其中，$\sigma$表示sigmoid函数。
 
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=14cm]{pic/chapter3/跨空间学习.pdf}
-    \caption{多尺度学习模块网络结构示意图}
-    \label{DPEN_CSL}
-\end{figure}
-
-\subsection{目标分类器模块}
+\subsection{目标分类模块}
+\label{sec:目标分类模块}
 在双通道注意力极化信息提取器（Dual Attention Polarization Information Extractor, DP）的基础上，构建端到端的极化SAR信息提取与目标分类网络（DP Convolutional Neural Network, DP-CNN）。从输入的高维原始极化特征出发，利用DP模块可以获得全局信息并且嵌入到分类器中。原始极化特征中有价值的信息被激发，而没有价值的信息被抑制。当具备了重新校正的极化特征之后，输入到目标分类器模块，通过卷积网络结构，实现对输入特征的分类。校准后的极化特征输入到图\ref{DPEN_framework}展示的分类模块中。分类器采用类似VGG结构的卷积神经网络架构，其中包含三个带有ReLU激活函数的$3\times 3$卷积层、两层最大池化函数、两层全连接网络以及一层SoftMax激活层。
 
 以交叉熵损失函数\citing{mao2023cross}为目标，通过反向传播算法训练模型参数。DP-CNN方法将输入的原始极化特征$x$映射为预测概率$p\in \mathbb{R}^{C}$，其中，$C$表示类别的个数。$x$对应的中心像素预测标签可以通过选择概率最高的类别，即向量$p$的最大值索引来预测。其计算公式如下：
@@ -268,6 +266,8 @@ $1\times 1$分支特征图在进行二维全局平均池化后，采用自然非
 
 
 \section{实验结果与分析}
+本节将详细阐述验证实验所依托的软件件设施配置以及关键的超参数设置。在此基础上，对验证实验所使用的极化SAR数据集进行简要介绍，并对本章所提出的双通道注意力目标分类方法进行性能评估。
+
 \subsection{实验参数设置}
 本章实验所使用的计算环境为一台CPU为Intel Core i7-8700K和配备了NVIDIA GPU（GeForce RTX 3090, 24G）的计算机设备。操作系统采用Ubuntu 20.04 LTS。深度学习框架选择PyTorch，版本为1.9.0，同时依赖CUDA深度神经网络库（cuDNN）版本8.0.5。在科学计算方面，实验使用NumPy库，版本为1.19.5。
 
@@ -282,7 +282,7 @@ $1\times 1$分支特征图在进行二维全局平均池化后，采用自然非
 如表\ref{tab:conf_示意表}所示，c类样本混淆矩阵是一个$c \times c$的矩阵，其中$c$表示数据集的类别数量。混淆矩阵的行表示实际类别，列表示预测类别。其中，每个元素$(i, j)$表示实际属于类别$i$的样本被预测为类别$j$的数量。混淆矩阵主对角线元素表示被正确分类的样本，非主对角线表示分类错误的样本。
 
 \begin{table}[ht!]
-    \caption{c类样本混淆矩阵示意表}
+    \caption{c类样本混淆矩阵示意}
     \label{tab:conf_示意表}
     \centering
     \begin{tabular}{ccccccc}
@@ -349,7 +349,7 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
 
 \subsection{AIRSAR Flevoland数据实验}
 实验数据集选择NASA/JPL于1989年在Flevoland区域采集得到的全极化数据。该数据集是荷兰的一个农业区域遥感数据，作为基准数据集广泛应用于极化SAR土地覆盖目标分类研究中。该图像大小为$1024 \times 750$ 像素，共有15种农作物类别，包括茎豆、豌豆、森林、苜蓿、小麦、甜菜、土豆、裸土、草、油菜籽、大麦、水和少量建筑物。各个农作物目标类别之间的差异较小，相似性较强，因此分类难度较大，容易出现错分漏分的现象。图\ref{flevoland_pauli}和图\ref{flevoland_gt}分别展示了AIRSAR Flevoland数据集的Pauli分解伪彩图像以及对应的地面真值标签图像。表\ref{flevoland_smaple}展示了该数据集中每个类别带标签的样本数量。
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \subfloat[]{
         \label{flevoland_pauli}
         \includegraphics[width=7.04cm]{pic/chapter3/fle/pauli.png}
@@ -367,7 +367,7 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
     \label{fig2}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[ht!]
     \caption{Felvoand地区实验数据集有标签样本数量}
     \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
         \hline 类别 & 干豆   & 大麦    & 裸土    & 土豆    & 甜菜    & 小麦 1  & 豌豆    & 苜蓿
@@ -466,28 +466,28 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
 \begin{figure}[ht]
     \subfloat[]{
         \label{fig:fle_t_t}
-        \includegraphics[width=4.74cm]{pic/chapter3/fle/tSNE-T.png}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/t-sne/t.png}
     }
     \subfloat[]{
         \label{fig:fle_t_p}
-        \includegraphics[width=4.74cm]{pic/chapter3/fle/tSNE-P.png}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/t-sne/p.png}
     }
     \subfloat[]{
         \label{fig:fle_t_f}
-        \includegraphics[width=4.74cm]{pic/chapter3/fle/tSNE-F.png}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/t-sne/f.png}
     }
 
     \subfloat[]{
         \label{fig:fle_t_se}
-        \includegraphics[width=4.74cm]{pic/chapter3/fle/tSNE-SE.png}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/t-sne/se.png}
     }
     \subfloat[]{
         \label{fig:fle_t_cbam}
-        \includegraphics[width=4.74cm]{pic/chapter3/fle/tSNE-CBAM.png}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/t-sne/cbam.png}
     }
     \subfloat[]{
         \label{fig:fle_t_dp}
-        \includegraphics[width=4.74cm]{pic/chapter3/fle/tSNE-DP.png}
+        \includegraphics[width=4.74cm]{pic/chapter3/fle/t-sne/dp.png}
     }
 
     \subfloat[]{
@@ -500,8 +500,8 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
 表\ref{tab:fle_result}展示了不同方法的分类数值结果。仅使用散射特征的分类方法，在草地和建筑物区域的分类准确率较低，分别为89.41\%和91.17\%，这可能是因为仅使用相干矩阵作为极化特征的分类方法，并不能完全反应这两类地物目标的散射特性，导致分类准确率较低。仅使用目标分解特征作为特征的分类方法，在干豆区域达到了99.66\%的准确率，这是因为目标分解特征中包含有具体物理意义的极化表征，但是在建筑物油菜籽区域的分类准确率较低，仅有90.2\%，反映了目标分解特征与散射特征相互补充，都是必不可少的极化特征表示方法。直接堆叠极化特征的分类方法在分类总体准确率、平均准确率以及大麦等区域准确率反而下降，这表明了直接堆叠极化特征导致特征维数增加，分类器无法有效分清两种类型的主次关系，导致分类准确率有所下降。经典的注意力方法CNN-SE与CNN-CBAM总体准确率粉分别为96.76\%和96.13\%，分类结果准确率指标仅有不足1\%的提升，表明该方法直接应用于极化SAR领域性能提升有限。根据本章方法的分类数值结果，在大多数的类别都具有最高的分类准确率，并且在总体准确率、平均准确率、Kappa系数分别提升2.25\%、3.12\%和2.46\%，表明了基于双通道注意力的极化信息提取方法对于极化SAR目标分类具有优势，验证了本章方法的有效性和优越性。
 
 \begin{table}[ht!]
-    \label{tab:fle_res}
     \caption{AIRSAR Flevoland地区数据分类数值结果(\%)}
+    \label{tab:fle_result}
     \renewcommand\arraystretch{1.0}
     \begin{tabular}{cccccccc}
         \toprule[1.5bp]
@@ -530,8 +530,7 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
     \end{tabular}
 \end{table}
 
-
-图\ref{fig:fle_conf_matrix}展示了本章方法分类结果的混淆矩阵可视化图。从图中可以看到，混淆矩阵的可视化结果显示本章方法在对角线上具有较高的主对角元素，说明在大多数类别上取得了良好的分类性能。
+图\ref{fig:fle_conf_matrix}展示了本章方法分类结果对应的混淆矩阵。结果表明，混淆矩阵的主对角线元素具有相对较高的数值，模型正确分类的情况占据了主导地位，说明本章方法在本数据集上的优秀分类性能。
 
 \begin{figure}[h]
     \centering
@@ -542,7 +541,7 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
 
 
 \subsection{E-SAR Oberpfaffenhofen数据实验}
-该数据集是通过E-SAR机载平台在德国Oberpfaffenhofen地区拍摄获取到的L波段极化SAR数据。该数据集经过多视处理，具有高质量的全极化信息，是极化SAR目标分类研究的经典数据集之一。数据集在方位向和距离向具有$3m \times 3m$的分辨率，大小为$1300 \times 1200$，总计包含三种类型的地物目标，分别是：建筑、林地和开放区域。图\ref{fig:ober_pauli}展示了该数据集的Pauli伪彩色图像，图\ref{fig:ober_gt}展示了该数据集的人工标记的地面真值参考图。地面真值图中黑色的区域表示未标记的区域。表\ref{fig:ober_label}展示了各类地物目标样本数量情况。
+该数据集是通过E-SAR机载平台在德国Oberpfaffenhofen地区拍摄获取到的L波段极化SAR数据。该数据集经过多视处理，具有高质量的全极化信息，是极化SAR目标分类研究的经典数据集之一。数据集在方位向和距离向具有$3m \times 3m$的分辨率，大小为$1300 \times 1200$，包含建筑物、林地、开放区域三种类型的地物目标，每类包含样本数量依次为269184、388503、779962。图\ref{fig:ober_pauli}展示了该数据集的Pauli伪彩色图像，图\ref{fig:ober_gt}展示了该数据集的人工标记的地面真值参考图，地面真值图中黑色的区域表示未标记的区域。
 
 \begin{figure}[ht]
     \subfloat[]{
@@ -560,17 +559,6 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
     }
     \caption{E-SAR Oberpfaffenhofen区域数据。(a)Pauli分解伪彩色图像；(b)实验数据地面真值；(c)颜色与类别对应关系}
 \end{figure}
-
-\begin{table}[ht]
-    \caption{ESAR Oberpfaffenhofen数据样本数量}
-    \label{tab:ober_sample}
-    \centering
-    \begin{tabular}{|c|c|c|c|}
-        \hline
-        类别 & 建筑      & 林地      & 开放区     \\ \hline
-        数目 & 269,184 & 388,503 & 779,962 \\ \hline
-    \end{tabular}
-\end{table}
 
 图\ref{fig:ober_res}展示了不同方法的分类结果可视化图像。根据图\ref{fig:ober_T}展示的仅使用极化相干矩阵为特征的分类结果图，尽管在开放区域的分类效果较好，但是在建筑物（区域A、区域B、区域C）存在大量被错分的样本，将建筑物区域样本错误分类为开放区域，并且错分的现象较为严重。这可能是因为仅使用极化相干矩阵作为特征时并没有完全利用其他的目标分解特征导致的，说明了综合考虑极化SAR图像中的其他极化特性和辅助特征的在分类任务中的重要性。相比之下，图\ref{fig:ober_P}与图\ref{fig:ober_F}在建筑物区域中的错分样本相对较少，但是在各类区域中也存在着部分错分的样本。其中将开放区域中的少数像素分类为建筑物的错分情况依然存在，这反映了极化目标分解特征提供的反映目标物理散射特性的信息为分类任务带来了一定的优势，是极化SAR图像中的重要的基本特征。图\ref{fig:ober_SE}和图\ref{fig:ober_CBAM}展示了基于经典注意力方法的特征表示分类结果，从结果图中可以看出，分类效果仅有微小的变化，错分像素相对减少但是依然存在，这可能是极化SAR图像与光学图像存在较大的差异，经典的注意力方法并没有考虑极化SAR图像的数据特征特点。图\ref{fig:ober_DP}展示了基于本章提出的双通道注意力极化信息提取方法的分类结果图，从图中可以看出，在建筑物区域的错分样本明显减少区域内部分类更加平滑，并且每个类中的小块错误区域数量也相对减少，整体分类结果得到明显改善，证明了本章方法的有效性。
 
@@ -641,10 +629,6 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
     \label{fig:ober-tSNE}
 \end{figure}
 
-表\ref{tab:ober_res}展示了各个方法的分类数值结果。本章提出的基于双通道注意力的极化信息提取方法总体准确率OA达到94.39\%，相比于其他验证方法提升了4.12\%。本章方法的散射特征时，在建筑物区域的分类准确率仅为76.68\%，这可能是因为建筑物区域目标散射回波差异性大，导致仅使用散射特征时，不能完全表征建筑物目标的特性，进而导致在建筑物区域可分性较低。与仅使用目标分解特征相比，直接堆叠极化特征在平均准确率指标反而下降0.45\%，这可能是由于该方法仅仅是对两类的特征进行简单的堆叠，堆叠后的特征维数过高，分类模型对于高维特征输入无法有效利用两种不同类型特征间的主次关系。而经典注意力方法CNN-SE与CNN-CBAM的OA分别为89.13\%和90.27\%，分类准确率提升不足1\%，微弱的准确率提升与计算量的增加表明对极化SAR特征优化性能有限。本章方法在OA、AA、Kappa系数等指标达到了94.39\%、93.28\%和90.4\%，相比于对比方法分别提升了4.12\%、4.3\%和5.16\%，表明本章方法能有效利用多类型极化特征，提升分类准确度。
-
-图\ref{fig:ober_conf_matrix}展示了本章方法分类结果的混淆矩阵可视化图。混淆矩阵的可视化结果显示本章方法在对角线上具有较高的主对角元素，说明在大多数类别上取得了良好的分类性能。
-
 \begin{table}[ht!]
     \caption{E-SAR Oberpfaffenhofen地区数据分类数值结果(\%)}
     \label{tab:ober_res}
@@ -665,12 +649,15 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=10.4cm]{pic/chapter3/ober/conf-matrix.pdf}
+    \includegraphics[width=8.4cm]{pic/chapter3/ober/conf-matrix.pdf}
     \caption{本章方法在E-SAR Oberpfaffenhofen图像中分类结果混淆矩阵图}
     \label{fig:ober_conf_matrix}
 \end{figure}
 
+表\ref{tab:ober_res}展示了各个方法的分类数值结果。本章提出的基于双通道注意力的极化信息提取方法总体准确率OA达到94.39\%，相比于其他验证方法提升了4.12\%。本章方法的散射特征时，在建筑物区域的分类准确率仅为76.68\%，这可能是因为建筑物区域目标散射回波差异性大，导致仅使用散射特征时，不能完全表征建筑物目标的特性，进而导致在建筑物区域可分性较低。与仅使用目标分解特征相比，直接堆叠极化特征在平均准确率指标反而下降0.45\%，这可能是由于该方法仅仅是对两类的特征进行简单的堆叠，堆叠后的特征维数过高，分类模型对于高维特征输入无法有效利用两种不同类型特征间的主次关系。而经典注意力方法CNN-SE与CNN-CBAM的OA分别为89.13\%和90.27\%，分类准确率提升不足1\%，微弱的准确率提升与计算量的增加表明对极化SAR特征优化性能有限。本章方法在OA、AA、Kappa系数等指标达到了94.39\%、93.28\%和90.4\%，相比于对比方法分别提升了4.12\%、4.3\%和5.16\%，表明本章方法能有效利用多类型极化特征，提升分类准确度。
+
+图\ref{fig:ober_conf_matrix}展示了本章方法分类结果对应的混淆矩阵。结果表明，混淆矩阵的主对角线元素具有相对较高的数值，模型正确分类的情况占据了主导地位，说明本章方法在本数据集上的优秀分类性能。
 
 
 \section{本章小结}
-本章针对多类型极化特征信息冗余问题，提出了基于双通道注意力的极化SAR目标分类方法。首先，构建后向散射特征通道和目标分解特征通道的双通道结构，结合空间、通道注意力机制，实现对两种类型极化特征中有效信息的激发而抑制无关信息。然后，为了充分挖掘两类极化特征之间的关联信息，设计了基于散射特征一致性的注意力修正方法，对注意力特征进行动态校正。其次，通过多尺度特征学习模块，聚合不同空间尺寸的极化特征，增强模型对不同空间尺度的特征的感知能力。最后，将经过双通道注意力校准后的极化特征输入到分类器，得到最终的分类结果。在两组真实极化SAR数据集进行性能测试，从视觉分类效果和数据量化准确率两个层面进行性能评估，结果表明本章提出的信息提取方法能为分类任务提供更加全面、充分的极化信息表示方式，提升极化SAR图像的分类精度。
+本章针对多类型极化特征信息冗余问题，提出了基于双通道注意力的极化SAR目标分类方法。首先，构建后向散射特征通道和目标分解特征通道的双通道结构，结合空间、通道注意力机制，实现对两种类型极化特征中有效信息的激发而抑制无关信息。然后，为了充分挖掘两类极化特征之间的关联信息，设计了基于散射特征一致性的注意力修正方法，对注意力特征进行动态校正。其次，通过多尺度特征学习模块，聚合不同空间尺寸的极化特征，增强模型对不同空间尺度的特征的感知能力。最后，将经过双通道注意力校准后的极化特征输入到分类器，得到最终的分类结果。在两组真实极化SAR数据集进行性能测试，并视觉分类效果和数据量化准确率两个层面进行性能评估，结果表明本章提出的目标分类方法能够更加全面地利用多类型极化特征信息，提升极化SAR图像目标分类精度。
