@@ -443,7 +443,7 @@
 }
 
 \DeclareOption{promaster}{
-  \def\chinesedegreename{专业硕士}
+  \def\chinesedegreename{硕士}
   \def\englishdegreename{Professional Master}
   \def\chinesebooktitle{专业学位硕士学位论文}
   \def\englishbooktitle{Master Thesis for Professional Degree}
@@ -640,18 +640,18 @@
                                                      &                         \\
       \cline{2-2}
     \end{tabular}\hspace*{\fill} \\[\baselineskip]
-    \begin{tabular}{>{\bfseries\fontsize{16pt}{16pt}\selectfont}l
-      >{\centering\arraybackslash\bfseries\fontsize{16pt}{16pt}\selectfont}
-      p{3.77in}p{15pt}}
-      学科专业                          & \zh@themajor      & \\
+    \begin{tabular}{>{\bfseries\fontsize{16bp}{16bp}\selectfont}l
+      >{\centering\arraybackslash\bfseries\fontsize{16bp}{16bp}\selectfont}
+      p{8.85cm}p{0cm}}
+      \hspace{0.55cm}\scalebox{0.66}[1]{专业学位类别}    & \zh@themajor      & \\
       \cline{2-2}
-      学\chinesespace\chinesespace 号 & \thestudentnumber & \\
+      \hspace{0.55cm}学\chinesespace\chinesespace 号 & \thestudentnumber & \\
       \cline{2-2}
-      作者姓名                          & \zh@theauthor     & \\
+      \hspace{0.55cm}作者姓名                          & \zh@theauthor     & \\
       \cline{2-2}
-      指导老师                          & \zh@theadvisor    & \\
+      \hspace{0.55cm}指导教师                          & \zh@theadvisor    & \\
       \cline{2-2}
-      学\chinesespace\chinesespace 院 & \zh@theschool     & \\
+      \hspace{0.55cm}学\chinesespace\chinesespace 院 & \zh@theschool     & \\
       \cline{2-2}
     \end{tabular}
   \end{center}
@@ -701,11 +701,17 @@
       p{1.0in}
       >{\fontsize{12pt}{12pt}\selectfont}l
       >{\centering\arraybackslash\fontsize{14pt}{14pt}\bfseries\selectfont}
-      p{2.50in}}
+      p{2.045in}}
     申请学位级别 & \chinesedegreename &
-    学科专业   & \zh@themajor         \\
+    专业学位类别 & \zh@themajor \\
     \cline{2-2}
     \cline{4-4}
+  \end{tabular} \\
+  \begin{tabular}{>{\fontsize{12pt}{12pt}\selectfont}l
+      >{\centering\arraybackslash\fontsize{14pt}{14pt}\bfseries\selectfont}
+      p{4.575in}}
+    专业学位领域 & 通信工程(含宽带网络、移动通信等) \\
+    \cline{2-2}
   \end{tabular} \\
   \begin{tabular}{>{\fontsize{12pt}{12pt}\selectfont}l
       >{\centering\arraybackslash\fontsize{14pt}{14pt}\bfseries\selectfont}
@@ -726,7 +732,7 @@
   \end{tabular} \\
   \begin{tabular}{>{\fontsize{12pt}{12pt}\selectfont}l
       >{\centering\arraybackslash\fontsize{14pt}{14pt}\heiti\selectfont}
-      p{2.29in}}
+      p{4.41in}}
     答辩委员会主席 & \\
     \cline{2-2}
   \end{tabular} \\
@@ -737,7 +743,7 @@
     \cline{2-2}
   \end{tabular}
 
-  \vspace{0.54in}
+  \vspace{0.48in}
   \noindent
   \hspace{12pt}注1：注明《国际十进分类法UDC》的类号。
 
