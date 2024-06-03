@@ -49,10 +49,9 @@
 其中，$c_m$表示不同混合分类的权重并且满足$\sum_{m=1}^M c_m=1$。
 
 在上述的高斯混合分布中，涉及到一组参数，用$\Theta = \{c_m, \mu_m, \Sigma_m\}$ 表示。其中，$c_m$表示每个分布的权重，$\mu_m$表示均值，$\Sigma_m$表示协方差矩阵。在考虑包含多个混合分类的情况下，这一组参数可以用来描述整个混合分布的特征。要获得对混合分布参数的准确描述，需要根据一组假设来确定这些参数的值，通过最佳的参数，来匹配观测到的数据，进而更加准确的反映真实数据的特征。图\ref{GMM}展示了二分量的GMM模型概率密度函数示意图：
-
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=10cm]{pic/chapter4/GMM.png}
+    \includegraphics[width=8cm]{pic/chapter4/GMM.pdf}
     \caption{二分量的高斯混合模型概率密度函数示意图}
     \label{GMM}
 \end{figure}
@@ -89,7 +88,7 @@
 在贝塔混合分布中，参数集为 $\Theta = \{c_m, \alpha_m, \beta_m\}$。其中，$c_m$ 表示每个贝塔分布的权重，$\alpha_m$ 和 $\beta_m$ 分别表示每个贝塔分布的形状参数。为了描述整个混合分布的特征，需要通过一组假设，从观测到的数据中确定这些参数的值。这一过程旨在使混合分布的参数最佳匹配观测到的数据，以更准确地反映实际数据的特征。图\ref{BMM}展示了二分量的BMM模型概率密度函数示意图：
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=10cm]{pic/chapter4/BMM.png}
+    \includegraphics[width=8cm]{pic/chapter4/BMM.pdf}
     \caption{二分量的贝塔混合模型概率密度函数示意图}
     \label{BMM}
 \end{figure}
@@ -185,7 +184,6 @@
 
 \begin{equation}
     p(\ell \mid \text{noisy})=\frac{\Gamma(\alpha_n+\beta_n)}{\Gamma(\alpha_n) \Gamma(\beta_n)} \ell^{\alpha_n-1}(1-\ell)^{\beta_n-1}
-    \label{eq:BMM_PDF}
 \end{equation}
 
 其中，$\alpha_{c/n}, \beta_{c/n} > 0$ 表示干净/噪声样本的贝塔分布参数，$\Gamma(\cdot)$ 是伽玛函数，$\lambda_{c}$ 和 $\lambda_{n}$ 分别表示混合系数，表示两个分量的组合系数。
@@ -193,40 +191,44 @@
 参数集$\Theta = \{c_{c/n}, \alpha_{c/n}, \beta_{c/n}\}$描述了整个混合分布的特征。使用最大期望（Expectation Maximization, EM）算法，实现混合模型的参数更新迭代。首先，在E步中，固定混合系数，损失值 \(\ell\) 的后验概率 \(Q_k(\ell)=p(k \mid \ell)\) 基于贝叶斯规则进行更新，即
 \begin{equation}
     Q_k(\ell)=\frac{\lambda_k p(\ell \mid \alpha_k, \beta_k)}{\sum_{j=0}^{1}\lambda_j p(\ell \mid \alpha_j, \beta_j)}
+    \label{eq:BMM_PDF}
 \end{equation}
 其中，$j=0(1)$ 表示干净（噪声）类别。
 
-然后，在M步中，基于更新的 \(Q_k(\ell)\)，通过加权版本的矩方法估计 \(\alpha_k\) 和 \(\beta_k\)。基于更新后的贝塔模型参数，结合公式\eqref{eq:BMM_PDF}可以根据样本损失分布，获得输入样本属于噪声概率$\omega$。
+然后，在M步中，基于更新的 \(Q_k(\ell)\)，通过加权版本的矩方法估计 \(\alpha_k\) 和 \(\beta_k\)。基于更新后的贝塔模型参数，结合公式\eqref{eq:BMM_PDF}可以根据样本损失分布，获得输入样本属于噪声概率$\omega$，即：
+\begin{equation}
+    \omega =Q_1\left( \ell \right) =\frac{\lambda _1p\left( \ell\mid \alpha _1,\beta _1 \right)}{\sum_{j=0}^1{\lambda _j}p(l\mid \alpha _j,\beta _j)}
+\end{equation}
 
 \subsection{边界增强模块}
 
 由于错误标记的噪声样本更多出现在类别交替的边界部分，模型需要对属于边界样本付出更多的关注度。为了加强对边界样本注意力关注和细节增强，对Pauli彩图进行Sobel算子卷积和展开运算，生成距离边界$d$以内的掩膜像素，并将其作为辅助边界损失的目标。对于输入的图像$I(x,y)$，Sobel算子使用两个$3 \times 3$的卷积和与输入图像进行卷积操作，分别计算垂直和水平垂直梯度近似。这两个卷积核如下所示：
 
 \begin{gather}
-    K_x=\left[ \begin{matrix}
+    \textbf{K}_x=\left[ \begin{matrix}
             -1 & 0 & 1 \\
             -2 & 0 & 2 \\
             -1 & 0 & 1 \\
         \end{matrix} \right]
     \\
-    K_y=\left[ \begin{matrix}
+    \textbf{K}_y=\left[ \begin{matrix}
             -1 & -2 & -1 \\
             0  & 0  & 0  \\
             1  & 2  & 1  \\
         \end{matrix} \right]
 \end{gather}
-其中，$K_x$和$K_y$分别表示水平和垂直方向的卷积核。卷积操作的结果分别用$G_x$和$G_y$表示，其计算过程如下：
+其中，$\textbf{K}_x$和$\textbf{K}_y$分别表示水平和垂直方向的卷积核。卷积操作的结果分别用$\textbf{G}_x$和$\textbf{G}_y$表示，其计算过程如下：
 \begin{gather}
-    G_x=I \ast K_x=\sum_{i=-1}^1{\sum_{j=-1}^1{I\left( x+i,y+j \right) \cdot K_x\left( i,j \right)}}
+    \textbf{G}_x=I \ast K_x=\sum_{i=-1}^1{\sum_{j=-1}^1{I\left( x+i,y+j \right) \cdot K_x\left( i,j \right)}}
     \\
-    G_y=I \ast K_y=\sum_{i=-1}^1{\sum_{j=-1}^1{I\left( x+i,y+j \right) \cdot K_y\left( i,j \right)}}
+    \textbf{G}_y=I \ast K_y=\sum_{i=-1}^1{\sum_{j=-1}^1{I\left( x+i,y+j \right) \cdot K_y\left( i,j \right)}}
 \end{gather}
 其中，$\ast$表示卷积操作。通过以上两个卷积操作，得到图像每个像素点的水平和垂直梯度。图像在该相处点出的梯度强度和方向可以通过下式计算：
 
 \begin{gather}
-    G=\sqrt{G_x^2+G_y^2}
+    G=\sqrt{\textbf{G}_x^2+\textbf{G}_y^2}
     \\
-    \theta=arctan(\frac{G_y}{G_x})
+    \theta=arctan(\frac{\textbf{G}_y}{\textbf{G}_x})
 \end{gather}
 其中，$G$表示梯度强度，$\theta$表示梯度方向。
 
@@ -255,7 +257,7 @@
 \subsection{实验参数设置}
 本章实验所使用的计算环境为一台CPU为Intel Core i7-8700K和配备了NVIDIA GPU（GeForce RTX 3090, 24G）的计算机设备。操作系统采用Ubuntu 20.04 LTS。深度学习框架选择PyTorch，版本为1.9.0，同时依赖CUDA深度神经网络库（cuDNN）版本8.0.5。在科学计算方面，实验使用NumPy库，版本为1.19.5。学习率、batch-size等超参数设置与第三章实验参数相同。边界膨胀距离$d$设置为5像素，边界增强系数$W_1$与$W_2$分别设置为1.5与1.0。
 
-实验中，使用两组真实极化SAR数据集分别是荷兰Flevoland区域和德国Oberpfaffenhofen地区数据来验证本章方法的有效性，并利用常规的性能指标总体分类准确率（OA）、各个类别分类准确率和Kappa系数对分类结果进行数值量化。同时对分类的可视化结果进行视觉评估。在给定的极化SAR标准数据集中，一部分像素是没有标签的，所以在计算分类准确率的时候只统计数据集中那些有标签的样本被正确分类的百分比，并认为该指标可以表征数据集中整体的分类性能。
+实验中，使用两组真实极化SAR数据集分别是荷兰Flevoland区域\citing{zhang2017complex}和德国Oberpfaffenhofen地区数据\citing{xie2017polsar}来验证本章方法的有效性，并利用常规的性能指标总体分类准确率（OA）、各个类别分类准确率和Kappa系数对分类结果进行数值量化。同时对分类的可视化结果进行视觉评估。在给定的极化SAR标准数据集中，一部分像素是没有标签的，所以在计算分类准确率的时候只统计数据集中那些有标签的样本被正确分类的百分比，并认为该指标可以表征数据集中整体的分类性能。
 
 实验中，随机从数据集中选择1\%的样本作为训练集，其余的99\%样本作为测试集。为了方便，将本章提出的基于混合模型与边界增强的分类方法简记为BEL，同时将结合上章极化信息提取方法DP作为本章前置模块的方法记为BEL+DP，\ref{sec:目标分类模块}小节中介绍的特征分类器作为本章方法的主干网络。为了模拟实际场景中出现的对称噪声标签和非对称噪声标签的两种情况，本节实验通过设置噪声转移矩阵的方法，分别在以上两个数据集中合成对应类型的标签噪声。同时，对比了两种噪声源下不同噪声比例对各个方法分类准确率的影响。为了验证本章方法的优越性，选择了多种替代的分类方案进行比较，主要是通过与目前经典的以及优越的分类方法进行对比，包括支持向量机方法（记为SVM）\citing{lardeux2009support}、基于Wishart分布的分类方法（记为Wishart）\citing{kong1988identification}和鲁棒的半监督学习方法（记为RSL）\citing{hou2017robust}。
 

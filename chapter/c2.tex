@@ -68,7 +68,7 @@
 
 由公式\eqref{轨迹方程}在$z_0$处的运动轨迹可以得到极化椭圆，如图\ref{极化椭圆示意图}所示。对于任意一个极化椭圆。可以通过椭圆幅度$A$,椭圆方向角$\chi \in [-\frac{\pi}{4}, \frac{\pi}{4}]$和椭圆孔径$\varphi \in [-\frac{\pi}{2}, \frac{\pi}{2}]$进行唯一表示：
 \begin{gather}
-    \mathbf{A}=\sqrt{\left|E_{x_0}\right|^2+\left|E_{y_0}\right|^2}                                                                \\
+    \bf{A}=\sqrt{\left|E_{x_0}\right|^2+\left|E_{y_0}\right|^2}                                                                \\
     \tan 2 \varphi=\frac{2\left|E_{x_0}\right|\left|E_{y_0}\right|^2}{\left|E_{x_0}\right|^2-\left|E_{y_0}\right|^2} \cos (\delta) \\
     \sin 2 \chi=\frac{2\left|E_{x_0}\right|\left|E_{y_0}\right|^2}{\left|E_{x_0}\right|^2+\left|E_{y_0}\right|^2} \sin (\delta)
 \end{gather}
@@ -137,32 +137,32 @@
 \section{极化散射数据表示方式}
 极化SAR系统通过发射水平和垂直两种不同极化方式的电磁波，对目标进行探测，当电磁波遇到目标后，部分被目标体吸收，另外一部分通过目标辐射，形成反射回波。由于散射回波因目标的散射特性而异，因此可以通过分析回波的特性来推断目标的特征。为了能够表征目标的极化散射特性，需要引入不同的参数来描述各个极化通道散射回波在幅度相位上的差异。
 \subsection{极化散射矩阵和Mueller矩阵}
-极化SAR系统从发射的不同极化形式的电磁波信号，到以不同的极化方式接收经过目标反射的电磁波，目标的反射过程可以看做电磁波对应琼斯矢量的线性转换的过程。为了描述这个线性转换的过程，引入极化散射矩阵\citing{sinclair1950transmission}，又称为Sinclair矩阵，简写为$S$，通常使用$2\times2$的复数矩阵表示，具体如下：
+极化SAR系统从发射的不同极化形式的电磁波信号，到以不同的极化方式接收经过目标反射的电磁波，目标的反射过程可以看做电磁波对应琼斯矢量的线性转换的过程。为了描述这个线性转换的过程，引入极化散射矩阵\citing{sinclair1950transmission}，又称为Sinclair矩阵，简写为$\textbf{S}$，通常使用$2\times2$的复数矩阵表示，具体如下：
 \begin{equation}
-    \left[ S \right] =\left[ \begin{matrix}
-            S_{HH} & S_{HV} \\
-            S_{VH} & S_{VV} \\
+    \textbf{S}  =\left[ \begin{matrix}
+            S_{\mathrm{HH}} & S_{\mathrm{HV}} \\
+            S_{\mathrm{VH}} & S_{\mathrm{VV}} \\
         \end{matrix} \right]
 \end{equation}
-其中，$H$和$V$分别表示水平和垂直的极化方式，$S_{XY}(X,Y=H,V)$表示发射$X$极化波、接收$Y$极化波的后向散射系数，在满足单站互易条件下，$S_{HV}=S_{VH}$。此时，极化散射矩阵可以表示为如下形式：
+其中，$\mathrm{H}$和$\mathrm{V}$分别表示水平和垂直的极化方式，$S_{\text{XY}}(\text{X,Y=H,V})$表示发射$\text{X}$极化波、接收$\text{Y}$极化波的后向散射系数，在满足单站互易条件下，$S_{\mathrm{HV}}=S_{\mathrm{VH}}$。此时，极化散射矩阵可以表示为如下形式：
 \begin{equation}
-    \left[ S \right] =\left[ \begin{matrix}
-            S_{HH} & S_{HV} \\
-            S_{HV} & S_{VV} \\
+    \textbf{S}  =\left[ \begin{matrix}
+            S_{\mathrm{HH}} & S_{\mathrm{HV}} \\
+            S_{\mathrm{HV}} & S_{\mathrm{VV}} \\
         \end{matrix} \right]
 \end{equation}
 
 以上的极化散射矩阵适用于表述完全极化波对应的琼斯矢量的入射与散射之间的线性关系，但是通常情况下，入射与散射的电磁波都是部分极化电磁波，这种情况下，需要引入Mueller矩阵\citing{guissard1994mueller}来进行表示它们之间的关系。
 
-Mueller矩阵是一个$4\times4$的矩阵，简写为$M$，具体表示如下：
+Mueller矩阵是一个$4\times4$的矩阵，简写为$\textbf{M}$，具体表示如下：
 \begin{equation}
     \label{Mueller}
-    M=R\left( S\otimes S^* \right) R^{-1}
+    \textbf{M}=\textbf{R}\left( \textbf{S}\otimes \textbf{S}^* \right) \textbf{R}^{-1}
 \end{equation}
-其中，$S$是Sinclair矩阵，$R$是转换系数矩阵，具体如下：
+其中，$\textbf{S}$是Sinclair矩阵，$\textbf{R}$是转换系数矩阵，具体如下：
 \begin{equation}
     \label{R}
-    R=\left[ \begin{matrix}
+    \textbf{R}=\left[ \begin{matrix}
             1 & 0 & 0  & 1  \\
             1 & 0 & 0  & -1 \\
             0 & 1 & 1  & 0  \\
@@ -170,19 +170,19 @@ Mueller矩阵是一个$4\times4$的矩阵，简写为$M$，具体表示如下：
         \end{matrix} \right]
 \end{equation}
 
-从公式\eqref{Mueller}和公式\eqref{R}可以看出，$M$实际上是经过$S$运算得到，因此$M$与$S$属于一一对应的关系，但是$S$相比于$M$还多具备了绝对的相位信息。
+从公式\eqref{Mueller}和公式\eqref{R}可以看出，$\textbf{M}$实际上是经过$\textbf{S}$运算得到，因此$\textbf{M}$与$\textbf{S}$属于一一对应的关系，但是$\textbf{S}$相比于$\textbf{M}$还多具备了绝对的相位信息。
 
 \subsection{极化相干矩阵和协方差矩阵}
-在极化SAR系统成像过程中，目标的散射回波通常会受到周围环境中其他散射体产生的杂波的干扰。为了减少散射杂波的影响，实践中尝尝采用矢量化分解对极化散射矩阵$S$进行处理，导出描述二阶统计特性的极化相干矩阵和极化协方差矩阵。
+在极化SAR系统成像过程中，目标的散射回波通常会受到周围环境中其他散射体产生的杂波的干扰。为了减少散射杂波的影响，实践中尝尝采用矢量化分解对极化散射矩阵$\textbf{S}$进行处理，导出描述二阶统计特性的极化相干矩阵和极化协方差矩阵。
 
 通常利用正交的矩阵基来对极化散射矩阵进行矢量化分解，矢量化过程表示如下：
 \begin{equation}
-    S=\left[ \begin{matrix}
-            S_{HH} & S_{HV} \\
-            S_{HV} & S_{VV} \\
-        \end{matrix} \right] \Rightarrow K_4=V(S)=\frac{1}{2}\mathrm{Trace(}S\Psi )=\left[ k_0,k_1,k_2,k_3 \right] ^T
+    \textbf{S}=\left[ \begin{matrix}
+            S_{\mathrm{HH}} & S_{\mathrm{HV}} \\
+            S_{\mathrm{HV}} & S_{\mathrm{VV}} \\
+        \end{matrix} \right] \Rightarrow \textbf{K}_4=\text{V(\textbf{S})}=\frac{1}{2}\mathrm{Trace(}\textbf{S}\Psi )=\left[ k_0,k_1,k_2,k_3 \right] ^\mathrm{T}
 \end{equation}
-其中，$V(\cdot)$表示矢量化操作，$Trace(\cdot)$表示矩阵求迹，$\Psi$表示$2\times2$的复单位矩阵，$T$表示矩阵转置。最常用的有两组标准基，分别是Lexicograhic基$\Psi_L$和Pauli基$\Psi_p$，具体如下：
+其中，$\text{V}(\cdot)$表示矢量化操作，$\text{Trace}(\cdot)$表示矩阵求迹，$\Psi$表示$2\times2$的复单位矩阵，$\mathrm{T}$表示矩阵转置。最常用的有两组标准基，分别是Lexicograhic基$\Psi_L$和Pauli基$\Psi_p$，具体如下：
 \begin{gather}
     \Psi_L=\left\{\left[\begin{array}{ll}
             2 & 0 \\
@@ -215,50 +215,50 @@ Mueller矩阵是一个$4\times4$的矩阵，简写为$M$，具体表示如下：
 基于以上两组基，分别得到目标散射矢量：
 \begin{gather}
     \label{4L}
-    k_{4 L}=\left[S_{HH}, S_{HV}, S_{VH}, S_{VV}\right] \\
+    \textbf{k}_{\textbf{4L}}=\left[S_{\mathrm{HH}}, S_{\mathrm{HV}}, S_{\mathrm{VH}}, S_{\mathrm{VV}}\right] \\
     \label{4P}
-    k_{4 P}=\frac{1}{\sqrt{2}}\left[S_{HH}+S_{VV}, S_{HH}-S_{VV}, S_{HV}+S_{VH}, i\left(S_{HV}+S_{VH}\right)\right]
+    \textbf{k}_{\textbf{4P}}=\frac{1}{\sqrt{2}}\left[S_{\mathrm{HH}}+S_{\mathrm{VV}}, S_{\mathrm{HH}}-S_{\mathrm{VV}}, S_{\mathrm{HV}}+S_{\mathrm{VH}}, i\left(S_{\mathrm{HV}}+S_{\mathrm{VH}}\right)\right]
 \end{gather}
 
-由单站互易定理可知$S_{HV}=S_{VH}$，可以将公式\eqref{4L}和\eqref{4P}简写为：
+由单站互易定理可知$S_{\mathrm{HV}}=S_{\mathrm{VH}}$，可以将公式\eqref{4L}和\eqref{4P}简写为：
 \begin{equation}
     \begin{gathered}
-        k_{3 L}=\left[S_{HH}, \sqrt{2}S_{HV}, S_{VV}\right] \\
-        k_{3 P}=\frac{1}{\sqrt{2}}\left[S_{HH}+S_{VV}, S_{HH}-S_{VV}, 2S_{HV}\right]
+        \textbf{k}_{\textbf{3L}}=\left[S_{\mathrm{HH}}, \sqrt{2}S_{\mathrm{HV}}, S_{\mathrm{VV}}\right] \\
+        \textbf{k}_{\textbf{3P}}=\frac{1}{\sqrt{2}}\left[S_{\mathrm{HH}}+S_{\mathrm{VV}}, S_{\mathrm{HH}}-S_{\mathrm{VV}}, 2S_{\mathrm{HV}}\right]
     \end{gathered}
 \end{equation}
 
-通过计算散射矢量$k_{3L}$与其复共轭转置矢量$k_{3L}^{H}$的内积可以得到极化协方差矩阵$C$，具体表示如下：
+通过计算散射矢量$\textbf{k}_{\textbf{3L}}$与其复共轭转置矢量$\textbf{k}_{\textbf{3L}}^{\text{H}}$的内积可以得到极化协方差矩阵$\textbf{C}$，具体表示如下：
 \begin{equation}
-    \boldsymbol{C}=\left. \langle k_{3L}\cdot k_{3L}^{^*\boldsymbol{T}} \right. \rangle =\left[ \begin{matrix}
-            \left. \langle \left. S_{HH} \right|^2 \right. \rangle  & \left. \langle \sqrt{2}S_{HH}S_{HV}^{*} \right. \rangle  & \left. \langle S_{HH}S_{VV}^{*} \right. \rangle         \\
-            \left. \langle \sqrt{2}S_{HV}S_{HH}^{*} \right. \rangle & \left. \langle 2\left| S_{HV} \right|^2 \right. \rangle  & \left. \langle \sqrt{2}S_{HV}S_{VV}^{*} \right. \rangle \\
-            \left. \langle S_{VV},S_{HH}^{*} \right. \rangle        & \left. \langle \sqrt{2}S_{VV},S_{HV}^{*} \right. \rangle & \left. \langle \left| S_{VV} \right|^2 \right. \rangle  \\
+    \textbf{C}=\left. \langle \textbf{k}_{\textbf{3L}}\cdot \textbf{k}_{\textbf{3L}}^{^*\boldsymbol{H}} \right. \rangle =\left[ \begin{matrix}
+            \left. \langle \left. S_{\mathrm{HH}} \right|^2 \right. \rangle           & \left. \langle \sqrt{2}S_{\mathrm{HH}}S_{\mathrm{HV}}^{*} \right. \rangle  & \left. \langle S_{\mathrm{HH}}S_{\mathrm{VV}}^{*} \right. \rangle         \\
+            \left. \langle \sqrt{2}S_{\mathrm{HV}}S_{\mathrm{HH}}^{*} \right. \rangle & \left. \langle 2\left| S_{\mathrm{HV}} \right|^2 \right. \rangle           & \left. \langle \sqrt{2}S_{\mathrm{HV}}S_{\mathrm{VV}}^{*} \right. \rangle \\
+            \left. \langle S_{\mathrm{VV}},S_{\mathrm{HH}}^{*} \right. \rangle        & \left. \langle \sqrt{2}S_{\mathrm{VV}},S_{\mathrm{HV}}^{*} \right. \rangle & \left. \langle \left| S_{\mathrm{VV}} \right|^2 \right. \rangle           \\
         \end{matrix} \right]
 \end{equation}
 
-同理，通过计算散射矢量$k_{3P}$与其复共轭转置矢量$k_{3P}^{H}$的内积可以得到极化相干矩阵$T$，具体表示如下：
+同理，通过计算散射矢量$\textbf{k}_{\textbf{3P}}$与其复共轭转置矢量$\textbf{k}_{\textbf{3P}}^\text{H}$的内积可以得到极化相干矩阵$\textbf{T}$，具体表示如下：
 \begin{equation}
     \label{eq:T}
     \begin{aligned}
-        T & =\left. \langle k_{3L}\cdot k_{3L}^{^*\boldsymbol{T}} \right. \rangle                                                                                                                                                                                                                  \\
-          & =\frac{1}{2}\left[ \begin{matrix}
-                                       \langle \left| S_{HH}+S_{VV} \right|^2\rangle                                               & \left. \langle \left( S_{HH}+S_{VV} \right) \left( S_{HH}-S_{VV} \right) ^* \right. \rangle & \left. \langle 2\left( S_{HH}+S_{VV} \right) S_{HV}^{*} \right. \rangle \\
-                                       \left. \langle \left( S_{HH}-S_{VV} \right) \left( S_{HH}+S_{VV} \right) ^* \right. \rangle & \left. \langle \left| S_{HH}-S_{VV} \right|^2 \right. \rangle                               & \left. \langle 2\left( S_{HH}-S_{VV} \right) S_{HV}^{*} \right. \rangle \\
-                                       \left. \langle 2S_{HV}\left( S_{HH}+S_{VV} \right) ^* \right. \rangle                       & \left. \langle 2S_{HV}\left( S_{HH}-S_{VV} \right) ^* \right. \rangle                       & \left. \langle 4\left| S_{HV} \right|^2 \right. \rangle                 \\
-                                   \end{matrix} \right]
+        \textbf{T} & =\left. \langle \textbf{3P}\cdot\textbf{3P}^{^*\text{H}} \right. \rangle                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \\
+                   & =\frac{1}{2}\left[ \begin{matrix}
+                                                \langle \left| S_{\mathrm{HH}}+S_{\mathrm{VV}} \right|^2\rangle                                                                 & \left. \langle \left( S_{\mathrm{HH}}+S_{\mathrm{VV}} \right) \left( S_{\mathrm{HH}}-S_{\mathrm{VV}} \right) ^* \right. \rangle & \left. \langle 2\left( S_{\mathrm{HH}}+S_{\mathrm{VV}} \right) S_{\mathrm{HV}}^{*} \right. \rangle \\
+                                                \left. \langle \left( S_{\mathrm{HH}}-S_{\mathrm{VV}} \right) \left( S_{\mathrm{HH}}+S_{\mathrm{VV}} \right) ^* \right. \rangle & \left. \langle \left| S_{\mathrm{HH}}-S_{\mathrm{VV}} \right|^2 \right. \rangle                                                 & \left. \langle 2\left( S_{\mathrm{HH}}-S_{\mathrm{VV}} \right) S_{\mathrm{HV}}^{*} \right. \rangle \\
+                                                \left. \langle 2S_{\mathrm{HV}}\left( S_{\mathrm{HH}}+S_{\mathrm{VV}} \right) ^* \right. \rangle                                & \left. \langle 2S_{\mathrm{HV}}\left( S_{\mathrm{HH}}-S_{\mathrm{VV}} \right) ^* \right. \rangle                                & \left. \langle 4\left| S_{\mathrm{HV}} \right|^2 \right. \rangle                                   \\
+                                            \end{matrix} \right]
     \end{aligned}
 \end{equation}
-其中，$\langle \cdot \rangle$表示取总体平均，$(\cdot)^*$和$(\cdot)^T$分别表示复共轭和矩阵转置。
+其中，$\langle \cdot \rangle$表示取总体平均，$(\cdot)^*$和$(\cdot)^\text{T}$分别表示复共轭和矩阵转置。
 
-极化协方差矩阵$C$与极化相干矩阵$T$都具备半正定的Hermitain（即埃尔米特）特性，两者之间可以相互转换，计算过程如下式所示：
+极化协方差矩阵$\textbf{C}$与极化相干矩阵$\textbf{T}$都具备半正定的Hermitain（即埃尔米特）特性，两者之间可以相互转换，计算过程如下式所示：
 \begin{gather}
-    C=U^H T U=U^{-1} T U \\
-    T=U C U^H=U C U^{-1}
+    \textbf{C}=\textbf{U}^\text{H} \textbf{T} \textbf{U}=\textbf{U}^{-1} \textbf{T} \textbf{U} \\
+    \textbf{T}=\textbf{U} \textbf{C} \textbf{U}^\text{H}=\textbf{U} \textbf{C} \textbf{U}^{-1}
 \end{gather}
-其中，$U$表示单位转换矩阵，具体可以表示为：
+其中，$\textbf{U}$表示单位转换矩阵，具体可以表示为：
 \begin{equation}
-    U=\frac{1}{\sqrt{2}}\left[ \begin{matrix}
+    \textbf{U}=\frac{1}{\sqrt{2}}\left[ \begin{matrix}
             1 & 0        & 1  \\
             1 & 0        & -1 \\
             0 & \sqrt{2} & 0  \\
@@ -270,31 +270,31 @@ Mueller矩阵是一个$4\times4$的矩阵，简写为$M$，具体表示如下：
 \subsection{极化相干分解}
 极化相干分解的基本思想是通过不同的基础散射模型，将测量得到的散射矩阵分解成多个散射机制之和，如下式所示：
 \begin{equation}
-    S=\sum_{k=1}^N{a_kS_k}
+    \textbf{S}=\sum_{k=1}^N{a_k\textbf{S}_k}
 \end{equation}
-其中，$S$表示极化散射矩阵，$S_k$表示分解得到的经典目标的散射矩阵，$a_k$表示对应的权值。
+其中，$\textbf{S}$表示极化散射矩阵，$\textbf{S}_k$表示分解得到的经典目标的散射矩阵，$a_k$表示对应的权值。
 
 经典的极化相干分解方法有Pauli分解\citing{cloude1996review}、Krogager分解\citing{krogager1990new}、Cameron分解\citing{cameron1990feature}、球坐标分解\citing{lee2017polarimetric}等。下面将介绍Pauli分解和Krogager分解的基本原理。
 \subsubsection{Pauli分解}
 Pauli分解方法是使用Pauli基对极化散射矩阵进行分解，分解过程如下式所示：
 \begin{equation}
-    S=\left[ \begin{matrix}
-            S_{HH} & S_{HV} \\
-            S_{VH} & S_{VV} \\
-        \end{matrix} \right] =aS_a+bS_b+cS_c+dS_d
+    \textbf{S}=\left[ \begin{matrix}
+            S_{\mathrm{HH}} & S_{\mathrm{HV}} \\
+            S_{\mathrm{VH}} & S_{\mathrm{VV}} \\
+        \end{matrix} \right] =a\textbf{S}_a+b\textbf{S}_b+c\textbf{S}_c+d\textbf{S}_d
 \end{equation}
-其中，$a,b,c,d$均是权重系数，$S_a,S_b,S_c,S_d$表示Pauli基，具体如下式所示：
+其中，$a,b,c,d$均是权重系数，$\textbf{S}_a,\textbf{S}_b,\textbf{S}_c,\textbf{S}_d$表示Pauli基，具体如下式所示：
 \begin{equation}
-    S_a=\left[ \begin{matrix}
+    \textbf{S}_a=\left[ \begin{matrix}
             1 & 0 \\
             0 & 1 \\
-        \end{matrix} \right] ,S_b=\left[ \begin{matrix}
+        \end{matrix} \right] ,\textbf{S}_b=\left[ \begin{matrix}
             1 & 0  \\
             0 & -1 \\
-        \end{matrix} \right] ,S_c=\left[ \begin{matrix}
+        \end{matrix} \right] ,\textbf{S}_c=\left[ \begin{matrix}
             0 & 1 \\
             1 & 0 \\
-        \end{matrix} \right] ,S_a=\left[ \begin{matrix}
+        \end{matrix} \right] ,\textbf{S}_d=\left[ \begin{matrix}
             0 & -i \\
             i & 0  \\
         \end{matrix} \right]
@@ -302,42 +302,44 @@ Pauli分解方法是使用Pauli基对极化散射矩阵进行分解，分解过�
 
 权重系数使用向量的形式，可以表示为：
 \begin{equation}
-    K=\left[ \begin{matrix}
+    \textbf{K}=\left[ \begin{matrix}
             a & b & c & d \\
         \end{matrix} \right] =\frac{1}{\sqrt{2}}\left[ \begin{matrix}
-            S_{HH}+S_{VV} & S_{HH}-S_{VV} & S_{HV}+S_{VH} & i\left( S_{VH}-S_{HV} \right) \\
+            S_{\mathrm{HH}}+S_{\mathrm{VV}} & S_{\mathrm{HH}}-S_{\mathrm{VV}} & S_{\mathrm{HV}}+S_{\mathrm{VH}} & i\left( S_{\mathrm{VH}}-S_{\mathrm{HV}} \right) \\
         \end{matrix} \right] ^T
 \end{equation}
 
 满足单站互易条件时，可以简化为：
 \begin{equation}
-    K=\left[ \begin{matrix}
+    \textbf{S}\textbf{S}=\left[ \begin{matrix}
             a & b & c \\
         \end{matrix} \right] =\frac{1}{\sqrt{2}}\left[ \begin{matrix}
-            S_{HH}+S_{VV} & S_{HH}-S_{VV} & 2S_{HV} \\
+            S_{\mathrm{HH}}+S_{\mathrm{VV}} & S_{\mathrm{HH}}-S_{\mathrm{VV}} & 2S_{\mathrm{HV}} \\
         \end{matrix} \right] ^T
 \end{equation}
 
 对于Pauli分解的每个分量的物理解释如表\ref{Pauli table}所示。
-\begin{table}[h]
+\begin{table}[ht!]
     \caption{Pauli分解}
-    \linespread{1.5} % 调整整个表格的行高
-    \setlength{\arraycolsep}{10pt} % 调整列之间的空白
-    \begin{tabular}{|c|c|c|}
-        \hline
-        Pauli基                 & 散射类型                & 物理描述                             \\ \hline
+    % \linespread{1.5} % 调整整个表格的行高
+    % \setlength{\arraycolsep}{10pt} % 调整列之间的空白
+    \begin{tabular}{ccc}
+        \toprule[1.5bp]
+        Pauli基                 & 散射类型                & 物理描述                             \\
+        \midrule[0.75bp]
         $\left[ \begin{matrix}
                             1 & 0 \\
                             0 & 1 \\
-                        \end{matrix} \right] $ & 奇次散射                & 球体、平坦平面或三面角反射器           \\ \hline
+                        \end{matrix} \right] $ & 奇次散射                & 球体、平坦平面或三面角反射器           \\
         $\left[ \begin{matrix}
                             1 & 0  \\
                             0 & -1 \\
-                        \end{matrix} \right] $ & 偶次散射                & 二面角反射器                   \\ \hline
+                        \end{matrix} \right] $ & 偶次散射                & 二面角反射器                   \\
         $\left[ \begin{matrix}
                             0 & 1 \\
                             1 & 0 \\
-                        \end{matrix} \right] $ & $\frac{\pi}{4}$偶次散射 & 与水平$\frac{\pi}{4}$倾角的二面角 \\ \hline
+                        \end{matrix} \right] $ & $\frac{\pi}{4}$偶次散射 & 与水平$\frac{\pi}{4}$倾角的二面角 \\
+        \bottomrule[1.5bp]
     \end{tabular}
     \label{Pauli table}
 \end{table}
@@ -348,10 +350,10 @@ Pauli分解方法是使用Pauli基对极化散射矩阵进行分解，分解过�
 % \end{figure}
 
 \subsubsection{Krogager分解}
-Krogager分解是将极化散射矩阵$S$分解为球散射、二面角散射以及螺旋体散射三个散射分量的加权和，具体如下：
+Krogager分解是将极化散射矩阵$\textbf{S}$分解为球散射、二面角散射以及螺旋体散射三个散射分量的加权和，具体如下：
 \begin{equation}
     \begin{aligned}
-        S_{(H, V)} & =e^{j \phi}\left\{e^{j \phi_S} k_S S_{sphere}+k_D S_{diplane(\theta)}+k_H S_{helix(\theta)}\right\}                                            \\
+        \textbf{S} & =e^{j \phi}\left\{e^{j \phi_S} k_S \textbf{S}_{sphere}+k_D \textbf{S}_{diplane(\theta)}+k_H \textbf{S}_{helix(\theta)}\right\}                 \\
                    & =e^{j \phi}\left\{e^{j \phi_S} k_S\left[\begin{array}{ll}
                                                                      1 & 0 \\
                                                                      0 & 1
@@ -369,91 +371,92 @@ Krogager分解是将极化散射矩阵$S$分解为球散射、二面角散射以
 当电磁波以左旋圆极化方式发射，右旋圆极化接收时，Krogager分解可以表示为：
 \begin{equation}
     \begin{aligned}
-        S_{(R,L)} & =\left[ \begin{matrix}
-                                    S_{RR} & S_{RL} \\
-                                    S_{LR} & S_{LL} \\
-                                \end{matrix} \right]
+        \textbf{S}_{(R,L)} & =\left[ \begin{matrix}
+                                             \textbf{S}_{RR} & \textbf{S}_{RL} \\
+                                             \textbf{S}_{LR} & \textbf{S}_{LL} \\
+                                         \end{matrix} \right]
         \\
-                  & =e^{j\phi}\left\{ e^{j\phi _S}k_S\left[ \begin{matrix}
-                                                                    0 & j \\
-                                                                    j & 0 \\
-                                                                \end{matrix} \right] +k_D\left[ \begin{matrix}
-                                                                                                    e^{j2\theta} & j              \\
-                                                                                                    j            & -e^{-j2\theta} \\
-                                                                                                \end{matrix} \right] +k_H\left[ \begin{matrix}
-                                                                                                                                    e^{j2\theta} & 0 \\
-                                                                                                                                    0            & 0 \\
-                                                                                                                                \end{matrix} \right] \right\}
+                           & =e^{j\phi}\left\{ e^{j\phi _S}k_S\left[ \begin{matrix}
+                                                                             0 & j \\
+                                                                             j & 0 \\
+                                                                         \end{matrix} \right] +k_D\left[ \begin{matrix}
+                                                                                                             e^{j2\theta} & j              \\
+                                                                                                             j            & -e^{-j2\theta} \\
+                                                                                                         \end{matrix} \right] +k_H\left[ \begin{matrix}
+                                                                                                                                             e^{j2\theta} & 0 \\
+                                                                                                                                             0            & 0 \\
+                                                                                                                                         \end{matrix} \right] \right\}
     \end{aligned}
 \end{equation}
 其中，Krogager的参数可以表示为：
 \begin{equation}
     \label{Krogager参数}
     \begin{matrix}
-        k_S=\left| S_{RL} \right|,                                    & \phi =\frac{1}{2}\left( \phi _{RR}+\phi _{LL}-\pi \right)          \\
+        k_S=\left| \textbf{S}_{RL} \right|,                           & \phi =\frac{1}{2}\left( \phi _{RR}+\phi _{LL}-\pi \right)          \\
         \theta =\frac{1}{4}\left( \phi _{RR}-\phi _{LL}+\pi \right) , & \phi _S=\phi _{RL}-\frac{1}{2}\left( \phi _{RR}+\phi _{LL} \right) \\
     \end{matrix}
 \end{equation}
 
-从公式\eqref{Krogager参数}可以看出，目标的左右旋散射特性可以由$S_{RR}$和$S_{LL}$确定。当目标为左螺旋体时：
+从公式\eqref{Krogager参数}可以看出，目标的左右旋散射特性可以由$\textbf{S}_{RR}$和$\textbf{S}_{LL}$确定。当目标为左螺旋体时：
 \begin{equation}
-    \left| S_{RR} \right|\geqslant \left| S_{LL} \right|\Rightarrow \left\{ \begin{array}{c}
-        k_{D}^{+}=\left| S_{LL} \right|                       \\
-        k_{H}^{+}=\left| S_{RR} \right|-\left| S_{LL} \right| \\
+    \left| \textbf{S}_{RR} \right|\geqslant \left| \textbf{S}_{LL} \right|\Rightarrow \left\{ \begin{array}{c}
+        k_{D}^{+}=\left| \textbf{S}_{LL} \right|                                \\
+        k_{H}^{+}=\left| \textbf{S}_{RR} \right|-\left| \textbf{S}_{LL} \right| \\
     \end{array} \right.
 \end{equation}
 
 类似地，当目标为右螺旋体时：
 \begin{equation}
-    \left| S_{RR} \right|\leqslant \left| S_{LL} \right|\Rightarrow \left\{ \begin{array}{c}
-        k_D=\left| S_{RR} \right|                       \\
-        k_H=\left| S_{LL} \right|-\left| S_{RR} \right| \\
+    \left| \textbf{S}_{RR} \right|\leqslant \left| \textbf{S}_{LL} \right|\Rightarrow \left\{ \begin{array}{c}
+        k_D=\left| \textbf{S}_{RR} \right|                                \\
+        k_H=\left| \textbf{S}_{LL} \right|-\left| \textbf{S}_{RR} \right| \\
     \end{array} \right.
 \end{equation}
 
 Krogager分解每个分量的物理解释如表\ref{Krogager table}所示。
 \begin{table}[h]
     \caption{Krogager分解}
-    \begin{tabular}{|c|c|c|}
-        \hline
-        Krogager基                   & 散射类型  & 物理描述                   \\ \hline
+    \begin{tabular}{ccc}
+        \toprule[1.5bp]
+        Krogager基                   & 散射类型  & 物理描述                   \\
+        \midrule[0.75bp]
         $\left[ \begin{matrix}
                             1 & 0 \\
                             0 & 1 \\
                         \end{matrix} \right] $      & 球面散射  & 球体、平坦平面或三面角反射器 \\
-        \hline
         $\left[ \begin{matrix}
                             cos2\theta & sin2\theta  \\
                             sin2\theta & -cos2\theta \\
-                        \end{matrix} \right] $ & 二面角散射 & 二面角反射器              \\ \hline
+                        \end{matrix} \right] $ & 二面角散射 & 二面角反射器              \\
         $\left[ \begin{matrix}
                             1     & \pm j \\
                             \pm j & -1    \\
-                        \end{matrix} \right] $      & 螺旋体散射 & 不对称结构          \\ \hline
+                        \end{matrix} \right] $      & 螺旋体散射 & 不对称结构          \\
+        \bottomrule[1.5bp]
     \end{tabular}
     \label{Krogager table}
 \end{table}
 
 \subsection{极化非相干分解}
-对于“非确定性”的非相干目标，具有动态的散射特性，因此需要使用统计的方法来对其目标散射特性进行研究，通常是使用二阶统计量的方法展开。非相干分解主要是将极化协方差矩阵$C$或者极化相干矩阵$T$进行分解，使用多个典型的散射模型之和的形式表示。
+对于“非确定性”的非相干目标，具有动态的散射特性，因此需要使用统计的方法来对其目标散射特性进行研究，通常是使用二阶统计量的方法展开。非相干分解主要是将极化协方差矩阵$\textbf{C}$或者极化相干矩阵$\textbf{T}$进行分解，使用多个典型的散射模型之和的形式表示。
 \begin{gather}
-    C=\sum_{k=1}^N{p_kC_k}
+    \textbf{C}=\sum_{k=1}^N{p_k\textbf{C}_k}
     \\
-    T=\sum_{k=1}^N{q_kT_k}
+    \textbf{T}=\sum_{k=1}^N{q_k\textbf{T}_k}
 \end{gather}
 其中，$p_k$和$q_k$均表示每个散射模型分量的权重系数。
 
 经典的非相干分解方法包括Cloude分解\citing{cloude1997entropy}、Freeman分解\citing{freeman1998three}、Huynen分解\citing{huynen1988extraction}、Yamaguchi分解\citing{yamaguchi2005four}、Holm分解\citing{holm1988radar}和van Zyl分解\citing{van1993application}等。下面将介绍Cloude分解和Freeman分解的原理。
 \subsubsection{Cloude分解}
-Cloude分解是一种矩阵特征空间分解方法，是对极化相干矩阵$T$进行特征分解，得到三组特征值与对应的特征向量。具体如下式所示：
+Cloude分解是一种矩阵特征空间分解方法，是对极化相干矩阵$\textbf{T}$进行特征分解，得到三组特征值与对应的特征向量。具体如下式所示：
 \begin{equation}
-    \mathrm{T}=\mathrm{U} \Lambda \mathrm{U}^{\mathrm{H}}=\mathrm{U}\left[\begin{array}{ccc}
+    \textbf{T}=\textbf{U} \Lambda \textbf{U}^{\text{H}}=\textbf{U}\left[\begin{array}{ccc}
             \lambda_1 & 0         & 0         \\
             0         & \lambda_2 & 0         \\
             0         & 0         & \lambda_3
-        \end{array}\right] \mathrm{U}^{\mathrm{H}}
+        \end{array}\right] \textbf{U}^{\text{H}}
 \end{equation}
-其中，$\Lambda$表示矩阵$\mathrm{T}$的三个特征值组成的对角矩阵，并且满足$\lambda_1 \geqslant \lambda_2 \geqslant \lambda_3 \geqslant 0$，$\mathrm{U}$表示三个特征值对应的特征向量构成的矩阵，$\mathrm{H}$表示取复共轭转置。
+其中，$\Lambda$表示矩阵$\textbf{T}$的三个特征值组成的对角矩阵，并且满足$\lambda_1 \geqslant \lambda_2 \geqslant \lambda_3 \geqslant 0$，$\textbf{U}$表示三个特征值对应的特征向量构成的矩阵，$\text{H}$表示取复共轭转置。
 
 由以上的特征值与特征向量，Cloude分解定义了平均散射角$\bar{a}$、极化熵$H$以及极化反熵$A$这三个用于描述目标统计的散射机制的量，具体如下表示：
 \begin{gather}
@@ -469,67 +472,68 @@ Cloude分解是一种矩阵特征空间分解方法，是对极化相干矩阵$T
 
 Cloude分解每个分量的物理解释如表\ref{Cloude table}所示。
 \begin{table}[h]
-    \centering
     \caption{Cloude分解}
-    \begin{tabular}{|c|c|c|}
-        \hline
-        Cloude参数         & 参数表达                                                    & 物理描述                  \\ \hline
-        Entropy          & $H=\sum_{i=1}^3{P_i\log _3P_i}$                         & 散射目标由各向性散射至完全随机散射的随机性 \\ \hline
-        Mean Alpha Angle & $\bar{\alpha}=\sum_{i=1}^3{P_i\alpha _i}$               & 由表面散射至二面角散射的平均随机性     \\ \hline
-        Anisotropy       & $A=\frac{\lambda _2-\lambda _3}{\lambda _2+\lambda _3}$ & 主散射体之外的两个较弱散射分量的强弱关系  \\ \hline
+    \begin{tabular}{ccc}
+        \toprule[1.5bp]
+        Cloude参数         & 参数表达                                                    & 物理描述                  \\
+        \midrule[0.75bp]
+        Entropy          & $H=\sum_{i=1}^3{P_i\log _3P_i}$                         & 散射目标由各向性散射至完全随机散射的随机性 \\
+        Mean Alpha Angle & $\bar{\alpha}=\sum_{i=1}^3{P_i\alpha _i}$               & 由表面散射至二面角散射的平均随机性     \\
+        Anisotropy       & $A=\frac{\lambda _2-\lambda _3}{\lambda _2+\lambda _3}$ & 主散射体之外的两个较弱散射分量的强弱关系  \\
+        \bottomrule[1.5bp]
     \end{tabular}
     \label{Cloude table}
 \end{table}
 
 \subsubsection{Freeman分解}
-Freeman和Durden基于van Zyl的目标分解工作，进一步提出了一种非相干的三分量分解方法，将极化协方差矩阵$C$使用单次散射、偶次散射和体散射三种散射机制的加权和表示。具体表示如下：
+Freeman和Durden基于van Zyl的目标分解工作，进一步提出了一种非相干的三分量分解方法，将极化协方差矩阵$\textbf{C}$使用单次散射、偶次散射和体散射三种散射机制的加权和表示。具体表示如下：
 \begin{equation}
-    C=f_sC_s+f_dC_d+f_vC_v
+    \textbf{C}=f_s\textbf{C}_s+f_d\textbf{C}_d+f_v\textbf{C}_v
 \end{equation}
 其中，
 \begin{equation}
     \begin{matrix}
-        C_s=\left[ \begin{matrix}
-                           \left| \beta \right|^2 & 0 & \beta \\
-                           0                      & 0 & 0     \\
-                           \beta ^*               & 0 & 1     \\
-                       \end{matrix} \right] , & C_d=\left[ \begin{matrix}
-                                                               \left| \alpha \right|^2 & 0 & \alpha \\
-                                                               0                       & 0 & 0      \\
-                                                               \alpha ^*               & 0 & 1      \\
-                                                           \end{matrix} \right] , & C_v=\left[ \begin{matrix}
-                                                                                                   1   & 0   & 1/3 \\
-                                                                                                   0   & 2/3 & 0   \\
-                                                                                                   1/3 & 0   & 1   \\
-                                                                                               \end{matrix} \right] \\
+        \textbf{C}_s=\left[ \begin{matrix}
+                                    \left| \beta \right|^2 & 0 & \beta \\
+                                    0                      & 0 & 0     \\
+                                    \beta ^*               & 0 & 1     \\
+                                \end{matrix} \right] , & \textbf{C}_d=\left[ \begin{matrix}
+                                                                                 \left| \alpha \right|^2 & 0 & \alpha \\
+                                                                                 0                       & 0 & 0      \\
+                                                                                 \alpha ^*               & 0 & 1      \\
+                                                                             \end{matrix} \right] , & \textbf{C}_v=\left[ \begin{matrix}
+                                                                                                                              1   & 0   & 1/3 \\
+                                                                                                                              0   & 2/3 & 0   \\
+                                                                                                                              1/3 & 0   & 1   \\
+                                                                                                                          \end{matrix} \right] \\
     \end{matrix}
 \end{equation}
-其中$\beta$ 表示单次散射参数，$\alpha$ 表示偶次散射参数；$C_s$、$C_d$、$C_v$分别表示单次散射模型、偶次散射模型和体散射模型的协方差矩阵分量；$f_s$、$f_d$，$f_v$表示三种散射模型对应的分解系数。
+其中$\beta$ 表示单次散射参数，$\alpha$ 表示偶次散射参数；$\textbf{C}_s$、$\textbf{C}_d$、$\textbf{C}_v$分别表示单次散射模型、偶次散射模型和体散射模型的协方差矩阵分量；$f_s$、$f_d$，$f_v$表示三种散射模型对应的分解系数。
 
 Freeman分解每个分量的物理解释如表\ref{Freeman table}所示。
 \begin{table}[!ht]
     \caption{Freeman分解}
-    \setlength{\tabcolsep}{10mm}{
-        \begin{tabular}{|c|c|c|}
-            \hline
-            Freeman基                                   & 散射类型 & 典型散射体 \\ \hline
-            $\left[ \begin{matrix}
-                                \left| \beta \right|^2 & 0 & \beta \\
-                                0                      & 0 & 0     \\
-                                \beta ^*               & 0 & 1     \\
-                            \end{matrix} \right]$      & 单次散射 & 一阶Bragg表面散射体  \\ \hline
-            $\left[ \begin{matrix}
-                                \left| \alpha \right|^2 & 0 & \alpha \\
-                                0                       & 0 & 0      \\
-                                \alpha ^*               & 0 & 1      \\
-                            \end{matrix} \right]$    & 偶次散射 & 二面角散射器          \\ \hline
-            $\left[ \begin{matrix}
-                                1           & 0           & \frac{1}{3} \\
-                                0           & \frac{2}{3} & 0           \\
-                                \frac{1}{3} & 0           & 1           \\
-                            \end{matrix} \right]$ & 体散射  & 植被冠状层偶极子           \\ \hline
-        \end{tabular}
-    }
+    \begin{tabular}{ccc}
+        \toprule[1.5bp]
+        Freeman基                                   & 散射类型 & 典型散射体 \\
+        \midrule[0.75bp]
+        $\left[ \begin{matrix}
+                            \left| \beta \right|^2 & 0 & \beta \\
+                            0                      & 0 & 0     \\
+                            \beta ^*               & 0 & 1     \\
+                        \end{matrix} \right]$      & 单次散射 & 一阶Bragg表面散射体  \\
+        $\left[ \begin{matrix}
+                            \left| \alpha \right|^2 & 0 & \alpha \\
+                            0                       & 0 & 0      \\
+                            \alpha ^*               & 0 & 1      \\
+                        \end{matrix} \right]$    & 偶次散射 & 二面角散射器          \\
+        $\left[ \begin{matrix}
+                            1           & 0           & \frac{1}{3} \\
+                            0           & \frac{2}{3} & 0           \\
+                            \frac{1}{3} & 0           & 1           \\
+                        \end{matrix} \right]$ & 体散射  & 植被冠状层偶极子           \\
+        \bottomrule[1.5bp]
+    \end{tabular}
     \label{Freeman table}
 \end{table}
 

@@ -10,22 +10,23 @@
 \label{sec:sce3_1}
 注意力机制是机器学习和深度学习中一种关键的技术，其主要目标是在处理信息是实现对输入数据的加权关注，以便网络模型能够更有效地捕捉与任务相关的信息。基于注意力机制的信息提取在自然语言处理、计算机视觉等领域获得了广泛的应用\citing{hu2018squeeze,vaswani2017attention}。注意力机制使用不同的权重来表示输入特征的不同的重要程度，根据关注的角度差异，可以分为通道注意力、空间注意力和混合注意力三种类型。
 \subsection{通道注意力机制}
-输入深度网络的特征一般使用多维数据表示，通道注意力专注于挖掘不同通道间的关键，通过自适应地调整通道之间的权重，使网络模型能够更加聚焦于对后续任务有益的特征通道，从而提升模型的性能和泛化能力。压缩和激励网络（Squeeze-and-Extraction Networks, SENet）\citing{hu2018squeeze}是最具代表性的通道注意力实现模型。图\ref{SENet}为SENet的组成结构图，该方法由压缩和激励两个阶段构成。在压缩阶段，通过全局池化操作对输入多维特征进行压缩，将每个通道的信息整合成单一的数值，用于全局感受野的建模。对于维数是$H\times W \times C$的输入特征，压缩操作将其压缩为$1 \times 1 \times C$维，具体如下式所示：
+输入深度网络的特征一般使用多维数据表示，通道注意力专注于挖掘不同通道间的关键信息，通过自适应地调整通道之间的权重，使网络模型能够更加聚焦于对后续任务有益的特征通道，从而提升模型的性能和泛化能力。压缩和激励网络（Squeeze-and-Extraction Networks, SENet）\citing{hu2018squeeze}是最具代表性的通道注意力实现模型。图\ref{SENet}为SENet的组成结构图，该方法由压缩和激励两个阶段构成。在压缩阶段，通过全局池化操作对输入多维特征进行压缩，将每个通道的信息整合成单一的数值，用于全局感受野的建模。对于维数是$H\times W \times C$的输入特征$\mathbf{u}_c$，压缩操作$\mathbf{F}_{sq}$将其压缩为$1 \times 1 \times C$维，具体如下式所示：
 \begin{equation}
-    z_c=\mathbf{F}_{sq}\left( \mathbf{u}_c \right) =\frac{1}{H\times W}\sum_{i=1}^H{\sum_{j=1}^W{u\left( i,j \right)}}
+    \mathbf{z}=\mathbf{F}_{sq}\left( \mathbf{u}_c \right) =\frac{1}{H\times W}\sum_{i=1}^H{\sum_{j=1}^W{u\left( i,j \right)}}
 \end{equation}
+其中，$\mathbf{z}$表示具有全局感受野的通道特征图。
 
 在激励阶段，利用全连接层和激活函数，学习得到每个通道的权重。得到的权重向量用来对原始输入特征图中的每个通道进行加权，形成加权的特征图。具体如下式所示：
 \begin{equation}
-    \mathbf{s}=\mathbf{F}_{ex}\left( \mathbf{z},\mathbf{W} \right) =\sigma \left( g\left( \mathbf{z},\mathbf{W} \right) \right) =\sigma \left( \mathbf{W}_2\sigma *\left( \mathbf{W}_1\mathbf{z} \right) \right)
+    \mathbf{s}_c=\mathbf{F}_{ex}\left( \mathbf{z},\mathbf{W} \right) =\sigma \left( g\left( \mathbf{z},\mathbf{W} \right) \right) =\sigma \left( \mathbf{W}_2\sigma *\left( \mathbf{W}_1\mathbf{z} \right) \right)
 \end{equation}
 其中，$\sigma$表示ReLu激活函数\citing{nair2010rectified}，$W_1 \in \mathbb{R}^{\frac{C}{r}\times C}$且$W_2 \in \mathbb{R}^{C \times \frac{C}{r}}$。
 
-模型最终通过权重向量$s$来对输入进行重标定得到：
+模型最终通过权重向量$\mathbf{s}_c$来对输入进行重标定得到：
 \begin{equation}
-    \widetilde{\mathbf{x}}_c=F_{scale}\left( \mathbf{u}_c,s_c \right) =s_c\mathbf{u}_c
+    \widetilde{\mathbf{x}}_c=F_{scale}\left( \mathbf{u}_c,\mathbf{s}_c \right) =\mathbf{s}_c \mathbf{u}_c
 \end{equation}
-其中，$ \widetilde{\mathbf{X}}=\left[ \widetilde{\mathbf{x}_1},\widetilde{\mathbf{x}_2},\cdots ,\widetilde{\mathbf{x}_C} \right] $， $F_{scale}\left( \mathbf{u}_c,s_c \right)$ 表示 $s_c$与特征图$\mathbf{u}_c \in \mathbb{R}^{H\times W}$的通道级乘积。
+其中，$ \widetilde{\mathbf{X}}=\left[ \widetilde{\mathbf{x}_1},\widetilde{\mathbf{x}_2},\cdots ,\widetilde{\mathbf{x}_C} \right] $， $F_{scale}\left( \mathbf{u}_c,\mathbf{s}_c \right)$ 表示 $s_c$与特征图$\mathbf{u}_c \in \mathbb{R}^{H\times W}$的通道级乘积。
 
 
 \begin{figure}[h]
@@ -47,7 +48,7 @@
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=12cm]{pic/chapter3/SAM.png}
+    \includegraphics[width=14cm]{pic/chapter3/空间注意力.pdf}
     \caption{SAM 结构图\citing{woo2018cbam}}
     \label{SAM}
 \end{figure}
@@ -60,7 +61,7 @@
                                               & =\sigma \left( \mathbf{W}_1\left( \mathbf{W}_0\left( \mathbf{F}_{avg}^{c} \right) \right) +\mathbf{W}_1\left( \mathbf{W}_0\left( \mathbf{F}_{max}^{c} \right) \right) \right)
     \end{aligned}
 \end{equation}
-其中，$\sigma$表示sigmoid函数，$W_0 \in \mathbb{R}^{C/r\times C}$、$W_1 \in \mathbb{R}^{C\times C/r}$均是多层感知机的权重参数。
+其中，$\sigma$表示sigmoid函数，$MLP$表示多层感知机，$W_0 \in \mathbb{R}^{C/r\times C}$、$W_1 \in \mathbb{R}^{C\times C/r}$均是多层感知机的权重参数。
 
 因此，CBAM的计算流程可以表示为：
 \begin{align}
@@ -72,7 +73,7 @@
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=12cm]{pic/chapter3/CBAM.jpg}
+    \includegraphics[width=14cm]{pic/chapter3/混合注意力.pdf}
     \caption{CBAM 结构图\citing{woo2018cbam}}
     \label{CBAM}
 \end{figure}
@@ -98,33 +99,33 @@
 
 根据公式\eqref{eq:T}，极化相干矩阵$T$非主对角线元素均是复数，而主对角线元素均是实数，并且关于主对角线共轭对称。因此，可以使用矩阵的上三角6个元素代表极化相干矩阵，考虑到复数性质，使用一个包含9个元素的一维数组表示极化相干矩阵，具体如下式所示：
 \begin{equation}
-    \mathbf{V}=[T_{11}, T_{22}, T_{33}, \text{Re}(T_{12}), \text{Re}(T_{13}), \text{Re}(T_{23}), \text{Im}(T_{12}), \text{Im}(T_{13}), \text{Im}(T_{23})]
+    \textbf{V}=[T_{11}, T_{22}, T_{33}, \text{Re}(T_{12}), \text{Re}(T_{13}), \text{Re}(T_{23}), \text{Im}(T_{12}), \text{Im}(T_{13}), \text{Im}(T_{23})]
 \end{equation}
-其中，$\text{Re}$与$\text{Im}$分别表示取实部与取虚部运算。$\mathbf{V}$包含了地物目标完备的后向散射信息，将$\mathbf{V}$作为通道1的输入。
+其中，$\text{Re}$与$\text{Im}$分别表示取实部与取虚部运算。$\textbf{V}$包含了地物目标完备的后向散射信息，将$\textbf{V}$作为通道1的输入。
 
 （2）通道2：目标分解特征
 
 不同的极化目标分解特征从不同的物理层面反映了目标的散射特性，通道2选择多种经典的极化目标分解特征作为输入，分别为Pauli分解、Cloude分解、Freeman分解、Krogager分解、Huynen分解共计32维目标分解参数。具体特征参数如表\ref{tab:decomposition_features}所示。
 
-% Please add the following required packages to your document preamble:
-% \usepackage{multirow}
 \begin{table}[ht!]
     \caption{通道2使用的极化目标分解特征参数表}
     \label{tab:decomposition_features}
     \centering
-    \begin{tabular}{|c|c|c|c|}
-        \hline
-        分解方法                     & 特征参数                                                             & 物理意义               & 特征维数 \\ \hline
-        Pauli                    & $\left| a \right|^2,\left| b \right|^2,\left| c \right|^2$       & 奇次、偶次、二面角散射        & 3    \\ \hline
-        \multirow{2}{*}{Cloude}  & $H,\alpha,A$                                                     & 散射熵、平均散射角、反熵       & 3    \\ \cline{2-4}
-                                 & $\lambda_1,\lambda_2,\lambda_3$                                  & 极化相干矩阵特征值          & 3    \\ \hline
-        \multirow{2}{*}{Freeman} & $P_s,P_d,P_v,P_r$                                                & 表面散射、体散射、二次散射、同极化比 & 4    \\ \cline{2-4}
-                                 & $f_s,f_d,f_v$                                                    & Freeman系数          & 3    \\ \hline
-        Krogager                 & $\left| k_s \right|^2,\left| k_d \right|^2,\left| k_h \right|^2$ & 球、双平面、螺旋散射能量       & 4    \\ \hline
-        \multirow{3}{*}{Huynen}  & $A_0,B_0+B,B_0-B$                                                & 对称、非对称、不规则性信息      & 3    \\ \cline{2-4}
-                                 & $C,D,E$                                                          & 线性、弯曲、扭转性信息        & 3    \\ \cline{2-4}
-                                 & $F,G,H$                                                          & 螺旋、沾合、方向信息         & 3    \\ \hline
-        Van Zyl                  & $f_v,f_d,f_s$                                                    & 体散射、二次散射、表面散射系数    & 3    \\ \hline
+    \begin{tabular}{cccc}
+        \toprule[1.5bp]
+        分解方法                     & 特征参数                                                             & 物理意义               & 特征维数 \\
+        \midrule[0.75bp]
+        Pauli                    & $\left| a \right|^2,\left| b \right|^2,\left| c \right|^2$       & 奇次、偶次、二面角散射        & 3    \\
+        \multirow{2}{*}{Cloude}  & $H,\alpha,A$                                                     & 散射熵、平均散射角、反熵       & 3    \\
+                                 & $\lambda_1,\lambda_2,\lambda_3$                                  & 极化相干矩阵特征值          & 3    \\
+        \multirow{2}{*}{Freeman} & $P_s,P_d,P_v,P_r$                                                & 表面散射、体散射、二次散射、同极化比 & 4    \\
+                                 & $f_s,f_d,f_v$                                                    & Freeman系数          & 3    \\
+        Krogager                 & $\left| k_s \right|^2,\left| k_d \right|^2,\left| k_h \right|^2$ & 球、双平面、螺旋散射能量       & 4    \\
+        \multirow{3}{*}{Huynen}  & $A_0,B_0+B,B_0-B$                                                & 对称、非对称、不规则性信息      & 3    \\
+                                 & $C,D,E$                                                          & 线性、弯曲、扭转性信息        & 3    \\
+                                 & $F,G,H$                                                          & 螺旋、沾合、方向信息         & 3    \\
+        Van Zyl                  & $f_v,f_d,f_s$                                                    & 体散射、二次散射、表面散射系数    & 3    \\
+        \bottomrule[1.5bp]
     \end{tabular}
 \end{table}
 
@@ -147,11 +148,11 @@
 \subsection{空间和通道注意力模块}
 注意力方法通过强调或抑制输入特征中的不同部分，在深度学习领域，被广泛应用到各种任务中。本文通过引入空间和通道注意力方法，旨在对输入的极化信息动态调整关注度，提升模型对关键信息的感知能力。图\ref{fig:spatial}为本方法中的空间注意力模块网络结构。空间注意力方法采用卷积操作来获取全局信息，从而赋予其更多的非线性捕捉能力，更好的拟合不同空间位置之间的复杂相关性，显著减少参数量和计算量。计算公式如下所示：
 \begin{equation}
-    A_s=\sigma(f^{7\times 7}(AvgPool(S);\Gamma(MaxPool(S))))
+    \textbf{A}_\text{s}=\sigma(f^{7\times 7}(AvgPool(\textbf{S});\Gamma(MaxPool(\textbf{S}))))
 \end{equation}
 其中，$f^{7\times 7}$表示卷积核大小为$7\times 7$的卷积操作；$\sigma$表示Sigmoid激活函数。空间注意力通过最大池化和平均池化两个池化操作得到大小为$2\times H \times W$的特征图，最大池化从图像中提取强的局部信息，平均池化提取全局平均统计特征。对特征图采用卷积运算，转换为$1\times H\times W$的单一通道特征，再利用Sigmoid激活函数将通道特征图转为对应的空间注意力图$A_s$，最后计算注意力图$A_s$与原始输入特征的乘积得到空间注意力信息。计算公式如下：
 \begin{equation}
-    S_S=A_S \otimes S
+    \textbf{S}_\textbf{S}=\textbf{A}_\textbf{S} \otimes \textbf{S}
 \end{equation}
 其中，$\otimes$ 表示逐元素乘积。通过空间注意力方法，在空间维度进行有效信息激发而抑制无效信息，得到空间注意力图校准的极化特征$S_S$。
 
@@ -163,13 +164,13 @@
     \label{fig:spatial}
 \end{figure}
 
-相比于空间注意力方法使用卷积层层与激活函数的注意力提取方法，通道注意力方法通过全连接和加和操作，完成对通道维度信息的提取。全局最大池化与平均池化操作对输入特征图的空间依赖性进行拆解，并通过逐个学习每个通道生成反映各个通道重要性的特征图。随后，将得到的两个$C\times 1 \times 1$的特征图进行拼接后使用全连接和加和运算后，再使用Sigmoid激活函数，形成成一维的通道注意力图，用于表示不同通道特征图的重要性。计算如下式所示：
+相比于空间注意力方法使用卷积层层与激活函数的注意力提取方法，通道注意力方法通过全连接和加和操作，完成对通道维度信息的提取。全局最大池化与平均池化操作对输入特征图的空间依赖性进行拆解，并通过逐个学习每个通道生成反映各个通道重要性的特征图。随后，将得到的两个$C\times 1 \times 1$的特征图进行拼接后使用全连接和加和运算后，再使用Sigmoid激活函数，形成一维的通道注意力图，用于表示不同通道特征图的重要性。计算如下式所示：
 \begin{equation}
-    A_C=\sigma(\Gamma(AvgPool(S))+\Gamma(MaxPool(S)))
+    \textbf{A}_\textbf{C}=\sigma(\Gamma(AvgPool(\textbf{S}))+\Gamma(MaxPool(\textbf{S})))
 \end{equation}
 其中，$\sigma$表示Sigmoid激活函数；$\Gamma$表示两层神经网络。将通道注意力图与输入极化特征相乘，得到通道注意力图校准的极化特征。计算公式如下：
 \begin{equation}
-    S_C=A_C \otimes S
+    \textbf{S}_\textbf{C}=\textbf{A}_\textbf{C} \otimes \textbf{S}
 \end{equation}
 其中，$\otimes$表示逐元素乘法。
 
@@ -183,15 +184,15 @@
 \subsection{极化注意力修正模块}
 \label{sec:极化注意力修正模块}
 
-基于双通道注意力架构对极化SAR输入特征提取空间、通道注意力特征图，对于同一类型目标，校准后的两种类型极化信息存在一致性与互补性。为了保持特征一致性和挖掘极化互补信息，图\ref{DPEN_WFM}展示的极化注意力修正模块，以极化信息一致性为引导，对输入的极化特征进行动态调整，增强特征一致性。极化注意力修正模块利用极化特征估计特征映射的位置相关关系，自适应地控制两类注意力图的空间位置信息。以双通道的注意力图$S_1\in R^{H \times W}$与$S_2\in R^{H \times W}$为输入，该模块的计算流程可以表示为：
+基于双通道注意力架构对极化SAR输入特征提取空间、通道注意力特征图，对于同一类型目标，校准后的两种类型极化信息存在一致性与互补性。为了保持特征一致性和挖掘极化互补信息，图\ref{DPEN_WFM}展示的极化注意力修正模块，以极化信息一致性为引导，对输入的极化特征进行动态调整，增强特征一致性。极化注意力修正模块利用极化特征估计特征映射的位置相关关系，自适应地控制两类注意力图的空间位置信息。以双通道的注意力图$\textbf{S}_1\in R^{H \times W}$与$\textbf{S}_2\in R^{H \times W}$为输入，该模块的计算流程可以表示为：
 \begin{gather}
-    S_{2}^{\prime}=f^{1\times 1}\left( S_2 \right)
+    \textbf{S}_{2}^{\prime}=f^{1\times 1}\left( \textbf{S}_2 \right)
     \\
-    S_{1}^{\prime}=\mathrm{Ref}\left( S_{2}^{\prime},\varphi \left( S_1 \right) \right)
+    \textbf{S}_{1}^{\prime}=\mathrm{Ref}\left( \textbf{S}_{2}^{\prime},\varphi \left( \textbf{S}_1 \right) \right)
     \\
-    S_{out}=S_{1}^{\prime}+S_1
+    \textbf{S}_{out}=\textbf{S}_{1}^{\prime}+\textbf{S}_1
 \end{gather}
-其中，$S_{out}$表示模块最终输出，运算$\varphi(\cdot)$表示在特征$S_1$引导下估计$S_2$的位置相关矩阵，描述了两路特征的空间对应关系，$\mathrm{Ref}(\cdot)$表示根据位置相关矩阵调整$S_{2}$，运算$\varphi(\cdot)$采用类似softmax运算操作计算归一化相关矩阵值，具体可以表示为：
+其中，$\textbf{S}_{out}$表示模块最终输出，运算$\varphi(\cdot)$表示在特征$\textbf{S}_1$引导下估计$\textbf{S}_2$的位置相关矩阵，描述了两路特征的空间对应关系，$\mathrm{Ref}(\cdot)$表示根据位置相关矩阵调整$S_{2}$，运算$\varphi(\cdot)$采用类似softmax运算操作计算归一化相关矩阵值，具体可以表示为：
 \begin{equation}
     \Phi _i\left( j \right) =\frac{\exp \left( \theta \left( S_i \right) ^T\cdot \phi \left( S_j \right) \right)}{\sum_j{\exp \left( \theta \left( S_i \right) ^T\cdot \phi \left( S_j \right) \right)}}
 \end{equation}
@@ -199,7 +200,7 @@
 
 对于输入注意力特征图位置索引$i$处的特征单元，以对应位置的相关元素$\Phi_i$为引导，修正过程可以表示为：
 \begin{equation}
-    S_{1i}^{\prime}=\sum_j{\Phi _i\left( j \right) \cdot S_{2}^{\prime}\left( j \right)}
+    \textbf{S}_{1i}^{\prime}=\sum_j{\Phi _i\left( j \right) \cdot \textbf{S}_{2}^{\prime}\left( j \right)}
 \end{equation}
 
 \begin{figure}[h]
@@ -238,11 +239,11 @@ $1\times 1$分支特征图在进行二维全局平均池化后，采用自然非
 
 在以上二维全局平均池化的输出处采用二维高斯映射的自然非线性函数Softmax来拟合线性变换，进而提升计算效率。通过将上述并行处理的输出与矩阵点积运算相乘，得出了第一个空间注意力图。同样利用二维全局平均池化在$3\times 3$分支编码全局空间信息，将每组内的输出特征映射计算为生成的两个空间权重值的集合，然后使用Sigmoid函数映射成空间位置对应的权重关系。通过捕获像素级的成对关系，突出显示所有像素的全局上下文信息。计算公式如下：
 \begin{gather}
-    S_1=f^{1\times 1}\left( S \right) \times \mathrm{AvgPool}\left( f^{3\times 3}\left( S \right) \right)
+    \textbf{S}_1=f^{1\times 1}\left( \textbf{S} \right) \times \mathrm{AvgPool}\left( f^{3\times 3}\left( \textbf{S} \right) \right)
     \\
-    S_2=f^{3\times 3}\left( S \right) \times \mathrm{AvgPool}\left( f^{1\times 1}\left( S \right) \right)
+    \textbf{S}_2=f^{3\times 3}\left( \textbf{S} \right) \times \mathrm{AvgPool}\left( f^{1\times 1}\left( \textbf{S} \right) \right)
     \\
-    S^{\prime}=\sigma \left( S_1+S_2 \right)
+    \textbf{S}^{\prime}=\sigma \left( \textbf{S}_1+\textbf{S}_2 \right)
 \end{gather}
 其中，$\sigma$表示sigmoid函数。
 
@@ -273,7 +274,9 @@ $1\times 1$分支特征图在进行二维全局平均池化后，采用自然非
 
 学习率作为深度学习模型训练的关键参数之一，其值的选择对于模型的收敛速度至关重要。在训练过程中，如果学习率设置的过大或者过小，均会可能给模型的分类准确度产生负面影响。通常情况下，在模型的训练初始阶段，采用较大的学习率能够使模型快速收敛到最优点附近。随着训练的执行，逐渐减小学习率，以更加精确地接近最优点。在本章所采用的模型中，初始学习率为$3\times 10^{-4}$，在训练至第30至60个epoch期间，学习率经过衰减变为原值的0.1倍。这里的epoch表示训练集中素有样本完成一次正向传递和反向传播的过程，本章中模型训练的epoch设置为100。Batch size表示每次训练中选择的样本数量，其值的大小会影响网络的优化速度和执行效率。在本章模型中，batch size被设置为64。实验中，使用大小为$15 \times 15$，步长为1的滑动窗口对输入图像进行随机截取，选取出1\%的中心带标签样本作为训练集，而其余的样本作为测试集。
 
-为了对本章提出的极化信息提取方法进行全面地评估和对比，从两个对比维度选择了多种替代方案进行比较：一是对特征输入的改变，二是对极化特征校准模块的替换。首先，验证了不同极化特征表示对目标分类任务的影响。对比方法包括仅使用极化相干矩阵中的元素结合CNN分类方法（记为CNN-T）、仅使用极化目标分解特征结合CNN分类方法（记为CNN-P）、以及基于散射特征和分解特征简单叠加结合CNN的分类方法（记为CNN-F）。这旨在验证本章方法在极化特征表示方面的有效性。其次，对极化特征校准模块进行替换。利用基于压缩和激励网络结合CNN分类方法（记为CNN-SE）和基于空间通道注意力结合CNN分类方法（记为CNN-CBAM）作为不同的对比方法。这旨在验证本章方法在极化特征表示方面的优越性。
+为了对本章提出的极化信息提取方法进行全面地评估和对比，从两个对比维度选择了多种替代方案进行比较：一是对特征输入的改变，二是对极化特征校准模块的替换。首先，验证了不同极化特征表示对目标分类任务的影响。对比方法包括仅使用极化相干矩阵中的元素结合CNN分类方法（记为CNN-T）、仅使用极化目标分解特征结合CNN分类方法（记为CNN-P）、以及基于散射特征和分解特征简单叠加结合CNN的分类方法（记为CNN-F）。这旨在验证本章方法在极化特征表示方面的有效性。其次，对极化特征校准模块进行替换。利用基于压缩和激励网络结合CNN分类方法（记为CNN-SE）和基于空间通道注意力结合CNN分类方法（记为CNN-CBAM）作为不同的对比方法。这旨在验证本章方法在极化特征表示方面的有效性。
+
+最后，还与目前广泛应用的极化SAR图像目标分类方法进行对比，来验证所提出算法的优越性，其中主要包括一种基于Wishart分布的自动编码器分类方法（Wishart Auto Encoder，WAE）\citing{xie2017polsar}、一种基于Wishart分布的自动卷积编码器分类方法（Wishart Auto Convolutional Encoder，WCAE）\citing{xie2017polsar}、一种复数卷积神经网络（Complex-valued Convolutional Neural Network, CV-CNN）分类算法\citing{zhang2017complex}、一种基于极化编码卷积神经网络（Polarimetric Convolutional Network，PCN）分类算法\citing{liu2018polarimetric}、一种极化特征驱动的卷积神经网络（Polarimetric Feature driven Convolutional Neural Network，SF-CNN）分类方法\citing{chen2018polsar}。以上五种算法均是近年来表现优异的算法，所有对比实验中的参数设置与相关文献保持一致。
 
 \subsection{精度评价方法}
 精度评价是对实际数据和模型分类结果进行比较的重要步骤，旨在确定分类模型的准确性，是衡量分类结果可靠性的关键指标。混淆矩阵（Confusion Matrix）通常作为遥感图像分类准确性能的评判指标，并且可以通过混淆矩阵计算得到多种常用的评价参数指标，包括
@@ -348,7 +351,7 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
 \end{table}
 
 \subsection{AIRSAR Flevoland数据实验}
-实验数据集选择NASA/JPL于1989年在Flevoland区域采集得到的全极化数据。该数据集是荷兰的一个农业区域遥感数据，作为基准数据集广泛应用于极化SAR土地覆盖目标分类研究中。该图像大小为$1024 \times 750$ 像素，共有15种农作物类别，包括茎豆、豌豆、森林、苜蓿、小麦、甜菜、土豆、裸土、草、油菜籽、大麦、水和少量建筑物。各个农作物目标类别之间的差异较小，相似性较强，因此分类难度较大，容易出现错分漏分的现象。图\ref{flevoland_pauli}和图\ref{flevoland_gt}分别展示了AIRSAR Flevoland数据集的Pauli分解伪彩图像以及对应的地面真值标签图像。表\ref{flevoland_smaple}展示了该数据集中每个类别带标签的样本数量。
+实验数据集选择NASA/JPL于1989年在Flevoland区域采集得到的全极化数据\citing{zhang2017complex}。该数据集是荷兰的一个农业区域遥感数据，作为基准数据集广泛应用于极化SAR土地覆盖目标分类研究中。该图像大小为$1024 \times 750$ 像素，共有15种农作物类别，包括茎豆、豌豆、森林、苜蓿、小麦、甜菜、土豆、裸土、草、油菜籽、大麦、水和少量建筑物。各个农作物目标类别之间的差异较小，相似性较强，因此分类难度较大，容易出现错分漏分的现象。图\ref{flevoland_pauli}和图\ref{flevoland_gt}分别展示了AIRSAR Flevoland数据集的Pauli分解伪彩图像以及对应的地面真值标签图像。表\ref{flevoland_smaple}展示了该数据集中每个类别带标签的样本数量。
 \begin{figure}[ht!]
     \subfloat[]{
         \label{flevoland_pauli}
@@ -379,6 +382,20 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
     \end{tabular}
     \label{flevoland_smaple}
 \end{table}
+
+% \begin{table}[]
+%     \begin{tabular}{cc||cc||cc}
+%         \toprule
+%         类别 & 数目    & 类别  & 数目    & 类别  & 数目    \\
+%         \midrule
+%         干豆 & 6338  & 小麦1 & 11159 & 油菜籽 & 13863 \\
+%         大麦 & 7595  & 豌豆  & 9582  & 小麦3 & 22241 \\
+%         裸土 & 5109  & 苜蓿  & 10181 & 建筑物 & 735   \\
+%         土豆 & 16156 & 草地  & 7058  & 森林  & 18044 \\
+%         甜菜 & 10033 & 小麦2 & 16386 & 水域  & 13232 \\
+%         \bottomrule
+%     \end{tabular}
+% \end{table}
 
 图\ref{fig:fle_res}展示了各个对比方法的可视化分类结果，其中每个分类结果图下方依次为A、B、C区域的局部放大图。根据图\ref{fig:fle_T}，仅使用散射特征的分类方法，在草地（区域A）、油菜籽（区域B）和土豆（区域C）都有较多的错分样本，这是因为只使用了散射特征而忽略了目标分解特征，没有全面综合利用所有的极化信息导致的。图\ref{fig:fle_P}展示了仅使用目标分解特征的分类结果，在草地、油菜籽、土豆区域也存在大量的错分样本，这可能是由于没有综合使用极化信息导致的，相干矩阵代表的散射特征是极化SAR中最基本、重要的特征。图\ref{fig:fle_F}展示的简单叠加散射特征与目标分解特征的分类结果，该方法的分类结果几乎与前两种方法相同，仍然在草地、油菜籽区域存在大量错分样本，这反映了直接简单堆叠使用极化特征带来的准确率提升有限。图\ref{fig:fle_SE}与图\ref{fig:fle_CBAM}展示了使用经典注意力方法的分类结果图，相比于直接叠加特征，并没有带来明显的分类性能提升，少量的错分孤立点与草地中错分的块状区域依然存在，这表明不考虑极化SAR数据特征的特征细化方法并不能为极化SAR分类任务带来优势。图\ref{fig:fle_DP}展示了基于双通道注意力方法的分类结果，可以看出本方法分类结果更加平滑，错分像素减少，特别是是在小麦、油菜籽区域，类间错分孤立点相对减少，这也验证了本章方法结合散射特征和目标分解特征的有效性，证明本章方法提取的极化信息表示是优越的。
 
@@ -530,6 +547,24 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
     \end{tabular}
 \end{table}
 
+表\ref{tab:fle-diff}为各目标分类算法的性能对比结果，可以看出，本章方法在AA、OA和Kappa评价指标上性能均优于各项对比方法，表明本章方法在极化SAR目标分类任务中具有优越的性能。
+\begin{table}[ht!]
+    \caption{AIRSAR Flevoland地区数据各分类方法的性能对比(\%)}
+    \label{tab:fle-diff}
+    \begin{tabular}{cccc}
+        \toprule[1.5bp]
+        分类方法   & OA             & AA             & Kappa          \\
+        \midrule[0.75bp]
+        WAE    & 89.97          & 89.98          & 89.43          \\
+        WCAE   & 86.21          & 86.08          & 85.07          \\
+        CV-CNN & 95.58          & 96.08          & 95.18          \\
+        PCN    & 95.59          & 96,94          & 94.08          \\
+        SF-CNN & 97.02          & 97.63          & 96.77          \\
+        CNN-DP & \textbf{98.47} & \textbf{98.65} & \textbf{98.53} \\
+        \bottomrule[1.5bp]
+    \end{tabular}
+\end{table}
+
 图\ref{fig:fle_conf_matrix}展示了本章方法分类结果对应的混淆矩阵。结果表明，混淆矩阵的主对角线元素具有相对较高的数值，模型正确分类的情况占据了主导地位，说明本章方法在本数据集上的优秀分类性能。
 
 \begin{figure}[h]
@@ -540,8 +575,9 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
 \end{figure}
 
 
+
 \subsection{E-SAR Oberpfaffenhofen数据实验}
-该数据集是通过E-SAR机载平台在德国Oberpfaffenhofen地区拍摄获取到的L波段极化SAR数据。该数据集经过多视处理，具有高质量的全极化信息，是极化SAR目标分类研究的经典数据集之一。数据集在方位向和距离向具有$3m \times 3m$的分辨率，大小为$1300 \times 1200$，包含建筑物、林地、开放区域三种类型的地物目标，每类包含样本数量依次为269184、388503、779962。图\ref{fig:ober_pauli}展示了该数据集的Pauli伪彩色图像，图\ref{fig:ober_gt}展示了该数据集的人工标记的地面真值参考图，地面真值图中黑色的区域表示未标记的区域。
+该数据集是通过E-SAR机载平台在德国Oberpfaffenhofen地区拍摄获取到的L波段极化SAR数据\citing{xie2017polsar}。该数据集经过多视处理，具有高质量的全极化信息，是极化SAR目标分类研究的经典数据集之一。数据集在方位向和距离向具有$3m \times 3m$的分辨率，大小为$1300 \times 1200$，包含建筑物、林地、开放区域三种类型的地物目标，每类包含样本数量依次为269184、388503、779962。图\ref{fig:ober_pauli}展示了该数据集的Pauli伪彩色图像，图\ref{fig:ober_gt}展示了该数据集的人工标记的地面真值参考图，地面真值图中黑色的区域表示未标记的区域。
 
 \begin{figure}[ht]
     \subfloat[]{
@@ -647,6 +683,27 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
     \end{tabular}
 \end{table}
 
+
+
+表\ref{tab:ober_res}展示了各个方法的分类数值结果。仅使用散射特征时，在建筑物区域的分类准确率仅为76.68\%，这可能是因为建筑物区域目标散射回波差异性大，导致仅使用散射特征时，不能完全表征建筑物目标的特性，进而导致在建筑物区域可分性较低。仅使用目标分解特征相比于CNN-T分类性能得到小幅度提升，OA达到88.97\%，这是因为目标分解特征包含的具体物理散射特性对建筑物区域分类提升明显。与仅使用目标分解特征相比，直接堆叠极化特征在平均准确率指标反而下降0.45\%，这可能是由于该方法仅仅是对两类的特征进行简单的堆叠，堆叠后的特征维数过高，分类模型对于高维特征输入无法有效利用两种不同类型特征间的主次关系。而经典注意力方法CNN-SE与CNN-CBAM的OA分别为89.13\%和90.27\%，分类准确率提升不足1\%，微弱的准确率提升与计算量的增加表明对极化SAR特征优化性能有限。本章方法在OA、AA、Kappa系数等指标达到了94.39\%、93.28\%和90.4\%，相比于对比方法分别提升了4.12\%、4.3\%和5.16\%，表明本章方法能有效利用多类型极化特征，提升分类准确度。
+
+\begin{table}[ht!]
+    \caption{E-SAR Oberpfaffenhofen地区数据各分类方法的性能对比(\%)}
+    \label{tab:ober-diff}
+    \begin{tabular}{cccc}
+        \toprule[1.5bp]
+        分类方法   & OA             & AA             & Kappa          \\
+        \midrule[0.75bp]
+        WAE    & 84.55          & 78.09          & 73.57          \\
+        WCAE   & 87.71          & 86.78          & 80.31          \\
+        CV-CNN & 90.21          & 90.11          & 85.15          \\
+        PCN    & 90.88          & 87.95          & 81.62          \\
+        SF-CNN & 89.13          & 88.16          & 83.58          \\
+        CNN-DP & \textbf{94.39} & \textbf{93.28} & \textbf{90.40} \\
+        \bottomrule[1.5bp]
+    \end{tabular}
+\end{table}
+
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=8.4cm]{pic/chapter3/ober/conf-matrix.pdf}
@@ -654,10 +711,9 @@ Kappa系数的大小可以用来表示分类的精度性能，表\ref{kappa}描�
     \label{fig:ober_conf_matrix}
 \end{figure}
 
-表\ref{tab:ober_res}展示了各个方法的分类数值结果。仅使用散射特征时，在建筑物区域的分类准确率仅为76.68\%，这可能是因为建筑物区域目标散射回波差异性大，导致仅使用散射特征时，不能完全表征建筑物目标的特性，进而导致在建筑物区域可分性较低。仅使用目标分解特征相比于CNN-T分类性能得到小幅度提升，OA达到88.97\%，这是因为目标分解特征包含的具体物理散射特性对建筑物区域分类提升明显。与仅使用目标分解特征相比，直接堆叠极化特征在平均准确率指标反而下降0.45\%，这可能是由于该方法仅仅是对两类的特征进行简单的堆叠，堆叠后的特征维数过高，分类模型对于高维特征输入无法有效利用两种不同类型特征间的主次关系。而经典注意力方法CNN-SE与CNN-CBAM的OA分别为89.13\%和90.27\%，分类准确率提升不足1\%，微弱的准确率提升与计算量的增加表明对极化SAR特征优化性能有限。本章方法在OA、AA、Kappa系数等指标达到了94.39\%、93.28\%和90.4\%，相比于对比方法分别提升了4.12\%、4.3\%和5.16\%，表明本章方法能有效利用多类型极化特征，提升分类准确度。
+表\ref{tab:ober-diff}为各目标分类算法的性能对比结果，可以看出，本章方法在AA、OA和Kappa评价指标上性能均优于各项对比方法，表明本章方法在极化SAR目标分类任务中具有优越的性能。
 
 图\ref{fig:ober_conf_matrix}展示了本章方法分类结果对应的混淆矩阵。结果表明，混淆矩阵的主对角线元素具有相对较高的数值，模型正确分类的情况占据了主导地位，说明本章方法在本数据集上的优秀分类性能。
-
 
 \section{本章小结}
 本章针对多类型极化特征信息冗余问题，提出了基于双通道注意力的极化SAR目标分类方法。首先，构建后向散射特征通道和目标分解特征通道的双通道结构，结合空间、通道注意力机制，实现对两种类型极化特征中有效信息的激发而抑制无关信息。然后，为了充分挖掘两类极化特征之间的关联信息，设计了基于散射特征一致性的注意力修正方法，对注意力特征进行动态校正。其次，通过多尺度特征学习模块，聚合不同空间尺寸的极化特征，增强模型对不同空间尺度的特征的感知能力。最后，将经过双通道注意力校准后的极化特征输入到分类器，得到最终的分类结果。在两组真实极化SAR数据集进行性能测试，并视觉分类效果和数据量化准确率两个层面进行性能评估，结果表明本章提出的目标分类方法能够更加全面地利用多类型极化特征信息，提升极化SAR图像目标分类精度。

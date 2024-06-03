@@ -703,7 +703,7 @@
       >{\centering\arraybackslash\fontsize{14pt}{14pt}\bfseries\selectfont}
       p{2.045in}}
     申请学位级别 & \chinesedegreename &
-    专业学位类别 & \zh@themajor \\
+    专业学位类别 & \zh@themajor         \\
     \cline{2-2}
     \cline{4-4}
   \end{tabular} \\
@@ -731,15 +731,19 @@
     \cline{2-2}
   \end{tabular} \\
   \begin{tabular}{>{\fontsize{12pt}{12pt}\selectfont}l
-      >{\centering\arraybackslash\fontsize{14pt}{14pt}\heiti\selectfont}
+      % >{\centering\arraybackslash\fontsize{14pt}{14pt}\heiti\selectfont}
+      % p{4.41in}}
+      >{\centering\arraybackslash\fontsize{14pt}{14pt}\bfseries\selectfont}
       p{4.41in}}
-    答辩委员会主席 & \\
+    答辩委员会主席 & 张伟 \\
     \cline{2-2}
   \end{tabular} \\
   \begin{tabular}{>{\fontsize{12pt}{12pt}\selectfont}l
-      >{\centering\arraybackslash\fontsize{14pt}{14pt}\heiti\selectfont}
+      % >{\centering\arraybackslash\fontsize{14pt}{14pt}\heiti\selectfont}
+      % p{5.03in}}
+      >{\centering\arraybackslash\fontsize{14pt}{14pt}\bfseries\selectfont}
       p{5.03in}}
-    评阅人 & \\
+    评阅人 & 曹宗杰/李冰 \\
     \cline{2-2}
   \end{tabular}
 
